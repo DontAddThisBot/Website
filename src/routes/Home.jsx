@@ -5,6 +5,10 @@ import StvM from "../img/7tvM.avif";
 import StvMAnimated from "../img/7tvM-Animated.gif";
 import Poro from "../img/Poro.avif";
 import PoroAnimated from "../img/Poro-Animated.gif";
+import Stats from "../img/Stats.avif";
+import StatsAnimated from "../img/Stats-Animated.gif";
+import peepoChat from "../img/peepoChat.avif";
+import peepooChatAnimated from "../img/peepoChat-Animated.gif";
 
 const Home = () => {
   return (
@@ -24,45 +28,183 @@ const Home = () => {
             </LoginButton>
           </a>
         </DivButton>
+        <div className="channel-count">Serving in 0000 Channels!</div>
       </TopHeaders>
+      <br />
+      <br />
       <MiddleHeaders>
         <img src={happE} alt="happE" className="bot-pfp" />
         <div className="bot-name">What can this bot do?</div>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis
-          deserunt consequatur itaque, aliquam autem accusamus labore, eos rem
-          nesciunt perferendis, vel voluptas. Consequuntur amet doloremque
-          laborum. Quia provident impedit accusantium.
+          DontAddThisBot is a multi-channel variety and utility moderation/fun
+          chat-bot.
         </p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
-          minus dolore numquam possimus ab, voluptate recusandae, praesentium
-          excepturi sed quisquam asperiores vel voluptatum aliquid, totam
-          blanditiis distinctio eveniet. Ducimus, odio?
+          Simply login with Twitch and add the bot to your channel to get
+          stared! The bot has alot of utility, and variety of commands.
         </p>
-      </MiddleHeaders>
-      <MiddleHeaders>
-        <img src={StvM} alt="YEAHBUT7TV" className="bot-pfp-2" />
-        <div className="bot-name">7TV Commands?</div>
-        <p>After granting DontAddThisBot as 7TV editor</p>
         <p>
-          <code>!7tv</code> - Shows the 7TV emotes you have access to
+          The bot is currently in development, and is being updated frequently.
         </p>
       </MiddleHeaders>
-      <MiddleHeaders>
-        <img src={Poro} alt="Poro" className="bot-pfp-3" />
-        <div className="bot-name">Poro Commands?</div>
-        <p>After granting DontAddThisBot as 7TV editor</p>
-        <p>
-          <code>!7tv</code> - Shows the 7TV emotes you have access to
-        </p>
-      </MiddleHeaders>
-      {/* <BottomHeaders>
-        
-      </BottomHeaders> */}
+      <RowWrapper>
+        <MiddleHeaders className="stv">
+          <img src={StvM} alt="YEAHBUT7TV" className="bot-pfp stv" />
+          <div className="bot-name">7TV Commands?</div>
+          <p>After granting DontAddThisBot as 7TV editor</p>
+          <p>Add, Remove, Alias emotes through Twitch chat!</p>
+        </MiddleHeaders>
+        <MiddleHeaders className="poro">
+          <img src={Poro} alt="Poro" className="bot-pfp poro" />
+          <div className="bot-name">Poro Commands?</div>
+          <p>Virtual currency in Twitch Chat</p>
+          <p>
+            Simply type |poro to get started, You can also checkout the Poro
+            leaderboard!
+          </p>
+        </MiddleHeaders>
+      </RowWrapper>
+      <RowWrapper2>
+        <MiddleHeaders className="utility">
+          <img src={peepoChat} alt="utility" className="bot-pfp utility" />
+          <div className="bot-name">Utility Commands</div>
+          <p>Alot of utility commandsㅤㅤㅤㅤ</p>
+          <p>
+            Check utility commands of user's information in
+            chats!ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ
+          </p>
+        </MiddleHeaders>
+        <MiddleHeaders className="stats">
+          <img src={Stats} alt="stats" className="bot-pfp stats" />
+          <div className="bot-name">Statistics</div>
+          <p>Tracking Statistics</p>
+          <p>
+            DontAddThisBot's purpose is to track statistics so users are aware
+            of their activity!
+          </p>
+        </MiddleHeaders>
+      </RowWrapper2>
+      <BottomHeaders>
+        <div>TEST TEST TEST</div>
+      </BottomHeaders>
     </Wrapper>
   );
 };
+
+const RowWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  transition: all 0.2s ease-in-out;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 1rem;
+  grid-auto-flow: dense;
+  grid-auto-columns: 1fr;
+  grid-auto-rows: 1fr;
+  max-width: 800px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  .stv,
+  .poro {
+    margin-right: 2rem;
+    margin-left: 2rem;
+    transition: all 0.2s ease-in-out;
+    .bot-pfp {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 85px;
+      &.stv {
+        box-shadow: 0 0 20px #29d9f7;
+      }
+      &.poro {
+        box-shadow: 0 0 20px white;
+      }
+    }
+    :hover {
+      transform: scale(1.1);
+    }
+    &.stv:hover {
+      box-shadow: 0 0 20px #29d9f7;
+      img.stv {
+        content: url(${StvMAnimated});
+      }
+    }
+    &.poro:hover {
+      box-shadow: 0 0 20px white;
+      img.poro {
+        content: url(${PoroAnimated});
+      }
+    }
+    @media (max-width: 768px) {
+      width: 60%;
+    }
+  }
+`;
+
+const RowWrapper2 = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  transition: all 0.2s ease-in-out;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 1rem;
+  grid-auto-flow: dense;
+  grid-auto-columns: 1fr;
+  grid-auto-rows: 1fr;
+  max-width: 800px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  .utility,
+  .stats {
+    margin-right: 2rem;
+    margin-left: 2rem;
+    transition: all 0.2s ease-in-out;
+    .bot-pfp {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 85px;
+      &.utility {
+        box-shadow: 0 0 20px #9bd02a;
+      }
+      &.stats {
+        box-shadow: 0 0 20px #74f593;
+      }
+    }
+    :hover {
+      transform: scale(1.1);
+    }
+    &.utility:hover {
+      box-shadow: 0 0 20px #9bd02a;
+      img.utility {
+        content: url(${peepooChatAnimated});
+      }
+    }
+    &.stats:hover {
+      box-shadow: 0 0 20px #74f593;
+      img.stats {
+        content: url(${StatsAnimated});
+      }
+    }
+
+    @media (max-width: 768px) {
+      width: 60%;
+    }
+  }
+`;
 
 const Wrapper = styled.div`
   color: #fff;
@@ -70,7 +212,6 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
   div.bot-name {
     font-size: 50px;
   }
@@ -86,6 +227,9 @@ const TopHeaders = styled.div`
   line-height: 60px;
   flex-direction: column;
   justify-content: center;
+  div.channel-count {
+    font-size: 2rem;
+  }
 `;
 
 const DivButton = styled.div`
@@ -136,6 +280,7 @@ const MiddleHeaders = styled.div`
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    margin-top: 1rem;
   }
 
   img {
@@ -147,40 +292,19 @@ const MiddleHeaders = styled.div`
     border-radius: 50%;
     background-color: #1f1f1f;
     box-shadow: 0 0 20px #9146ff;
-
-    &.bot-pfp-2 {
-      box-shadow: 0 0 20px #29d9f7;
-      transition: 0s content;
-      &:hover {
-        content: url(${StvMAnimated});
-        transition-delay: 0.5s;
-      }
-    }
-
-    &.bot-pfp-3 {
-      box-shadow: 0 0 20px white;
-      transition: 0s content;
-      &:hover {
-        content: url(${PoroAnimated});
-        transition-delay: 0.5s;
-      }
-    }
   }
 `;
 
 const BottomHeaders = styled.div`
   color: #c7c7c7;
-  width: 100%;
-  padding: 8px;
+  width: 60%;
+  padding: 24px;
+  max-width: 800px;
   box-shadow: -3px 3px 10px #ffffff12;
   margin-top: 40px;
   margin-bottom: 48px;
-  background-color: #261c32;
-  margin: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-  height: 250px;
+  background-color: #1f1f1f;
+  border-radius: 15px;
 `;
 
 export default Home;
