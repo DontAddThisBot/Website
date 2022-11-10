@@ -21,13 +21,13 @@ const Home = () => {
           <br />
           Fun utility chat bot
         </div>
-        <DivButton>
+        <div className="div-button">
           <a href="/login">
-            <LoginButton>
+            <button className="login-button">
               <Span>Login with Twitch</Span>
-            </LoginButton>
+            </button>
           </a>
-        </DivButton>
+        </div>
         <div className="channel-count">Serving in 0000 Channels!</div>
       </TopHeaders>
       <br />
@@ -84,9 +84,21 @@ const Home = () => {
           </p>
         </MiddleHeaders>
       </RowWrapper2>
-      <BottomHeaders>
-        <div>TEST TEST TEST</div>
-      </BottomHeaders>
+      <Footer>
+        <div className="footer-text">
+          <p>
+            DontAddThisBot is a multi-channel variety and utility moderation/fun
+            chat-bot.
+          </p>
+          <p>
+            Simply login with Twitch and add the bot to your channel to get
+            stared! The bot has alot of utility, and variety of commands.
+          </p>
+          <p>
+            The bot is currently in development, and is being updated frequently.
+          </p>
+        </div>
+      </Footer>
     </Wrapper>
   );
 };
@@ -227,17 +239,18 @@ const TopHeaders = styled.div`
   line-height: 60px;
   flex-direction: column;
   justify-content: center;
+
+  div.div-button {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    box-shadow: -3px 3px 10px #ffffff12;
+    // remove this above later just box-shadow tho
+  }
   div.channel-count {
     font-size: 2rem;
   }
-`;
 
-const DivButton = styled.div`
-  margin-top: 30px;
-  margin-bottom: 30px;
-`;
-
-const LoginButton = styled.button`
+  button.login-button {
   border: none;
   border-radius: 5px;
   padding: 15px 35px;
@@ -249,10 +262,11 @@ const LoginButton = styled.button`
   background-color: #9146ff;
 
   &:hover {
-    background-color: transparent;
-    border: 1.5px solid #9146ff;
-    transform: scale(1.1);
-    transition: 0.3s;
+      background-color: transparent;
+      border: 1.5px solid #9146ff;
+      transform: scale(1.1);
+      transition: 0.3s;
+    }  
   }
 `;
 
@@ -295,16 +309,28 @@ const MiddleHeaders = styled.div`
   }
 `;
 
-const BottomHeaders = styled.div`
-  color: #c7c7c7;
-  width: 60%;
-  padding: 24px;
-  max-width: 800px;
-  box-shadow: -3px 3px 10px #ffffff12;
-  margin-top: 40px;
-  margin-bottom: 48px;
+const Footer = styled.footer`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 50px;
   background-color: #1f1f1f;
-  border-radius: 15px;
-`;
+  width: 100%;
+  div {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    }
+  a {
+    color: #9146ff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    :hover {
+      transform: scale(1.1);
+    }
+  }
+  `;
 
 export default Home;
