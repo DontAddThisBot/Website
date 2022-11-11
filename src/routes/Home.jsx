@@ -10,10 +10,41 @@ import StatsAnimated from "../img/Stats-Animated.gif";
 import peepoChat from "../img/peepoChat.avif";
 import peepooChatAnimated from "../img/peepoChat-Animated.gif";
 
+function redirect() {
+  const a = "/";
+  const b = "c";
+  const c = "o";
+  const d = "d";
+  const e = "e";
+  window.location.href = `${a}${b}${c}${d}${e}`;
+}
+
+const loadAllImages = () => {
+  const images = [
+    StvMAnimated,
+    PoroAnimated,
+    StatsAnimated,
+    peepooChatAnimated,
+  ];
+
+  const displayNone = {
+    display: "none",
+  };
+
+  return (
+    <div style={displayNone}>
+      {images.map(
+        (image, key) => <img src={image} alt={key} key={key} /> ?? null
+      )}
+    </div>
+  );
+};
+
 const Home = () => {
   return (
     <Wrapper>
       <TopHeaders>
+        {loadAllImages()}
         <div>
           Variety
           <br />
@@ -33,7 +64,7 @@ const Home = () => {
       <br />
       <br />
       <MiddleHeaders>
-        <img src={happE} alt="happE" className="bot-pfp" />
+        <img src={happE} alt="happE" className="bot-pfp" onClick={redirect} />
         <div className="bot-name">What can this bot do?</div>
         <p>
           DontAddThisBot is a multi-channel variety and utility moderation/fun
@@ -84,6 +115,39 @@ const Home = () => {
           </p>
         </MiddleHeaders>
       </RowWrapper2>
+      <BottomWrapper>
+        <BottomTextHeaders>
+          <div className="bot-name">How do I use it in chat?</div>
+          <p>Simply to get started with the bot, do the following!</p>
+        </BottomTextHeaders>
+        <BottomImageHeaders>
+          <div className="images">
+            <img
+              src="https://i.imgur.com/gMDtQXj.gif"
+              alt="information"
+              className="bot-pfp stv"
+            />
+          </div>
+        </BottomImageHeaders>
+      </BottomWrapper>
+      <StreamerInformationText>
+        <div className="bot-name">Who is using the bot?</div>
+        <p>
+          These are the top streamers using the bot! DontAddThisBot is trusted
+          by these streamers!
+        </p>
+      </StreamerInformationText>
+      <StreamerInformationInABox>
+        <img
+          src="https://static-cdn.jtvnw.net/jtv_user_pictures/1eec6ff3-35dc-4928-b905-b2ee991c98e8-profile_image-600x600.png"
+          alt="information"
+        />
+        <div className="streamer-information">
+          <p className="streamer-username">LoreStorm</p>
+          <p className="streamer-status">Partner</p>
+          <p className="streamer-followers">1,000,000</p>
+        </div>
+      </StreamerInformationInABox>
       <Footer>
         <div className="footer-text">
           <p>
@@ -95,7 +159,8 @@ const Home = () => {
             stared! The bot has alot of utility, and variety of commands.
           </p>
           <p>
-            The bot is currently in development, and is being updated frequently.
+            The bot is currently in development, and is being updated
+            frequently.
           </p>
         </div>
       </Footer>
@@ -103,7 +168,160 @@ const Home = () => {
   );
 };
 
-const RowWrapper = styled.div`
+const StreamerInformationText = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 3rem;
+
+  p {
+    margin: 0 auto;
+    color: grey;
+  }
+`;
+
+const StreamerInformationInABox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 90%;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  transition: 0.3s;
+  cursor: pointer;
+  border: 2px solid grey;
+  background-color: transparent;
+
+  img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 10px;
+    margin-left: 7%;
+
+    @media (max-width: 768px) {
+      width: 100px;
+      height: 100px;
+      margin-left: 20px;
+    }
+  }
+
+  .streamer-information {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    width: 300px;
+    max-width: 90%;
+
+    .streamer-username {
+      font-size: 200%;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .streamer-status {
+      font-size: 150%;
+      font-weight: 600;
+      margin-top: -9%;
+      color: #9146ff;
+    }
+
+    .streamer-followers {
+      font-size: 150%;
+      font-weight: 600;
+      color: grey;
+      margin-top: -2%;
+      margin-bottom: 5px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 80%;
+  }
+`;
+
+const BottomWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1a1a;
+  margin-top: 3.5rem;
+  margin-bottom: 5rem;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    width: 100%;
+    margin-top: 2rem;
+  }
+`;
+
+const BottomTextHeaders = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 400;
+  p {
+    font-size: 1.5rem;
+    font-weight: 200;
+    margin-top: 1rem;
+  }
+`;
+
+const BottomImageHeaders = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  max-width: 50%;
+  max-height: 50%;
+  background-color: #1a1a1a;
+  margin-bottom: 3%;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 white;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 100%;
+    max-width: 80%;
+    max-height: 80%;
+    margin-top: 3rem;
+    margin-bottom: 4rem;
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      content: url("https://i.imgur.com/L3AWFhn.gif");
+      box-shadow: 0 0 10px 0 white;
+    }
+  }
+`;
+
+const RowWrapper = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,7 +378,7 @@ const RowWrapper = styled.div`
   }
 `;
 
-const RowWrapper2 = styled.div`
+const RowWrapper2 = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,7 +436,7 @@ const RowWrapper2 = styled.div`
   }
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   color: #fff;
   display: flex;
   align-items: center;
@@ -229,7 +447,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const TopHeaders = styled.div`
+const TopHeaders = styled.section`
   display: flex;
   font-size: 3rem;
   margin-top: 3rem;
@@ -241,32 +459,35 @@ const TopHeaders = styled.div`
   justify-content: center;
 
   div.div-button {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    box-shadow: -3px 3px 10px #ffffff12;
-    // remove this above later just box-shadow tho
+    margin: 0 auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
   }
   div.channel-count {
     font-size: 2rem;
   }
 
   button.login-button {
-  border: none;
-  border-radius: 5px;
-  padding: 15px 35px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  border: 1px solid #9146ff;
-  border-radius: 5px;
-  background-color: #9146ff;
+    border: none;
+    border-radius: 5px;
+    padding: 15px 35px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #9146ff;
+    border-radius: 5px;
+    background-color: #9146ff;
+    transition: 0.3s;
 
-  &:hover {
+    &:hover {
       background-color: transparent;
       border: 1.5px solid #9146ff;
       transform: scale(1.1);
-      transition: 0.3s;
-    }  
+    }
   }
 `;
 
@@ -278,7 +499,7 @@ const Span = styled.span`
   font-weight: bold;
 `;
 
-const MiddleHeaders = styled.div`
+const MiddleHeaders = styled.section`
   color: #c7c7c7;
   width: 60%;
   padding: 24px;
@@ -314,13 +535,18 @@ const Footer = styled.footer`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 10%;
   background-color: #1f1f1f;
   width: 100%;
+
+  @media (max-width: 768px) {
+    margin-top: 50%;
+  }
+
   div {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    }
+  }
   a {
     color: #9146ff;
     font-size: 1.5rem;
@@ -331,6 +557,6 @@ const Footer = styled.footer`
       transform: scale(1.1);
     }
   }
-  `;
+`;
 
 export default Home;

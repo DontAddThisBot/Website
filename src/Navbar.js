@@ -25,16 +25,22 @@ const Navbar = () => {
     <Nav>
       <nav className="navbar">
         <div id="brand">
-          <Link to="/">
-            <span className="Bot-Name-1">DontAdd</span>
-            <span className="Bot-Name-2">ThisBot</span>
-          </Link>
+          <span className="Bot-Name-1">DontAdd</span>
+          <span className="Bot-Name-2">ThisBot</span>
         </div>
 
-        <nav>
+        <nav className="middle-navbar">
           <ul>
+            <CustomLink to="/">Home</CustomLink>
             <CustomLink to="/leaderboard">Leaderboard</CustomLink>
             <CustomLink to="/commands">Commands</CustomLink>
+            <li>
+              <a href="https://stats.kattah.me">Stats</a>
+            </li>
+          </ul>
+        </nav>
+        <nav className="right-navbar">
+          <ul>
             <li id="login">
               <a href="login">Login</a>
             </li>
@@ -45,8 +51,12 @@ const Navbar = () => {
           <div className="bar2"></div>
           <div className="bar3"></div>
           <ul className="mobile-menu">
+            <CustomLink to="/">Home</CustomLink>
             <CustomLink to="/leaderboard">Leaderboard</CustomLink>
             <CustomLink to="/commands">Commands</CustomLink>
+            <li>
+              <a href="https://stats.kattah.me">Stats</a>
+            </li>
             <li id="login">
               <a href="/login">Login</a>
             </li>
@@ -62,6 +72,18 @@ const Nav = styled.nav`
     text-decoration: none;
   }
 
+  nav.middle-navbar {
+    @media (max-width: 850px) {
+      font-size: 0.8em;
+    }
+  }
+
+  nav.right-navbar {
+    @media (max-width: 850px) {
+      font-size: 0.8em;
+    }
+  }
+
   nav {
     padding: 0 20px;
     background-color: #1d1f1d;
@@ -69,6 +91,33 @@ const Nav = styled.nav`
     display: flex;
     justify-content: space-between;
     border-bottom: 7px solid #7a749d;
+    nav {
+      display: flex;
+      align-items: center;
+      ul {
+        display: flex;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        li {
+          margin: 0 10px;
+          padding: 5px;
+          margin-left: 10px;
+          border-radius: 5px;
+          transition: 0.3s;
+          a {
+            color: white;
+            font-size: 1.2em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            &:hover {
+              color: #7a749d;
+            }
+          }
+        }
+      }
+    }
   }
 
   #navbar {
@@ -83,14 +132,14 @@ const Nav = styled.nav`
     font-size: 18px;
     display: flex;
     align-items: center;
-  }
-
-  #brand span.Bot-Name-1 {
-    color: #f8f8f8;
-  }
-
-  #brand span.Bot-Name-2 {
-    color: #998fd2;
+    span {
+      &.Bot-Name-1 {
+        color: #f8f8f8;
+      }
+      &.Bot-Name-2 {
+        color: #998fd2;
+      }
+    }
   }
 
   ul {
@@ -98,34 +147,28 @@ const Nav = styled.nav`
     display: flex;
     align-items: center;
     justify-content: space-around;
-  }
-
-  ul a {
-    color: white;
-  }
-
-  ul li {
-    padding: 5px;
-    margin-left: 10px;
-  }
-
-  ul li:hover {
-    transform: scale(1.1);
-    transition: 0.3s;
-  }
-
-  #login,
-  #signup {
-    border-radius: 5px;
-    padding: 5px 8px;
+    a {
+      color: white;
+    }
+    li {
+      padding: 5px;
+      margin-left: 10px;
+      border-radius: 5px;
+      transition: 0.3s;
+      &:hover {
+        transform: scale(1.1);
+        transition: 0.3s;
+      }
+    }
   }
 
   #login {
+    border-radius: 5px;
+    padding: 5px 8px;
     border: 1px solid #9146ff;
-  }
-
-  #login a {
-    color: #9146ff;
+    a {
+      color: #9146ff;
+    }
   }
 
   #hamburger-icon {
