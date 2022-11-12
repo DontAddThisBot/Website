@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useState } from "react";
 import happE from "../img/happE.avif";
 import StvM from "../img/7tvM.avif";
 import StvMAnimated from "../img/7tvM-Animated.gif";
@@ -19,28 +20,136 @@ function redirect() {
   window.location.href = `${a}${b}${c}${d}${e}`;
 }
 
-const loadAllImages = () => {
-  const images = [
-    StvMAnimated,
-    PoroAnimated,
-    StatsAnimated,
-    peepooChatAnimated,
-  ];
-
-  const displayNone = {
-    display: "none",
-  };
-
-  return (
-    <div style={displayNone}>
-      {images.map(
-        (image, key) => <img src={image} alt={key} key={key} /> ?? null
-      )}
-    </div>
-  );
-};
+var cooldown = false;
 
 const Home = () => {
+  let username = document.getElementsByClassName("streamer-username");
+  let statusa = document.getElementsByClassName("streamer-status");
+  const pfp = document.getElementsByClassName("streamer-pfp");
+  let followers = document.getElementsByClassName("streamer-followers");
+
+  const names = [
+    {
+      name: "xQc",
+      status: "Partner",
+      pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/xqc-profile_image-9298dca608632101-600x600.jpeg",
+      followers: "10.5M",
+    },
+    {
+      name: "LoreStorm",
+      status: "Affiliate",
+      pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/a00c2488-5b53-4507-a3c0-87ca18a3ccb3-profile_image-600x600.png",
+      followers: "1K",
+    },
+    {
+      name: "Kattah",
+      status: "Affiliate",
+      pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/6e0274d1-a764-4d94-87fc-e684c56efed9-profile_image-600x600.png ",
+      followers: "30K",
+    },
+    {
+      name: "forsen",
+      status: "Partner",
+      pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/forsen-profile_image-48b43e1e4f54b5c8-600x600.png",
+      followers: "1.5M",
+    },
+  ];
+  const [streamer, setStreamer] = useState(names[0]);
+
+  const changeStreamer = (name) => {
+    setStreamer({ name });
+    names.forEach((streamer) => {
+      if (streamer.name === name) {
+        const {
+          name,
+          status,
+          pfp: profile_pic,
+          followers: follower_count,
+        } = streamer;
+
+        username[0].innerHTML = name;
+        statusa[0].innerHTML = status;
+        pfp[0].src = profile_pic;
+        followers[0].innerHTML = follower_count;
+      }
+    });
+  };
+
+  function transition(isNegative) {
+    for (const classes of [username, followers, statusa]) {
+      classes[0].style.transform = `translateX(${isNegative}30%)`;
+      classes[0].style.transition = "transform 0.5s ease-in-out";
+
+      setTimeout(() => {
+        classes[0].style.transform = "translateX(0%)";
+      }, 500);
+
+      setTimeout(() => {
+        classes[0].style.transition = "none";
+      }, 1000);
+
+      setTimeout(() => {
+        classes[0].style.transition = "transform 0.5s ease-in-out";
+      }, 1001);
+    }
+  }
+
+  function LeftLoad() {
+    if (!cooldown) {
+      const index = names.findIndex(
+        (streamer) => streamer.name === username[0].innerHTML
+      );
+      if (index === 0) {
+        changeStreamer(names[names.length - 1].name);
+      } else {
+        changeStreamer(names[index - 1].name);
+      }
+      transition("");
+      cooldown = true;
+      setTimeout(() => {
+        cooldown = false;
+      }, 2200);
+    }
+  }
+
+  function RightLoad() {
+    if (!cooldown) {
+      const index = names.findIndex(
+        (streamer) => streamer.name === username[0].innerHTML
+      );
+      if (index === names.length - 1) {
+        changeStreamer(names[0].name);
+      } else {
+        changeStreamer(names[index + 1].name);
+      }
+      transition("-");
+      setTimeout(() => {
+        cooldown = false;
+      }, 2200);
+    }
+  }
+
+  const loadAllImages = () => {
+    const images = [
+      StvMAnimated,
+      PoroAnimated,
+      StatsAnimated,
+      peepooChatAnimated,
+    ];
+
+    const displayNone = {
+      display: "none",
+    };
+
+    return (
+      <div style={displayNone}>
+        {images.map(
+          (image, key) => <img src={image} alt={key} key={key} /> ?? null
+        )}
+      </div>
+    );
+  };
+
   return (
     <Wrapper>
       <TopHeaders>
@@ -130,24 +239,27 @@ const Home = () => {
           </div>
         </BottomImageHeaders>
       </BottomWrapper>
-      <StreamerInformationText>
+      <StreamerText>
         <div className="bot-name">Who is using the bot?</div>
         <p>
           These are the top streamers using the bot! DontAddThisBot is trusted
           by these streamers!
         </p>
-      </StreamerInformationText>
-      <StreamerInformationInABox>
-        <img
-          src="https://static-cdn.jtvnw.net/jtv_user_pictures/1eec6ff3-35dc-4928-b905-b2ee991c98e8-profile_image-600x600.png"
-          alt="information"
-        />
+      </StreamerText>
+      <StreamerBox>
+        <button className="streamer-button" onClick={LeftLoad}>
+          <span>&#60;</span>
+        </button>
+        <img src={names[1].pfp} alt="information" className="streamer-pfp" />
         <div className="streamer-information">
-          <p className="streamer-username">LoreStorm</p>
-          <p className="streamer-status">Partner</p>
-          <p className="streamer-followers">1,000,000</p>
+          <p className="streamer-username">{names[1].name}</p>
+          <p className="streamer-status">{names[1].status}</p>
+          <p className="streamer-followers">{names[1].followers}</p>
         </div>
-      </StreamerInformationInABox>
+        <button className="streamer-button" onClick={RightLoad}>
+          <span>&#62;</span>
+        </button>
+      </StreamerBox>
       <Footer>
         <div className="footer-text">
           <p>
@@ -168,7 +280,7 @@ const Home = () => {
   );
 };
 
-const StreamerInformationText = styled.div`
+const StreamerText = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -188,7 +300,7 @@ const StreamerInformationText = styled.div`
   }
 `;
 
-const StreamerInformationInABox = styled.div`
+const StreamerBox = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,6 +312,42 @@ const StreamerInformationInABox = styled.div`
   cursor: pointer;
   border: 2px solid grey;
   background-color: transparent;
+  animation: slide 1s ease-in-out;
+
+  button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 0 1rem;
+    outline: none;
+    border-radius: 50%;
+    border: 2px solid grey;
+    width: 50px;
+    height: 50px;
+
+    &:hover {
+      border-radius: 50%;
+      color: #000000;
+      background-color: lightgrey;
+      opacity: 0.4;
+      transform: scale(1.1);
+    }
+
+    &:active {
+      border-radius: 50%;
+      color: #000000;
+      background-color: transparent;
+      transform: scale(0.7);
+    }
+
+    span {
+      font-size: 1.8rem;
+    }
+  }
 
   img {
     width: 150px;
@@ -207,6 +355,7 @@ const StreamerInformationInABox = styled.div`
     border-radius: 50%;
     margin: 10px;
     margin-left: 7%;
+    box-shadow: 0 0 10px 0 lightgrey;
 
     @media (max-width: 768px) {
       width: 100px;
@@ -223,6 +372,7 @@ const StreamerInformationInABox = styled.div`
     color: white;
     width: 300px;
     max-width: 90%;
+    transition: 0.3s;
 
     .streamer-username {
       font-size: 200%;
