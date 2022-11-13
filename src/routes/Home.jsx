@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getStreamers } from "../utils/looper";
+
 import happE from "../img/happE.avif";
 import StvM from "../img/7tvM.avif";
 import StvMAnimated from "../img/7tvM-Animated.gif";
@@ -10,55 +12,51 @@ import Stats from "../img/Stats.avif";
 import StatsAnimated from "../img/Stats-Animated.gif";
 import peepoChat from "../img/peepoChat.avif";
 import peepooChatAnimated from "../img/peepoChat-Animated.gif";
+import Gradient from "../img/Gradient.png";
+import Discord from "../img/Discord.png";
+import Twitter from "../img/Twitter.png";
+import Twitch from "../img/Twitch.png";
+import Github from "../img/Github.png";
 
-function redirect() {
-  const a = "/";
-  const b = "c";
-  const c = "o";
-  const d = "d";
-  const e = "e";
-  window.location.href = `${a}${b}${c}${d}${e}`;
-}
+let pfp = document.getElementsByClassName("streamer-pfp");
+let username = document.getElementsByClassName("streamer-username");
+let statusa = document.getElementsByClassName("streamer-status");
+let followers = document.getElementsByClassName("streamer-followers");
 
-var cooldown = false;
+export default function Home() {
+  const [totalSteamers, setTotalStreamers] = useState([]);
+  const [count, setCount] = useState(0);
+  const [button, setButton] = useState([]);
 
-const Home = () => {
-  let username = document.getElementsByClassName("streamer-username");
-  let statusa = document.getElementsByClassName("streamer-status");
-  const pfp = document.getElementsByClassName("streamer-pfp");
-  let followers = document.getElementsByClassName("streamer-followers");
+  useEffect(() => {
+    getStreamers().then((data) => {
+      setTotalStreamers(data);
+    });
 
-  const names = [
-    {
-      name: "xQc",
-      status: "Partner",
-      pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/xqc-profile_image-9298dca608632101-600x600.jpeg",
-      followers: "10.5M",
-    },
-    {
-      name: "LoreStorm",
-      status: "Affiliate",
-      pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/a00c2488-5b53-4507-a3c0-87ca18a3ccb3-profile_image-600x600.png",
-      followers: "1K",
-    },
-    {
-      name: "Kattah",
-      status: "Affiliate",
-      pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/6e0274d1-a764-4d94-87fc-e684c56efed9-profile_image-600x600.png ",
-      followers: "30K",
-    },
-    {
-      name: "forsen",
-      status: "Partner",
-      pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/forsen-profile_image-48b43e1e4f54b5c8-600x600.png",
-      followers: "1.5M",
-    },
-  ];
-  const [streamer, setStreamer] = useState(names[0]);
+    const interval = setInterval(() => {
+      setCount(count + 1);
+      if (count === 5) {
+        RightLoad();
+        setCount(0);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [count]);
+
+  function ChangeButtonDependingOnStreamer(streamerName) {
+    const streamer = document.getElementsByClassName(streamerName);
+    streamer[0].style.backgroundColor = "#fff";
+
+    const newSteamer = document.getElementsByClassName(button);
+    if (!newSteamer[0]) {
+      return;
+    } else {
+      newSteamer[0].style.backgroundColor = "#1e1e1e";
+    }
+  }
 
   const changeStreamer = (name) => {
-    setStreamer({ name });
-    names.forEach((streamer) => {
+    totalSteamers.forEach((streamer) => {
       if (streamer.name === name) {
         const {
           name,
@@ -67,6 +65,8 @@ const Home = () => {
           followers: follower_count,
         } = streamer;
 
+        setButton(name);
+        ChangeButtonDependingOnStreamer(name);
         username[0].innerHTML = name;
         statusa[0].innerHTML = status;
         pfp[0].src = profile_pic;
@@ -76,12 +76,14 @@ const Home = () => {
   };
 
   function transition(isNegative) {
-    for (const classes of [username, followers, statusa]) {
-      classes[0].style.transform = `translateX(${isNegative}30%)`;
+    for (const classes of [username, followers, statusa, pfp]) {
+      classes[0].style.transform = `translate3d(${
+        isNegative ? "-" : ""
+      }25%, 0, 0)`;
       classes[0].style.transition = "transform 0.5s ease-in-out";
 
       setTimeout(() => {
-        classes[0].style.transform = "translateX(0%)";
+        classes[0].style.transform = "translate3d(0, 0, 0)";
       }, 500);
 
       setTimeout(() => {
@@ -94,39 +96,36 @@ const Home = () => {
     }
   }
 
+  function ButtonClickLoad(streamer) {
+    setCount(0);
+    changeStreamer(streamer);
+    transition(true);
+  }
+
   function LeftLoad() {
-    if (!cooldown) {
-      const index = names.findIndex(
-        (streamer) => streamer.name === username[0].innerHTML
-      );
-      if (index === 0) {
-        changeStreamer(names[names.length - 1].name);
-      } else {
-        changeStreamer(names[index - 1].name);
-      }
-      transition("");
-      cooldown = true;
-      setTimeout(() => {
-        cooldown = false;
-      }, 2200);
+    setCount(0);
+    const index = totalSteamers.findIndex(
+      (streamer) => streamer.name === username[0].innerHTML
+    );
+    if (index === 0) {
+      changeStreamer(totalSteamers[totalSteamers.length - 1].name);
+    } else {
+      changeStreamer(totalSteamers[index - 1].name);
     }
+    transition("");
   }
 
   function RightLoad() {
-    if (!cooldown) {
-      const index = names.findIndex(
-        (streamer) => streamer.name === username[0].innerHTML
-      );
-      if (index === names.length - 1) {
-        changeStreamer(names[0].name);
-      } else {
-        changeStreamer(names[index + 1].name);
-      }
-      transition("-");
-      setTimeout(() => {
-        cooldown = false;
-      }, 2200);
+    setCount(0);
+    const index = totalSteamers.findIndex(
+      (streamer) => streamer.name === username[0].innerHTML
+    );
+    if (index === totalSteamers.length - 1) {
+      changeStreamer(totalSteamers[0].name);
+    } else {
+      changeStreamer(totalSteamers[index + 1].name);
     }
+    transition("-");
   }
 
   const loadAllImages = () => {
@@ -136,19 +135,27 @@ const Home = () => {
       StatsAnimated,
       peepooChatAnimated,
     ];
-
-    const displayNone = {
-      display: "none",
-    };
-
     return (
-      <div style={displayNone}>
+      <div
+        style={{
+          display: "none",
+        }}
+      >
         {images.map(
           (image, key) => <img src={image} alt={key} key={key} /> ?? null
         )}
       </div>
     );
   };
+
+  function redirect() {
+    const a = "/";
+    const b = "c";
+    const c = "o";
+    const d = "d";
+    const e = "e";
+    window.location.href = `${a}${b}${c}${d}${e}`;
+  }
 
   return (
     <Wrapper>
@@ -226,8 +233,10 @@ const Home = () => {
       </RowWrapper2>
       <BottomWrapper>
         <BottomTextHeaders>
-          <div className="bot-name">How do I use it in chat?</div>
-          <p>Simply to get started with the bot, do the following!</p>
+          <div className="bot-started-information">
+            How do I use it in chat?
+          </div>
+          <span></span>
         </BottomTextHeaders>
         <BottomImageHeaders>
           <div className="images">
@@ -240,45 +249,269 @@ const Home = () => {
         </BottomImageHeaders>
       </BottomWrapper>
       <StreamerText>
-        <div className="bot-name">Who is using the bot?</div>
+        <div className="streamer-bot-info">Who is using DontAddThisBot?</div>
         <p>
           These are the top streamers using the bot! DontAddThisBot is trusted
           by these streamers!
         </p>
       </StreamerText>
       <StreamerBox>
-        <button className="streamer-button" onClick={LeftLoad}>
+        <button className="streamer-button left" onClick={LeftLoad}>
           <span>&#60;</span>
         </button>
-        <img src={names[1].pfp} alt="information" className="streamer-pfp" />
-        <div className="streamer-information">
-          <p className="streamer-username">{names[1].name}</p>
-          <p className="streamer-status">{names[1].status}</p>
-          <p className="streamer-followers">{names[1].followers}</p>
-        </div>
-        <button className="streamer-button" onClick={RightLoad}>
+        {totalSteamers
+          .map((streamer, key) => streamer)
+          .slice(0, 1)
+          .map((streamer, key) => (
+            <div className="streamer-information" key={key}>
+              <img
+                src={streamer.pfp}
+                alt="information"
+                className="streamer-pfp"
+              />
+              <div className="streamer-information-text">
+                <p className="streamer-username">{streamer.name}</p>
+                <p className="streamer-status">{streamer.status}</p>
+                <p className="streamer-followers">{streamer.followers}</p>
+              </div>
+            </div>
+          ))}
+        <button className="streamer-button right" onClick={RightLoad}>
           <span>&#62;</span>
         </button>
       </StreamerBox>
-      <Footer>
-        <div className="footer-text">
-          <p>
-            DontAddThisBot is a multi-channel variety and utility moderation/fun
-            chat-bot.
-          </p>
-          <p>
-            Simply login with Twitch and add the bot to your channel to get
-            stared! The bot has alot of utility, and variety of commands.
-          </p>
-          <p>
-            The bot is currently in development, and is being updated
-            frequently.
-          </p>
+      <BottomImageSliderButtons>
+        {totalSteamers.map((streamer, key) => (
+          <button
+            className={streamer.name}
+            key={key}
+            onClick={() => {
+              ButtonClickLoad(streamer.name);
+            }}
+          ></button>
+        ))}
+      </BottomImageSliderButtons>
+      <FooterThatFitsMobile>
+        <div className="outer-footer">
+          <div className="copyright">
+            <span className="Bot-Name-1">
+              DontAdd<span className="Bot-Name-2">ThisBot</span>
+            </span>
+            <p>© 2022 Kattah</p>
+            <p>Not affiliated with Twitch or any of its partners. All rights</p>
+          </div>
+          <div className="information-footer">
+            <p className="information-footer-text">Information</p>
+            <div className="information-redirects">
+              <a href="/commands">Commands</a>
+              <a href="/dashboard">Dashboard</a>
+              <a href="/leaderboard">Leaderboard</a>
+              <a href="/stats">Stats</a>
+            </div>
+          </div>
+          <div className="social-media">
+            <p className="social-media-text">Contact</p>
+            <div className="social-media-redirects">
+              <a href="https://twitter.com/katt3h">
+                <img
+                  src={Twitter}
+                  alt="Twitter"
+                  className="social-media-pfp Twitter"
+                />
+              </a>
+              <a href="https://discord.gg/2Z7Y4Y4">
+                <img src={Discord} alt="Discord" className="social-media-pfp" />
+              </a>
+              <a href="https://twitch.tv/kattah">
+                <img src={Twitch} alt="Twitch" className="social-media-pfp" />
+              </a>
+              <a href="https://github.com/kattah7">
+                <img
+                  src={Github}
+                  alt="Github"
+                  className="social-media-pfp Github"
+                />
+              </a>
+            </div>
+          </div>
         </div>
-      </Footer>
+      </FooterThatFitsMobile>
     </Wrapper>
   );
-};
+}
+
+const FooterThatFitsMobile = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 5%;
+  background-color: #1f1f1f;
+  width: 100%;
+
+  .outer-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin-bottom: 2%;
+    margin-top: 2%;
+    margin-right: 3%;
+    gap: 25%;
+
+    .copyright,
+    .information-footer,
+    .social-media {
+      flex-direction: column;
+
+      a {
+        color: #a9a9a9;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #a9a9a9;
+        margin-top: 1%;
+      }
+
+      p.information-footer-text,
+      p.social-media-text {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #f8f8f8;
+      }
+
+      .information-redirects,
+      .social-media-redirects {
+        display: flex;
+        flex-direction: column;
+        margin-top: 1%;
+
+        a {
+          font-size: 1rem;
+          font-weight: 500;
+          color: #a9a9a9;
+
+          &:hover {
+            transition: 0.3s;
+            color: #f8f8f8;
+            span {
+              visibility: visible;
+            }
+          }
+        }
+      }
+
+      .social-media-redirects {
+        display: flex;
+        flex-direction: row;
+        gap: 20%;
+        img {
+          width: 1.5rem;
+          height: 1.5rem;
+
+          &:hover {
+            transition: 0.5s;
+            filter: brightness(0.5);
+          }
+        }
+
+        .Github {
+          width: 1.8rem;
+          height: 1.8rem;
+          margin-top: -0.2rem;
+          margin-left: -0.2rem;
+        }
+
+        .Twitter {
+          width: 1.6rem;
+          height: 1.4rem;
+        }
+      }
+
+      span {
+        font-size: 1.3rem;
+        font-weight: 600;
+        &.Bot-Name-1 {
+          color: #f8f8f8;
+          margin-top: 200px;
+        }
+        &.Bot-Name-2 {
+          color: #998fd2;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 13%;
+    .outer-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-right: 0%;
+      margin-top: -10%;
+      margin-bottom: 10%;
+
+      .copyright,
+      .information-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .copyright {
+        margin-bottom: 5%;
+        margin-top: -30%;
+      }
+
+      .information-footer {
+        margin-bottom: 15%;
+
+        a {
+          margin-top: 1%;
+        }
+      }
+
+      p.social-media-text {
+        display: flex;
+        justify-content: center;
+      }
+
+      .social-media-redirects {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+  }
+`;
+
+const BottomImageSliderButtons = styled.ul`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin: 10px 0;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+  z-index: 1;
+
+  button {
+    background-color: #1e1e1e;
+    border: 2px solid #fff;
+    cursor: pointer;
+    height: 15px;
+    margin: 0 5px;
+    outline: none;
+    width: 10px;
+    border-radius: 50%;
+    transition: 0.3s ease-in-out;
+  }
+`;
 
 const StreamerText = styled.section`
   display: flex;
@@ -298,6 +531,13 @@ const StreamerText = styled.section`
     margin: 0 auto;
     color: grey;
   }
+
+  .streamer-bot-info {
+    font-size: 50px;
+    @media (max-width: 768px) {
+      font-size: 30px;
+    }
+  }
 `;
 
 const StreamerBox = styled.section`
@@ -313,7 +553,6 @@ const StreamerBox = styled.section`
   border: 2px solid grey;
   background-color: transparent;
   animation: slide 1s ease-in-out;
-
   button {
     background-color: transparent;
     border: none;
@@ -347,6 +586,18 @@ const StreamerBox = styled.section`
     span {
       font-size: 1.8rem;
     }
+
+    @media (max-width: 768px) {
+      width: 40px;
+      height: 40px;
+      span {
+        font-size: 1.3rem;
+      }
+
+      &.right {
+        margin-top: 15px;
+      }
+    }
   }
 
   img {
@@ -354,36 +605,43 @@ const StreamerBox = styled.section`
     height: 150px;
     border-radius: 50%;
     margin: 10px;
-    margin-left: 7%;
     box-shadow: 0 0 10px 0 lightgrey;
+    margin-right: 4rem;
 
     @media (max-width: 768px) {
       width: 100px;
       height: 100px;
-      margin-left: 20px;
+      margin-top: 1.5rem;
+      margin-right: 0.5rem;
     }
   }
 
   .streamer-information {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     color: white;
-    width: 300px;
+    width: 400px;
     max-width: 90%;
     transition: 0.3s;
+
+    .streamer-information-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
     .streamer-username {
       font-size: 200%;
       font-weight: 600;
-      margin-top: 10px;
+      margin-bottom: 0.2rem;
     }
 
     .streamer-status {
       font-size: 150%;
       font-weight: 600;
-      margin-top: -9%;
+      margin-top: -3%;
       color: #9146ff;
     }
 
@@ -393,6 +651,18 @@ const StreamerBox = styled.section`
       color: grey;
       margin-top: -2%;
       margin-bottom: 5px;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+
+      .streamer-username {
+        margin-top: 0.3rem;
+      }
+
+      .streamer-status {
+        margin-bottom: 0.3rem;
+      }
     }
   }
 
@@ -407,9 +677,12 @@ const BottomWrapper = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #1a1a1a;
+  background-image: url(${Gradient});
+  background-size: cover;
   margin-top: 3.5rem;
   margin-bottom: 5rem;
+  width: 100%;
+
   @media (max-width: 768px) {
     font-size: 1rem;
     width: 100%;
@@ -426,6 +699,21 @@ const BottomTextHeaders = styled.div`
     font-size: 1.5rem;
     font-weight: 200;
     margin-top: 1rem;
+    color: lightgrey;
+  }
+
+  span {
+    background-color: white;
+    display: inline-block;
+    width: 200px;
+    height: 1px;
+  }
+
+  .bot-started-information {
+    font-size: 50px;
+    @media (max-width: 768px) {
+      font-size: 30px;
+    }
   }
 `;
 
@@ -455,7 +743,6 @@ const BottomImageHeaders = styled.section`
     height: 100%;
     max-width: 80%;
     max-height: 80%;
-    margin-top: 3rem;
     margin-bottom: 4rem;
     background-color: transparent;
     box-shadow: none;
@@ -679,34 +966,3 @@ const MiddleHeaders = styled.section`
     box-shadow: 0 0 20px #9146ff;
   }
 `;
-
-const Footer = styled.footer`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 10%;
-  background-color: #1f1f1f;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    margin-top: 50%;
-  }
-
-  div {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  a {
-    color: #9146ff;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
-    :hover {
-      transform: scale(1.1);
-    }
-  }
-`;
-
-export default Home;

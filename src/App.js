@@ -1,8 +1,11 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
+
 import Home from "./routes/Home";
 import Unknown from "./routes/Unknown";
 import Navbar from "./Navbar";
+import Leaderboard from "./routes/Leaderboard";
+
 import styled from "styled-components";
 import img from "./img/shapes.png";
 
@@ -24,6 +27,7 @@ function App() {
       </div> */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="*" element={<Unknown />} />
       </Routes>
     </AppContainer>
