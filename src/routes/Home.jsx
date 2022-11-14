@@ -65,7 +65,7 @@ function transition(isNegative) {
 }
 
 async function isLogged() {
-  const isLogged = await fetch("http://localhost:3001/api/twitch", {
+  const isLogged = await fetch("http://localhost:3301/api/twitch", {
     method: "GET",
     credentials: "include",
   }).then((res) => res.json());
@@ -74,7 +74,7 @@ async function isLogged() {
 
 async function isChannelBot(channelName) {
   const isChannelBot = await fetch(
-    `http://localhost:3003/api/bot/channel/${channelName}`,
+    `http://localhost:3301/api/bot/channel/${channelName}`,
     {
       method: "GET",
     }
@@ -238,7 +238,7 @@ export default function Home() {
 
     if (!loggedIn) {
       return (
-        <a href="http://localhost:3001/auth/twitch">
+        <a href="http://localhost:3301/auth/twitch">
           <button className="login-button">
             <Span>Login with Twitch</Span>
           </button>
