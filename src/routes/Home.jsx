@@ -67,7 +67,6 @@ function transition(isNegative) {
 async function isLogged() {
   const isLogged = await fetch("https://test.poros.lol/api/twitch", {
     method: "GET",
-    credentials: "include",
   }).then((res) => res.json());
   return isLogged;
 }

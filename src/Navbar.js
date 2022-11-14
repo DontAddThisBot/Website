@@ -28,7 +28,6 @@ const Navbar = () => {
     const getUserAuth = async () => {
       const userAuth = await fetch("https://test.poros.lol/api/twitch", {
         method: "GET",
-        credentials: "include",
       });
       const userAuthJson = await userAuth.json();
       setUserAuth(userAuthJson);
