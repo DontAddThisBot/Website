@@ -1,6 +1,7 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import styled from "styled-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import fetch from "node-fetch";
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
@@ -21,6 +22,106 @@ function toggleMobileMenu() {
 }
 
 const Navbar = () => {
+  const [userAuth, setUserAuth] = useState([]);
+
+  useEffect(() => {
+    const getUserAuth = async () => {
+      const userAuth = await fetch("http://localhost:3001/api/twitch", {
+        method: "GET",
+        credentials: "include",
+      });
+      const userAuthJson = await userAuth.json();
+      setUserAuth(userAuthJson);
+    };
+    getUserAuth();
+
+    return () => {
+      setUserAuth([]);
+    };
+  }, []);
+
+  window.addEventListener("click", (event) => {
+    const getDocuemnt = document.getElementsByClassName("dropdown-content");
+    if (!getDocuemnt[0].className.includes(event.target.className)) {
+      getDocuemnt[0].style.display = "none";
+    }
+  });
+
+  function dropdownBox() {
+    const getDocuemnt = document.getElementsByClassName("dropdown-content");
+    if (getDocuemnt[0].style.display === "block") {
+      getDocuemnt[0].style.display = "none";
+    } else {
+      getDocuemnt[0].style.display = "block";
+    }
+  }
+
+  const { success, id } = userAuth;
+  const isLoggedIn = () => {
+    if (success) {
+      const style = {
+        marginRight: "50px",
+      };
+      return (
+        <div>
+          <ul>
+            <img
+              src={id?.user.data[0].profile_image_url}
+              alt="navbar-pfp"
+              onClick={dropdownBox}
+              style={style}
+            />
+          </ul>
+          <div className="dropdown-content">
+            <li className="dropdown-text dashboard">
+              <a href="http://localhost:3001/api/twitch/logout">Dashboard</a>
+            </li>
+            <li className="dropdown-text dashboard">
+              <a href="http://localhost:3001/api/twitch/logout">Dashboard</a>
+            </li>
+            <li id="logout" className="dropdown-text">
+              <a href="http://localhost:3001/api/logout">Logout</a>
+            </li>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <ul>
+          <li id="login">
+            <a href="http://localhost:3001/auth/twitch">Login</a>
+          </li>
+        </ul>
+      );
+    }
+  };
+
+  const mobileNavBar = () => {
+    if (success) {
+      return (
+        <>
+          <ul className="mobile-text-dropdown">
+            <li id="dropdown-text dashboard">
+              <a href="/login">Dashboard</a>
+            </li>
+            <li id="dropdown-text dashboard">
+              <a href="/login">Dashboard</a>
+            </li>
+          </ul>
+          <li id="logout">
+            <a href="http://localhost:3001/api/logout">Logout</a>
+          </li>
+        </>
+      );
+    } else {
+      return (
+        <li id="login">
+          <a href="http://localhost:3001/auth/twitch">Login</a>
+        </li>
+      );
+    }
+  };
+
   return (
     <Nav>
       <nav className="navbar">
@@ -39,13 +140,7 @@ const Navbar = () => {
             </li>
           </ul>
         </nav>
-        <nav className="right-navbar">
-          <ul>
-            <li id="login">
-              <a href="login">Login</a>
-            </li>
-          </ul>
-        </nav>
+        <nav className="right-navbar">{isLoggedIn()}</nav>
         <div id="hamburger-icon" onClick={toggleMobileMenu}>
           <div className="bar1"></div>
           <div className="bar2"></div>
@@ -57,9 +152,7 @@ const Navbar = () => {
             <li>
               <a href="https://stats.kattah.me">Stats</a>
             </li>
-            <li id="login">
-              <a href="/login">Login</a>
-            </li>
+            {mobileNavBar()}
           </ul>
         </div>
       </nav>
@@ -79,6 +172,54 @@ const Nav = styled.nav`
   }
 
   nav.right-navbar {
+    #login {
+      margin-left: 1em;
+    }
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-top: 5px;
+      :hover {
+        transition: 0.5s;
+        cursor: pointer;
+        transform: scale(1.1);
+      }
+    }
+
+    .dropdown-content {
+      flex-direction: column;
+      padding: 0;
+      display: none;
+      position: absolute;
+      border-radius: 5px;
+      background-color: #1d1f1d;
+      min-width: 2%;
+      margin-left: 5px;
+      margin-top: -5px;
+
+      li.dropdown-text {
+        color: white;
+        padding: 5px 16px;
+        text-decoration: none;
+        display: block;
+        margin: 5px;
+        text-align: center;
+      }
+
+      li.dashboard {
+        border-bottom: 1px solid #3a3a3a;
+        a {
+          color: white;
+          font-weight: 500;
+          :hover {
+            transition: 0.3s;
+            color: grey;
+          }
+        }
+      }
+    }
+
     @media (max-width: 850px) {
       font-size: 0.8em;
     }
@@ -162,12 +303,31 @@ const Nav = styled.nav`
     }
   }
 
-  #login {
+  #login,
+  #logout {
     border-radius: 5px;
     padding: 5px 8px;
+    cursor: pointer;
+  }
+
+  #login {
     border: 1px solid #9146ff;
     a {
       color: #9146ff;
+    }
+  }
+
+  #logout {
+    border: 1px solid #ff3860;
+    :hover {
+      transition: 0.5s;
+      background-color: #ff3860;
+      a {
+        color: white;
+      }
+    }
+    a {
+      color: #ff3860;
     }
   }
 
@@ -232,6 +392,13 @@ const Nav = styled.nav`
 
     #hamburger-icon {
       display: block;
+    }
+
+    ul.mobile-text-dropdown {
+      margin-right: 2.5rem;
+      a {
+        color: grey;
+      }
     }
   }
 `;

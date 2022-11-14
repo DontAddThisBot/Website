@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import fetch from "node-fetch";
+import { useOutletContext } from "react-router-dom";
 
 async function fetchLeaderboard() {
   const { topUsers } = await fetch(
@@ -17,6 +18,8 @@ const Leaderboard = () => {
   useEffect(() => {
     fetchLeaderboard().then((topUsers) => setLeaderboard(topUsers));
   }, []);
+  const obj = useOutletContext();
+  console.log(obj);
 
   return (
     <Wrapper>
@@ -30,7 +33,7 @@ const Leaderboard = () => {
         <tbody>
           {leaderboard.map((user, index) => (
             <tr key={index}>
-              <td>{user}</td>
+              <td>{user.username}</td>
             </tr>
           ))}
         </tbody>

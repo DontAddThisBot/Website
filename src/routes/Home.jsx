@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { getStreamers } from "../utils/looper";
+import { join as joinChannel, part as partChannel } from "../js/bot";
 
 import happE from "../img/happE.avif";
 import StvM from "../img/7tvM.avif";
@@ -23,37 +23,99 @@ let username = document.getElementsByClassName("streamer-username");
 let statusa = document.getElementsByClassName("streamer-status");
 let followers = document.getElementsByClassName("streamer-followers");
 
+async function fetchStreamers() {
+  const streamers = ["xqc", "kattah", "forsen", "turtoise", "pokimane"];
+  const data = await fetch(
+    `https://api.ivr.fi/v2/twitch/user?login=${streamers.join("%2C")}`,
+    {
+      method: "GET",
+    }
+  ).then((res) => res.json());
+  const mapped = await data.map((streamer) => {
+    const { displayName, logo, followers } = streamer;
+    return {
+      name: displayName,
+      pfp: logo,
+      status: "Partner",
+      followers: followers.toLocaleString(),
+    };
+  });
+  return mapped;
+}
+
+function transition(isNegative) {
+  for (const classes of [username, followers, statusa, pfp]) {
+    classes[0].style.transform = `translate3d(${
+      isNegative ? "-" : ""
+    }25%, 0, 0)`;
+    classes[0].style.transition = "transform 0.5s ease-in-out";
+
+    setTimeout(() => {
+      classes[0].style.transform = "translate3d(0, 0, 0)";
+    }, 500);
+
+    setTimeout(() => {
+      classes[0].style.transition = "none";
+    }, 1000);
+
+    setTimeout(() => {
+      classes[0].style.transition = "transform 0.5s ease-in-out";
+    }, 1001);
+  }
+}
+
+async function isLogged() {
+  const isLogged = await fetch("http://localhost:3001/api/twitch", {
+    method: "GET",
+    credentials: "include",
+  }).then((res) => res.json());
+  return isLogged;
+}
+
+async function isChannelBot(channelName) {
+  const isChannelBot = await fetch(
+    `http://localhost:3003/api/bot/channel/${channelName}`,
+    {
+      method: "GET",
+    }
+  ).then((res) => res.json());
+  return isChannelBot;
+}
+
 export default function Home() {
   const [totalSteamers, setTotalStreamers] = useState([]);
   const [count, setCount] = useState(0);
   const [button, setButton] = useState([]);
 
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState([]);
+  const [isBotIn, setIsBotIn] = useState([]);
+
   useEffect(() => {
-    getStreamers().then((data) => {
-      setTotalStreamers(data);
-    });
-
-    const interval = setInterval(() => {
-      setCount(count + 1);
-      if (count === 5) {
-        RightLoad();
-        setCount(0);
+    fetchStreamers().then((streamers) => setTotalStreamers(streamers));
+    isLogged().then((loginFlow) => {
+      setIsUserLoggedIn(loginFlow);
+      const { success, id } = loginFlow;
+      if (success) {
+        isChannelBot(id.user.data[0].login).then((channelInfo) => {
+          setIsBotIn(channelInfo);
+        });
       }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [count]);
+    });
+  }, []);
 
-  function ChangeButtonDependingOnStreamer(streamerName) {
-    const streamer = document.getElementsByClassName(streamerName);
-    streamer[0].style.backgroundColor = "#fff";
-
-    const newSteamer = document.getElementsByClassName(button);
-    if (!newSteamer[0]) {
-      return;
-    } else {
-      newSteamer[0].style.backgroundColor = "#1e1e1e";
-    }
-  }
+  // useEffect(() => {
+  //   let Timer = setInterval(() => {
+  //     setCount((count) => count + 1);
+  //     if (count === 5) {
+  //       reset();
+  //       function reset() {
+  //         setCount(0);
+  //         LeftLoad();
+  //       }
+  //     }
+  //   }, 1000);
+  //   return () => clearInterval(Timer);
+  // }, [count]);
 
   const changeStreamer = (name) => {
     totalSteamers.forEach((streamer) => {
@@ -75,35 +137,21 @@ export default function Home() {
     });
   };
 
-  function transition(isNegative) {
-    for (const classes of [username, followers, statusa, pfp]) {
-      classes[0].style.transform = `translate3d(${
-        isNegative ? "-" : ""
-      }25%, 0, 0)`;
-      classes[0].style.transition = "transform 0.5s ease-in-out";
-
-      setTimeout(() => {
-        classes[0].style.transform = "translate3d(0, 0, 0)";
-      }, 500);
-
-      setTimeout(() => {
-        classes[0].style.transition = "none";
-      }, 1000);
-
-      setTimeout(() => {
-        classes[0].style.transition = "transform 0.5s ease-in-out";
-      }, 1001);
+  function ChangeButtonDependingOnStreamer(streamerName) {
+    const streamer = document.getElementsByClassName(streamerName);
+    streamer[0].style.backgroundColor = "#fff"; // white
+    const newSteamer = document.getElementsByClassName(button);
+    if (newSteamer[0]) {
+      return (newSteamer[0].style.backgroundColor = "#1e1e1e"); // black
     }
   }
 
   function ButtonClickLoad(streamer) {
-    setCount(0);
     changeStreamer(streamer);
     transition(true);
   }
 
-  function LeftLoad() {
-    setCount(0);
+  const LeftLoad = () => {
     const index = totalSteamers.findIndex(
       (streamer) => streamer.name === username[0].innerHTML
     );
@@ -113,10 +161,9 @@ export default function Home() {
       changeStreamer(totalSteamers[index - 1].name);
     }
     transition("");
-  }
+  };
 
   function RightLoad() {
-    setCount(0);
     const index = totalSteamers.findIndex(
       (streamer) => streamer.name === username[0].innerHTML
     );
@@ -157,6 +204,57 @@ export default function Home() {
     window.location.href = `${a}${b}${c}${d}${e}`;
   }
 
+  const IsInChannel = () => {
+    const { success: loggedIn } = isUserLoggedIn;
+    const { success, isChannel } = isBotIn;
+    // make a loading screen
+    if (loggedIn && success) {
+      if (!isChannel) {
+        return (
+          <button
+            className="join-button"
+            onClick={() => {
+              disableJoin();
+              joinChannel();
+            }}
+          >
+            <Span>Add Bot</Span>
+          </button>
+        );
+      } else {
+        return (
+          <button
+            className="part-button"
+            onClick={() => {
+              disablePart();
+              partChannel();
+            }}
+          >
+            <Span>Part Bot</Span>
+          </button>
+        );
+      }
+    }
+
+    if (!loggedIn) {
+      return (
+        <a href="http://localhost:3001/auth/twitch">
+          <button className="login-button">
+            <Span>Login with Twitch</Span>
+          </button>
+        </a>
+      );
+    }
+  };
+
+  function disableJoin() {
+    document.getElementsByClassName("join-button")[0].style.display = "none";
+  }
+
+  function disablePart() {
+    document.getElementsByClassName("part-button")[0].style.display = "none";
+  }
+
   return (
     <Wrapper>
       <TopHeaders>
@@ -169,11 +267,7 @@ export default function Home() {
           Fun utility chat bot
         </div>
         <div className="div-button">
-          <a href="/login">
-            <button className="login-button">
-              <Span>Login with Twitch</Span>
-            </button>
-          </a>
+          <IsInChannel />
         </div>
         <div className="channel-count">Serving in 0000 Channels!</div>
       </TopHeaders>
@@ -256,7 +350,13 @@ export default function Home() {
         </p>
       </StreamerText>
       <StreamerBox>
-        <button className="streamer-button left" onClick={LeftLoad}>
+        <button
+          className="streamer-button left"
+          onClick={() => {
+            LeftLoad();
+            setCount(0);
+          }}
+        >
           <span>&#60;</span>
         </button>
         {totalSteamers
@@ -276,7 +376,13 @@ export default function Home() {
               </div>
             </div>
           ))}
-        <button className="streamer-button right" onClick={RightLoad}>
+        <button
+          className="streamer-button right"
+          onClick={() => {
+            RightLoad();
+            setCount(0);
+          }}
+        >
           <span>&#62;</span>
         </button>
       </StreamerBox>
@@ -287,6 +393,7 @@ export default function Home() {
             key={key}
             onClick={() => {
               ButtonClickLoad(streamer.name);
+              setCount(0);
             }}
           ></button>
         ))}
@@ -908,7 +1015,29 @@ const TopHeaders = styled.section`
     font-size: 2rem;
   }
 
-  button.login-button {
+  button.join-button {
+    color: white;
+    background-color: transparent;
+    border: 1px solid #30c759;
+
+    :hover {
+      background-color: #30c759;
+      border: 1px solid #30c759;
+    }
+  }
+
+  button.part-button {
+    color: white;
+    background-color: transparent;
+    border: 1px solid #d1243e;
+
+    :hover {
+      background-color: #d1243e;
+      border: 1px solid #d1243e;
+    }
+  }
+
+  button {
     border: none;
     border-radius: 5px;
     padding: 15px 35px;
