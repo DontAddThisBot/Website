@@ -238,7 +238,7 @@ export default function Home() {
 
     if (!loggedIn) {
       return (
-        <a href="http://localhost:3001/auth/twitch">
+        <a href="https://test.poros.lol/auth/twitch">
           <button className="login-button">
             <Span>Login with Twitch</Span>
           </button>

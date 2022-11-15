@@ -89,7 +89,7 @@ const Navbar = () => {
       return (
         <ul>
           <li id="login">
-            <a href="http://localhost:3301/auth/twitch">Login</a>
+            <a href="https://test.poros.lol/auth/twitch">Login</a>
           </li>
         </ul>
       );
