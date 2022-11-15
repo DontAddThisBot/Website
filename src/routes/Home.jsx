@@ -83,6 +83,35 @@ async function isChannelBot(channelName) {
   return isChannelBot;
 }
 
+function redirect() {
+  const a = "/";
+  const b = "c";
+  const c = "o";
+  const d = "d";
+  const e = "e";
+  window.location.href = `${a}${b}${c}${d}${e}`;
+}
+
+const loadAllImages = () => {
+  const images = [
+    StvMAnimated,
+    PoroAnimated,
+    StatsAnimated,
+    peepooChatAnimated,
+  ];
+  return (
+    <div
+      style={{
+        display: "none",
+      }}
+    >
+      {images.map(
+        (image, key) => <img src={image} alt={key} key={key} /> ?? null
+      )}
+    </div>
+  );
+};
+
 export default function Home() {
   const [totalSteamers, setTotalStreamers] = useState([]);
   const [count, setCount] = useState(0);
@@ -90,6 +119,16 @@ export default function Home() {
 
   const [isUserLoggedIn, setIsUserLoggedIn] = useState([]);
   const [isBotIn, setIsBotIn] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const IsApiLoaded = () => {
+    if (!isLoading) {
+      return <div className="loading">Loading...</div>;
+    } else {
+      return IsInChannel();
+    }
+  };
 
   useEffect(() => {
     fetchStreamers().then((streamers) => setTotalStreamers(streamers));
@@ -99,7 +138,10 @@ export default function Home() {
       if (success) {
         isChannelBot(id.user.data[0].login).then((channelInfo) => {
           setIsBotIn(channelInfo);
+          setIsLoading(true);
         });
+      } else {
+        setIsLoading(true);
       }
     });
   }, []);
@@ -117,6 +159,79 @@ export default function Home() {
   //   }, 1000);
   //   return () => clearInterval(Timer);
   // }, [count]);
+
+  const IsInChannel = () => {
+    const JoinButton = () => {
+      return (
+        <button
+          className="join-button"
+          onClick={() => {
+            joinChannel();
+            disableJoin();
+          }}
+        >
+          <Span>Add Bot</Span>
+        </button>
+      );
+    };
+
+    const PartButton = () => {
+      return (
+        <button
+          className="part-button"
+          onClick={() => {
+            partChannel();
+            disablePart();
+          }}
+        >
+          <Span>Part Bot</Span>
+        </button>
+      );
+    };
+
+    const { success: loggedIn } = isUserLoggedIn;
+    const { success, isChannel } = isBotIn;
+
+    if (!loggedIn) {
+      return (
+        <a href={`${site.frontend.origin}/auth/twitch`}>
+          <button className="login-button">
+            <Span>Login with Twitch</Span>
+          </button>
+        </a>
+      );
+    }
+
+    if (loggedIn && success) {
+      if (!isChannel) {
+        return <JoinButton />;
+      } else {
+        return <PartButton />;
+      }
+    } else if (loggedIn && !success) {
+      return <JoinButton />;
+    }
+  };
+
+  function disableJoin() {
+    const button = document.getElementsByClassName("join-button");
+    button[0].style.display = "none";
+
+    const loading = document.createElement("div");
+    loading.className = "loading";
+    loading.innerHTML = "Joining Channel...";
+    button[0].parentNode.appendChild(loading);
+  }
+
+  function disablePart() {
+    const button = document.getElementsByClassName("part-button");
+    button[0].style.display = "none";
+
+    const loading = document.createElement("div");
+    loading.className = "loading";
+    loading.innerHTML = "Parting Channel...";
+    button[0].parentNode.appendChild(loading);
+  }
 
   const changeStreamer = (name) => {
     totalSteamers.forEach((streamer) => {
@@ -176,85 +291,6 @@ export default function Home() {
     transition("-");
   }
 
-  const loadAllImages = () => {
-    const images = [
-      StvMAnimated,
-      PoroAnimated,
-      StatsAnimated,
-      peepooChatAnimated,
-    ];
-    return (
-      <div
-        style={{
-          display: "none",
-        }}
-      >
-        {images.map(
-          (image, key) => <img src={image} alt={key} key={key} /> ?? null
-        )}
-      </div>
-    );
-  };
-
-  function redirect() {
-    const a = "/";
-    const b = "c";
-    const c = "o";
-    const d = "d";
-    const e = "e";
-    window.location.href = `${a}${b}${c}${d}${e}`;
-  }
-
-  const IsInChannel = () => {
-    const { success: loggedIn } = isUserLoggedIn;
-    const { success, isChannel } = isBotIn;
-    if (loggedIn && success) {
-      if (!isChannel) {
-        return (
-          <button
-            className="join-button"
-            onClick={() => {
-              disableJoin();
-              joinChannel();
-            }}
-          >
-            <Span>Add Bot</Span>
-          </button>
-        );
-      } else {
-        return (
-          <button
-            className="part-button"
-            onClick={() => {
-              disablePart();
-              partChannel();
-            }}
-          >
-            <Span>Part Bot</Span>
-          </button>
-        );
-      }
-    }
-
-    if (!loggedIn) {
-      return (
-        <a href={`${site.frontend.origin}/auth/twitch`}>
-          <button className="login-button">
-            <Span>Login with Twitch</Span>
-          </button>
-        </a>
-      );
-    }
-  };
-
-  function disableJoin() {
-    document.getElementsByClassName("join-button")[0].style.display = "none";
-  }
-
-  function disablePart() {
-    document.getElementsByClassName("part-button")[0].style.display = "none";
-  }
-
   return (
     <Wrapper>
       <TopHeaders>
@@ -267,7 +303,7 @@ export default function Home() {
           Fun utility chat bot
         </div>
         <div className="div-button">
-          <IsInChannel />
+          <IsApiLoaded />
         </div>
         <div className="channel-count">Serving in 0000 Channels!</div>
       </TopHeaders>
