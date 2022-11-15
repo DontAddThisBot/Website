@@ -75,7 +75,7 @@ async function isLogged() {
 
 async function isChannelBot(channelName) {
   const isChannelBot = await fetch(
-    `https://api.poros.lol/api/bot/channel/${channelName}`,
+    `${site.frontend.oldApi}/api/bot/channel/${channelName}`,
     {
       method: "GET",
     }
