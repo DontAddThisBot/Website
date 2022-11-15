@@ -65,15 +65,16 @@ function transition(isNegative) {
 }
 
 async function isLogged() {
-  const isLogged = await fetch("https://test.poros.lol/api/twitch", {
+  const isLogged = await fetch("http://localhost:3301/api/twitch", {
     method: "GET",
+    credentials: "include",
   }).then((res) => res.json());
   return isLogged;
 }
 
 async function isChannelBot(channelName) {
   const isChannelBot = await fetch(
-    `https://test.poros.lol/api/bot/channel/${channelName}`,
+    `https://api.poros.lol/api/bot/channel/${channelName}`,
     {
       method: "GET",
     }
