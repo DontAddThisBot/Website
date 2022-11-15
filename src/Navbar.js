@@ -26,7 +26,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const getUserAuth = async () => {
-      const userAuth = await fetch("/api/twitch", {
+      const userAuth = await fetch("http://localhost:3344/api/twitch", {
         method: "GET",
         credentials: "include",
       });
