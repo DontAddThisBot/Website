@@ -208,7 +208,6 @@ export default function Home() {
   const IsInChannel = () => {
     const { success: loggedIn } = isUserLoggedIn;
     const { success, isChannel } = isBotIn;
-    // make a loading screen
     if (loggedIn && success) {
       if (!isChannel) {
         return (

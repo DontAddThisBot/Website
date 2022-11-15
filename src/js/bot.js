@@ -1,5 +1,7 @@
+import site from "../config.json";
+
 export async function join() {
-  const r = await fetch("https://test.poros.lol/api/bot/join", {
+  const r = await fetch(`${site.frontend.origin}/api/bot/join`, {
     method: "POST",
     credentials: "include",
   });
@@ -12,7 +14,7 @@ export async function join() {
 }
 
 export async function part() {
-  const r = await fetch("https://test.poros.lol/api/bot/part", {
+  const r = await fetch(`${site.frontend.origin}/api/bot/part`, {
     method: "POST",
     credentials: "include",
   });
