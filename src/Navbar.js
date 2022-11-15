@@ -23,10 +23,9 @@ function toggleMobileMenu() {
 
 const Navbar = () => {
   const [userAuth, setUserAuth] = useState([]);
-
   useEffect(() => {
     const getUserAuth = async () => {
-      const userAuth = await fetch(`${process.env.ORIGIN}/api/twitch`, {
+      const userAuth = await fetch(`https://test.poros.lol/api/twitch`, {
         method: "GET",
         credentials: "include",
       });
