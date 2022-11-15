@@ -1,5 +1,5 @@
 export async function join() {
-  const r = await fetch("http://localhost:3001/api/bot/join", {
+  const r = await fetch("https://test.poros.lol/api/bot/join", {
     method: "POST",
     credentials: "include",
   });
@@ -12,7 +12,7 @@ export async function join() {
 }
 
 export async function part() {
-  const r = await fetch("http://localhost:3001/api/bot/part", {
+  const r = await fetch("https://test.poros.lol/api/bot/part", {
     method: "POST",
     credentials: "include",
   });
