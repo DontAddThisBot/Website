@@ -1,7 +1,6 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import fetch from "node-fetch";
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
@@ -89,7 +88,7 @@ const Navbar = () => {
       return (
         <ul>
           <li id="login">
-            <a href="http://localhost:3001/auth/twitch">Login</a>
+            <a href="http://localhost:3301/auth/twitch">Login</a>
           </li>
         </ul>
       );
