@@ -74,13 +74,17 @@ const Navbar = () => {
           </ul>
           <div className="dropdown-content">
             <li className="dropdown-text dashboard">
-              <a href="http://localhost:3001/api/twitch/logout">Dashboard</a>
+              <a href={`${site.frontend.origin}/api/twitch/logout`}>
+                Dashboard
+              </a>
             </li>
             <li className="dropdown-text dashboard">
-              <a href="http://localhost:3001/api/twitch/logout">Dashboard</a>
+              <a href={`${site.frontend.origin}/api/twitch/logout`}>
+                Dashboard
+              </a>
             </li>
             <li id="logout" className="dropdown-text">
-              <a href="http://localhost:3001/api/logout">Logout</a>
+              <a href={`${site.frontend.origin}/api/twitch/logout`}>Logout</a>
             </li>
           </div>
         </div>
@@ -89,7 +93,7 @@ const Navbar = () => {
       return (
         <ul>
           <li id="login">
-            <a href="https://test.poros.lol/auth/twitch">Login</a>
+            <a href={`${site.frontend.origin}/auth/twitch`}>Login</a>
           </li>
         </ul>
       );
@@ -109,14 +113,14 @@ const Navbar = () => {
             </li>
           </ul>
           <li id="logout">
-            <a href="http://localhost:3001/api/logout">Logout</a>
+            <a href={`${site.frontend.origin}/api/twitch/logout`}>Logout</a>
           </li>
         </>
       );
     } else {
       return (
         <li id="login">
-          <a href="http://localhost:3001/auth/twitch">Login</a>
+          <a href={`${site.frontend.origin}/auth/twitch`}>Login</a>
         </li>
       );
     }
