@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { join as joinChannel, part as partChannel } from "../js/bot";
+import site from "./config.json";
 
 import happE from "../img/happE.avif";
 import StvM from "../img/7tvM.avif";
@@ -65,7 +66,7 @@ function transition(isNegative) {
 }
 
 async function isLogged() {
-  const isLogged = await fetch("https://test.poros.lol/api/twitch", {
+  const isLogged = await fetch(`${site.frontend.origin}/api/twitch`, {
     method: "GET",
     credentials: "include",
   }).then((res) => res.json());
@@ -238,7 +239,7 @@ export default function Home() {
 
     if (!loggedIn) {
       return (
-        <a href="https://test.poros.lol/auth/twitch">
+        <a href={`${site.frontend.origin}/auth/twitch`}>
           <button className="login-button">
             <Span>Login with Twitch</Span>
           </button>
