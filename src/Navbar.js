@@ -26,7 +26,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const getUserAuth = async () => {
-      const userAuth = await fetch("http://localhost:3344/api/twitch", {
+      const userAuth = await fetch("https://test.poros.lol/api/twitch", {
         method: "GET",
       });
       const userAuthJson = await userAuth.json();
