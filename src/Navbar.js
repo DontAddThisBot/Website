@@ -2,7 +2,6 @@ import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import fetch from "node-fetch";
-import { frontend } from "../config.json";
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
@@ -27,7 +26,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const getUserAuth = async () => {
-      const userAuth = await fetch(`${frontend.origin}/api/twitch`, {
+      const userAuth = await fetch(`${process.env.ORIGIN}/api/twitch`, {
         method: "GET",
         credentials: "include",
       });
