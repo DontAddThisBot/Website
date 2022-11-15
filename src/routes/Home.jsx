@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { join as joinChannel, part as partChannel } from "../js/bot";
-import site from "./config.json";
+import site from "../config.json";
 
 import happE from "../img/happE.avif";
 import StvM from "../img/7tvM.avif";
