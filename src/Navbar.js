@@ -28,7 +28,6 @@ const Navbar = () => {
     const getUserAuth = async () => {
       const userAuth = await fetch("http://localhost:3344/api/twitch", {
         method: "GET",
-        credentials: "include",
       });
       const userAuthJson = await userAuth.json();
       setUserAuth(userAuthJson);
