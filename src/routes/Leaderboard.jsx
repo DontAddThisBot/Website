@@ -20,7 +20,6 @@ const Leaderboard = () => {
     fetchLeaderboard().then((topUsers) => setLeaderboard(topUsers));
   }, []);
   const obj = useOutletContext();
-  console.log(obj);
 
   return (
     <Wrapper>
