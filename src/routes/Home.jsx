@@ -124,6 +124,13 @@ async function isChannelBot(channelName) {
   return isChannelBot;
 }
 
+async function totalChannels() {
+  const channelCount = await fetch(`${site.frontend.oldApi}/api/bot/channels`, {
+    method: "GET",
+  }).then((res) => res.json());
+  return channelCount;
+}
+
 function disableLoading() {
   const loading = document.getElementsByClassName("loading");
   loading[0].parentNode.removeChild(loading[0]);
@@ -136,6 +143,19 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
   const [totalSteamers, setTotalStreamers] = useState([]);
   const [count, setCount] = useState(0);
   const [button, setButton] = useState([]);
+
+  const [totalChannelCount, setTotalChannelCount] = useState([]);
+
+  useEffect(() => {
+    totalChannels().then((res) => setTotalChannelCount(res));
+    fetchStreamers().then((streamers) => setTotalStreamers(streamers));
+    const userID = id?.user.data[0].login;
+    if (userID) {
+      isChannelBot(userID).then((res) => {
+        setBotState(res);
+      });
+    }
+  }, []);
 
   const JoinButton = () => {
     return (
@@ -174,16 +194,6 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
       </button>
     );
   };
-
-  useEffect(() => {
-    fetchStreamers().then((streamers) => setTotalStreamers(streamers));
-    const userID = id?.user.data[0].login;
-    if (userID) {
-      isChannelBot(userID).then((res) => {
-        setBotState(res);
-      });
-    }
-  }, []);
 
   const IsApiLoaded = () => {
     if (!isLoading) {
@@ -343,10 +353,20 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
         <div className="div-button">
           <IsApiLoaded />
         </div>
-        <div className="channel-count">Serving in 0000 Channels!</div>
+        <div className="channel-count">
+          Currently in {totalChannelCount.channelCount} Channels
+          <p className="bot-info">
+            Total {totalChannelCount.totalPoros} Poros farmed
+          </p>
+          <p className="bot-info">
+            Total {totalChannelCount.executedCommands} commands execued
+          </p>
+          <p className="bot-info">
+            Total {totalChannelCount.seenUsers} users seen
+          </p>
+          <p className="bot-info since">Since 2022-04-24</p>
+        </div>
       </TopHeaders>
-      <br />
-      <br />
       <MiddleHeaders>
         <img src={happE} alt="happE" className="bot-pfp" onClick={redirect} />
         <div className="bot-name">What can this bot do?</div>
@@ -1086,6 +1106,15 @@ const TopHeaders = styled.section`
   }
   div.channel-count {
     font-size: 2rem;
+    p.bot-info {
+      font-size: 1rem;
+      color: grey;
+      line-height: 10px;
+    }
+    p.since {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+    }
   }
 
   button.join-button {

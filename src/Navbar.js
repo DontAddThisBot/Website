@@ -99,7 +99,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
               <a href="/login">Dashboard</a>
             </li>
             <li id="dropdown-text dashboard">
-              <a href={`/dashboard/${id?.user.data[0]?.login}`}>Dashboard</a>
+              <p className="user-level">Level: {level}</p>
             </li>
           </ul>
           <li id="logout">
@@ -391,7 +391,8 @@ const Nav = styled.nav`
 
     ul.mobile-text-dropdown {
       margin-right: 2.5rem;
-      a {
+      a,
+      p.user-level {
         color: grey;
       }
     }
