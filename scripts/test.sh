@@ -4,7 +4,7 @@ join() {
         -X GET \
         -o /dev/null \
         -w " %{http_code}\n" \
-        https://api.poros.lol/api/bot/leaderboard)"
+        https://www.frankerfacez.com/donate/toggle_badge)"
     echo "$1: $r"
 }
 

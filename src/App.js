@@ -1,33 +1,119 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 import Home from "./routes/Home";
 import Unknown from "./routes/Unknown";
 import Navbar from "./Navbar";
 import Leaderboard from "./routes/Leaderboard";
+import Dashboard from "./routes/Dashboard";
 
 import styled from "styled-components";
 import img from "./img/shapes.png";
 
+import site from "./config.json";
+
+import { create as createUser } from "./js/bot";
+
+async function isLogged() {
+  const isLogged = await fetch(`${site.frontend.origin}/api/twitch`, {
+    method: "GET",
+    credentials: "include",
+  }).then((res) => res.json());
+  return isLogged;
+}
+
+async function isChannelBot(channelName) {
+  const isChannelBot = await fetch(
+    `${site.frontend.oldApi}/api/bot/channel/${channelName}`,
+    {
+      method: "GET",
+    }
+  ).then((res) => res.json());
+  return isChannelBot;
+}
+
+async function getUserLevel(username) {
+  const userLevel = await fetch(
+    `${site.frontend.oldApi}/api/bot/users/${username}`,
+    {
+      method: "GET",
+    }
+  ).then((res) => res.json());
+  return userLevel;
+}
+
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState([]);
+  const [isBotIn, setIsBotIn] = useState([]);
+  const [userLevel, setUserLevel] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    isLogged().then((loginFlow) => {
+      setIsLoggedIn(loginFlow);
+      const { success, id } = loginFlow;
+      if (success) {
+        isChannelBot(id.user.data[0].login).then((channelInfo) => {
+          setIsBotIn(channelInfo);
+          setIsLoading(true);
+        });
+        getUserLevel(id.user.data[0].login).then((userLevel) => {
+          const { success } = userLevel;
+          if (success) {
+            setUserLevel(userLevel);
+            setIsLoading(true);
+          } else {
+            createUser().then(() => {
+              getUserLevel(id.user.data[0].login).then((userLevel) => {
+                setUserLevel(userLevel);
+                setIsLoading(true);
+              });
+            });
+          }
+        });
+      } else {
+        setIsLoading(true);
+      }
+    });
+  }, []);
+
   return (
     <AppContainer>
-      <Navbar />
+      <Navbar
+        userAuth={isLoggedIn}
+        isLoading={isLoading}
+        setAuthState={setIsLoggedIn}
+        userLevel={userLevel}
+      />
       {/* <div class="snowflakes" aria-hidden="true">
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❆</div>
-        <div class="snowflake">❄</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❆</div>
-        <div class="snowflake">❄</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❆</div>
-        <div class="snowflake">❄</div>
-      </div> */}
+          <div class="snowflake">❅</div>
+          <div class="snowflake">❅</div>
+          <div class="snowflake">❆</div>
+          <div class="snowflake">❄</div>
+          <div class="snowflake">❅</div>
+          <div class="snowflake">❆</div>
+          <div class="snowflake">❄</div>
+          <div class="snowflake">❅</div>
+          <div class="snowflake">❆</div>
+          <div class="snowflake">❄</div>
+        </div> */}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <Home
+              loginFlow={isLoggedIn}
+              isBotIn={isBotIn}
+              isLoading={isLoading}
+              setBotState={setIsBotIn}
+            />
+          }
+        />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
+          <Route path="/dashboard/:id" element={<Dashboard />} />
+        </Route>
         <Route path="*" element={<Unknown />} />
       </Routes>
     </AppContainer>

@@ -1,7 +1,6 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
-import fetch from "node-fetch";
+import React from "react";
 import site from "./config.json";
 
 function CustomLink({ to, children, ...props }) {
@@ -22,23 +21,13 @@ function toggleMobileMenu() {
   getDocuemnt.classList.toggle("open");
 }
 
-const Navbar = () => {
-  const [userAuth, setUserAuth] = useState([]);
-  useEffect(() => {
-    const getUserAuth = async () => {
-      const userAuth = await fetch(`${site.frontend.origin}/api/twitch`, {
-        method: "GET",
-        credentials: "include",
-      });
-      const userAuthJson = await userAuth.json();
-      setUserAuth(userAuthJson);
-    };
-    getUserAuth();
-
-    return () => {
-      setUserAuth([]);
-    };
-  }, []);
+function dropdownBox() {
+  const getDocuemnt = document.getElementsByClassName("dropdown-content");
+  if (getDocuemnt[0].style.display === "block") {
+    getDocuemnt[0].style.display = "none";
+  } else {
+    getDocuemnt[0].style.display = "block";
+  }
 
   window.addEventListener("click", (event) => {
     const getDocuemnt = document.getElementsByClassName("dropdown-content");
@@ -47,15 +36,13 @@ const Navbar = () => {
     }
   });
 
-  function dropdownBox() {
-    const getDocuemnt = document.getElementsByClassName("dropdown-content");
-    if (getDocuemnt[0].style.display === "block") {
-      getDocuemnt[0].style.display = "none";
-    } else {
-      getDocuemnt[0].style.display = "block";
-    }
-  }
+  return () => {
+    window.removeEventListener("click", () => {});
+  };
+}
 
+const Navbar = ({ userAuth, setAuthState, userLevel }) => {
+  const { level } = userLevel;
   const { success, id } = userAuth;
   const isLoggedIn = () => {
     if (success) {
@@ -66,7 +53,7 @@ const Navbar = () => {
         <div>
           <ul>
             <img
-              src={id?.user.data[0].profile_image_url}
+              src={id?.user.data[0]?.profile_image_url}
               alt="navbar-pfp"
               onClick={dropdownBox}
               style={style}
@@ -74,17 +61,20 @@ const Navbar = () => {
           </ul>
           <div className="dropdown-content">
             <li className="dropdown-text dashboard">
-              <a href={`${site.frontend.origin}/api/twitch/logout`}>
-                Dashboard
-              </a>
+              <p className="user-level">Level: {level}</p>
             </li>
             <li className="dropdown-text dashboard">
-              <a href={`${site.frontend.origin}/api/twitch/logout`}>
-                Dashboard
-              </a>
+              <a href={`/dashboard/${id?.user.data[0]?.login}`}>Dashboard</a>
             </li>
             <li id="logout" className="dropdown-text">
-              <a href={`${site.frontend.origin}/api/twitch/logout`}>Logout</a>
+              <a
+                href={`${site.frontend.origin}/api/twitch/logout`}
+                onClick={() => {
+                  setAuthState([]);
+                }}
+              >
+                Logout
+              </a>
             </li>
           </div>
         </div>
@@ -109,7 +99,7 @@ const Navbar = () => {
               <a href="/login">Dashboard</a>
             </li>
             <li id="dropdown-text dashboard">
-              <a href="/login">Dashboard</a>
+              <a href={`/dashboard/${id?.user.data[0]?.login}`}>Dashboard</a>
             </li>
           </ul>
           <li id="logout">
@@ -213,7 +203,8 @@ const Nav = styled.nav`
 
       li.dashboard {
         border-bottom: 1px solid #3a3a3a;
-        a {
+        a,
+        p.user-level {
           color: white;
           font-weight: 500;
           :hover {

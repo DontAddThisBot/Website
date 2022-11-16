@@ -65,24 +65,6 @@ function transition(isNegative) {
   }
 }
 
-async function isLogged() {
-  const isLogged = await fetch(`${site.frontend.origin}/api/twitch`, {
-    method: "GET",
-    credentials: "include",
-  }).then((res) => res.json());
-  return isLogged;
-}
-
-async function isChannelBot(channelName) {
-  const isChannelBot = await fetch(
-    `${site.frontend.oldApi}/api/bot/channel/${channelName}`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-  return isChannelBot;
-}
-
 function redirect() {
   const a = "/";
   const b = "c";
@@ -112,15 +94,96 @@ const loadAllImages = () => {
   );
 };
 
-export default function Home() {
+function disableJoin() {
+  const button = document.getElementsByClassName("join-button");
+  button[0].style.display = "none";
+
+  const loading = document.createElement("div");
+  loading.className = "loading";
+  loading.innerHTML = "Joining Channel...";
+  button[0].parentNode.appendChild(loading);
+}
+
+function disablePart() {
+  const button = document.getElementsByClassName("part-button");
+  button[0].style.display = "none";
+
+  const loading = document.createElement("div");
+  loading.className = "loading";
+  loading.innerHTML = "Parting Channel...";
+  button[0].parentNode.appendChild(loading);
+}
+
+async function isChannelBot(channelName) {
+  const isChannelBot = await fetch(
+    `${site.frontend.oldApi}/api/bot/channel/${channelName}`,
+    {
+      method: "GET",
+    }
+  ).then((res) => res.json());
+  return isChannelBot;
+}
+
+function disableLoading() {
+  const loading = document.getElementsByClassName("loading");
+  loading[0].parentNode.removeChild(loading[0]);
+}
+
+export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
+  const { success, id } = loginFlow;
+  const { success: isChannelSuccess, isChannel } = isBotIn;
+
   const [totalSteamers, setTotalStreamers] = useState([]);
   const [count, setCount] = useState(0);
   const [button, setButton] = useState([]);
 
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState([]);
-  const [isBotIn, setIsBotIn] = useState([]);
+  const JoinButton = () => {
+    return (
+      <button
+        className="join-button"
+        onClick={() => {
+          disableJoin();
+          joinChannel().then(() => {
+            isChannelBot(id?.user.data[0].login).then((res) => {
+              disableLoading();
+              setBotState(res);
+            });
+          });
+        }}
+      >
+        <Span>Add Bot</Span>
+      </button>
+    );
+  };
 
-  const [isLoading, setIsLoading] = useState(false);
+  const PartButton = () => {
+    return (
+      <button
+        className="part-button"
+        onClick={() => {
+          disablePart();
+          partChannel().then(() => {
+            isChannelBot(id?.user.data[0].login).then((res) => {
+              disableLoading();
+              setBotState(res);
+            });
+          });
+        }}
+      >
+        <Span>Part Bot</Span>
+      </button>
+    );
+  };
+
+  useEffect(() => {
+    fetchStreamers().then((streamers) => setTotalStreamers(streamers));
+    const userID = id?.user.data[0].login;
+    if (userID) {
+      isChannelBot(userID).then((res) => {
+        setBotState(res);
+      });
+    }
+  }, []);
 
   const IsApiLoaded = () => {
     if (!isLoading) {
@@ -130,21 +193,27 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    fetchStreamers().then((streamers) => setTotalStreamers(streamers));
-    isLogged().then((loginFlow) => {
-      setIsUserLoggedIn(loginFlow);
-      const { success, id } = loginFlow;
-      if (success) {
-        isChannelBot(id.user.data[0].login).then((channelInfo) => {
-          setIsBotIn(channelInfo);
-          setIsLoading(true);
-        });
+  const IsInChannel = () => {
+    if (!success) {
+      return (
+        <a href={`${site.frontend.origin}/auth/twitch`}>
+          <button className="login-button">
+            <Span>Login with Twitch</Span>
+          </button>
+        </a>
+      );
+    }
+
+    if (success && isChannelSuccess) {
+      if (!isChannel) {
+        return <JoinButton />;
       } else {
-        setIsLoading(true);
+        return <PartButton />;
       }
-    });
-  }, []);
+    } else if (success && !isChannelSuccess) {
+      return <JoinButton />;
+    }
+  };
 
   // useEffect(() => {
   //   let Timer = setInterval(() => {
@@ -159,79 +228,6 @@ export default function Home() {
   //   }, 1000);
   //   return () => clearInterval(Timer);
   // }, [count]);
-
-  const IsInChannel = () => {
-    const JoinButton = () => {
-      return (
-        <button
-          className="join-button"
-          onClick={() => {
-            joinChannel();
-            disableJoin();
-          }}
-        >
-          <Span>Add Bot</Span>
-        </button>
-      );
-    };
-
-    const PartButton = () => {
-      return (
-        <button
-          className="part-button"
-          onClick={() => {
-            partChannel();
-            disablePart();
-          }}
-        >
-          <Span>Part Bot</Span>
-        </button>
-      );
-    };
-
-    const { success: loggedIn } = isUserLoggedIn;
-    const { success, isChannel } = isBotIn;
-
-    if (!loggedIn) {
-      return (
-        <a href={`${site.frontend.origin}/auth/twitch`}>
-          <button className="login-button">
-            <Span>Login with Twitch</Span>
-          </button>
-        </a>
-      );
-    }
-
-    if (loggedIn && success) {
-      if (!isChannel) {
-        return <JoinButton />;
-      } else {
-        return <PartButton />;
-      }
-    } else if (loggedIn && !success) {
-      return <JoinButton />;
-    }
-  };
-
-  function disableJoin() {
-    const button = document.getElementsByClassName("join-button");
-    button[0].style.display = "none";
-
-    const loading = document.createElement("div");
-    loading.className = "loading";
-    loading.innerHTML = "Joining Channel...";
-    button[0].parentNode.appendChild(loading);
-  }
-
-  function disablePart() {
-    const button = document.getElementsByClassName("part-button");
-    button[0].style.display = "none";
-
-    const loading = document.createElement("div");
-    loading.className = "loading";
-    loading.innerHTML = "Parting Channel...";
-    button[0].parentNode.appendChild(loading);
-  }
 
   const changeStreamer = (name) => {
     totalSteamers.forEach((streamer) => {
@@ -290,6 +286,48 @@ export default function Home() {
     }
     transition("-");
   }
+
+  const socialMedias = [
+    {
+      name: "Twitter",
+      link: "https://twitter.com/katt3h",
+      img: Twitter,
+    },
+    {
+      name: "Discord",
+      link: "https://discordapp.com/users/363968088783323136",
+      img: Discord,
+    },
+    {
+      name: "Twitch",
+      link: "https://twitch.tv/katt3h",
+      img: Twitch,
+    },
+    {
+      name: "Github",
+      link: "https://github.com/kattah7",
+      img: Github,
+    },
+  ];
+
+  const infoText = [
+    {
+      name: "Commands",
+      href: "/commands",
+    },
+    {
+      name: "Rules",
+      href: "/rules",
+    },
+    {
+      name: "Leaderboard",
+      href: "/leaderboard",
+    },
+    {
+      name: "Stats",
+      href: "/stats",
+    },
+  ];
 
   return (
     <Wrapper>
@@ -366,7 +404,7 @@ export default function Home() {
           <div className="bot-started-information">
             How do I use it in chat?
           </div>
-          <span></span>
+          <span />
         </BottomTextHeaders>
         <BottomImageHeaders>
           <div className="images">
@@ -446,35 +484,34 @@ export default function Home() {
           <div className="information-footer">
             <p className="information-footer-text">Information</p>
             <div className="information-redirects">
-              <a href="/commands">Commands</a>
-              <a href="/dashboard">Dashboard</a>
-              <a href="/leaderboard">Leaderboard</a>
-              <a href="/stats">Stats</a>
+              {infoText.map((text, key) => {
+                return (
+                  <a href={text.href} key={key}>
+                    {text.name}
+                  </a>
+                );
+              })}
             </div>
           </div>
           <div className="social-media">
             <p className="social-media-text">Contact</p>
             <div className="social-media-redirects">
-              <a href="https://twitter.com/katt3h">
-                <img
-                  src={Twitter}
-                  alt="Twitter"
-                  className="social-media-pfp Twitter"
-                />
-              </a>
-              <a href="https://discord.gg/2Z7Y4Y4">
-                <img src={Discord} alt="Discord" className="social-media-pfp" />
-              </a>
-              <a href="https://twitch.tv/kattah">
-                <img src={Twitch} alt="Twitch" className="social-media-pfp" />
-              </a>
-              <a href="https://github.com/kattah7">
-                <img
-                  src={Github}
-                  alt="Github"
-                  className="social-media-pfp Github"
-                />
-              </a>
+              {socialMedias.map((socialMedia, key) => {
+                return (
+                  <a
+                    href={socialMedia.link}
+                    key={key}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={socialMedia.img}
+                      alt={socialMedia.name}
+                      className={`social-media-pfp ${socialMedia.name}`}
+                    />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>
