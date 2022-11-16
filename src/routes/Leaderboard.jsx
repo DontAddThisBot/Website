@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import fetch from "node-fetch";
 import { useOutletContext } from "react-router-dom";
+import site from "../config.json";
 
 async function fetchLeaderboard() {
   const { topUsers } = await fetch(
-    `https://api.poros.lol/api/bot/leaderboard`,
+    `${site.frontend.oldApi}/api/bot/leaderboard`,
     {
       method: "GET",
     }
