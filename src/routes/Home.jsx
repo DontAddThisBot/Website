@@ -25,7 +25,14 @@ let statusa = document.getElementsByClassName("streamer-status");
 let followers = document.getElementsByClassName("streamer-followers");
 
 async function fetchStreamers() {
-  const streamers = ["xqc", "kattah", "forsen", "turtoise", "pokimane"];
+  const streamers = [
+    "forsen",
+    "fapparamoar",
+    "michelleputtini",
+    "lagoda1337",
+    "jujalag",
+    "tibb12",
+  ];
   const data = await fetch(
     `https://api.ivr.fi/v2/twitch/user?login=${streamers.join("%2C")}`,
     {
