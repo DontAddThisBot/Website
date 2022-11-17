@@ -109,7 +109,7 @@ const Leaderboard = () => {
           >
             Highest
           </li>
-          <li className="divider"></li>
+          <li className="divider" />
           <li
             onClick={() => {
               sortLowest(true);
@@ -122,8 +122,8 @@ const Leaderboard = () => {
       <div className="leaderboard">
         {leaderboard.map((user, index) => {
           return (
-            <div className="user" key={index}>
-              <div className={`rank ${user.username}`}>#{user.userRank}</div>
+            <div className={`user user${index + 1}`} key={index}>
+              <div className={`rank ranking${index + 1}`}>#{user.userRank}</div>
               <div className="pfp">
                 <img
                   src={data === null ? Loading : user.pfp}
@@ -309,6 +309,27 @@ const Wrapper = styled.div`
       font-size: 18px;
       font-weight: 600;
       margin-left: 10px;
+    }
+
+    &.user1 {
+      box-shadow: 0 0 5px 5px #ffcc00;
+      .ranking1 {
+        color: #ffd700;
+      }
+    }
+
+    &.user2 {
+      box-shadow: 0 0 5px 5px #c0c0c0;
+      .ranking2 {
+        color: #c0c0c0;
+      }
+    }
+
+    &.user3 {
+      box-shadow: 0 0 5px 5px #cd7f32;
+      .ranking3 {
+        color: #cd7f32;
+      }
     }
 
     joined {
