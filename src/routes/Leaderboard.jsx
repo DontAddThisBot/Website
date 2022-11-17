@@ -24,7 +24,6 @@ async function fetchLeaderboard(boolean) {
       method: "GET",
     }
   ).then((res) => res.json());
-  console.log(topUsers);
   return topUsers;
 }
 
