@@ -7,6 +7,7 @@ import Unknown from "./routes/Unknown";
 import Navbar from "./Navbar";
 import Leaderboard from "./routes/Leaderboard";
 import Dashboard from "./routes/Dashboard";
+import Footer from "./Footer";
 
 import styled from "styled-components";
 import img from "./img/shapes.png";
@@ -116,6 +117,7 @@ function App() {
         </Route>
         <Route path="*" element={<Unknown />} />
       </Routes>
+      <Footer />
     </AppContainer>
   );
 }
