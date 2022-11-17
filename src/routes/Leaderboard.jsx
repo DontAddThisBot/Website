@@ -83,6 +83,13 @@ const Leaderboard = () => {
     });
   }
 
+  function test(index) {
+    const rankDiv = document.getElementsByClassName(`ranking${index}`);
+    const style = ["font-size: 10px"].join(";");
+    rankDiv[0].style = style;
+    return index;
+  }
+
   return (
     <Wrapper>
       <h1>Leaderboard</h1>
@@ -99,7 +106,7 @@ const Leaderboard = () => {
         Test{" "}
       </button> */}
       <label className="dropdown">
-        <div className="dd-button">Dropdown</div>
+        <div className="dd-button">Sort by</div>
         <input type="checkbox" className="dd-input" id="test" />
         <ul className="dd-menu">
           <li
@@ -123,7 +130,9 @@ const Leaderboard = () => {
         {leaderboard.map((user, index) => {
           return (
             <div className={`user user${index + 1}`} key={index}>
-              <div className={`rank ranking${index + 1}`}>#{user.userRank}</div>
+              <div className={`rank ranking${index + 1}`}>
+                #{user.userRank > 999 ? test(index + 1) : user.userRank}
+              </div>
               <div className="pfp">
                 <img
                   src={data === null ? Loading : user.pfp}
