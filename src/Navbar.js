@@ -174,6 +174,9 @@ const Nav = styled.nav`
       height: 50px;
       border-radius: 50%;
       margin-top: 5px;
+      @media (max-width: 850px) {
+        margin-left: -50px;
+      }
       :hover {
         transition: 0.5s;
         cursor: pointer;
