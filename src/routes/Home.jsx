@@ -14,10 +14,6 @@ import StatsAnimated from "../img/Stats-Animated.gif";
 import peepoChat from "../img/peepoChat.avif";
 import peepooChatAnimated from "../img/peepoChat-Animated.gif";
 import Gradient from "../img/Gradient.png";
-import Discord from "../img/Discord.png";
-import Twitter from "../img/Twitter.png";
-import Twitch from "../img/Twitch.png";
-import Github from "../img/Github.png";
 
 let pfp = document.getElementsByClassName("streamer-pfp");
 let username = document.getElementsByClassName("streamer-username");
@@ -143,7 +139,41 @@ function disableLoading() {
   loading[0].parentNode.removeChild(loading[0]);
 }
 
+const handleScroll = () => {
+  const topWrapper = document.getElementById("top-wrapper");
+  const bottomWrapper = document.getElementById("bottom-wrapper");
+  for (const wrappers of [topWrapper, bottomWrapper]) {
+    if (window.scrollY > 200) {
+      window.removeEventListener("scroll", handleScroll);
+      topWrapper.style.transform = `translateX(-20%)`;
+      bottomWrapper.style.transform = `translateX(20%)`;
+      wrappers.style.transition = "transform 0.4s ease-in-out";
+
+      setTimeout(() => {
+        wrappers.style.transform = "translate3d(0, 0, 0)";
+        wrappers.style.opacity = "0.2";
+      }, 500);
+
+      setTimeout(() => {
+        wrappers.style.opacity = "0.6";
+        wrappers.style.opacity = "1";
+      }, 700);
+    }
+  }
+};
+
 export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
+  useEffect(() => {
+    const topWrapper = document.getElementById("top-wrapper");
+    const bottomWrapper = document.getElementById("bottom-wrapper");
+    window.addEventListener("scroll", handleScroll);
+    topWrapper.style.opacity = "0";
+    bottomWrapper.style.opacity = "0";
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const { success, id } = loginFlow;
   const { success: isChannelSuccess, isChannel } = isBotIn;
 
@@ -304,48 +334,6 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
     transition("-");
   }
 
-  const socialMedias = [
-    {
-      name: "Twitter",
-      link: "https://twitter.com/katt3h",
-      img: Twitter,
-    },
-    {
-      name: "Discord",
-      link: "https://discordapp.com/users/363968088783323136",
-      img: Discord,
-    },
-    {
-      name: "Twitch",
-      link: "https://twitch.tv/katt3h",
-      img: Twitch,
-    },
-    {
-      name: "Github",
-      link: "https://github.com/kattah7",
-      img: Github,
-    },
-  ];
-
-  const infoText = [
-    {
-      name: "Commands",
-      href: "/commands",
-    },
-    {
-      name: "Rules",
-      href: "/rules",
-    },
-    {
-      name: "Leaderboard",
-      href: "/leaderboard",
-    },
-    {
-      name: "Stats",
-      href: "/stats",
-    },
-  ];
-
   return (
     <Wrapper>
       <TopHeaders>
@@ -389,7 +377,7 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
           The bot is currently in development, and is being updated frequently.
         </p>
       </MiddleHeaders>
-      <RowWrapper>
+      <RowWrapper id="top-wrapper">
         <MiddleHeaders className="stv">
           <img src={StvM} alt="YEAHBUT7TV" className="bot-pfp stv" />
           <div className="bot-name">7TV Commands?</div>
@@ -406,7 +394,7 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
           </p>
         </MiddleHeaders>
       </RowWrapper>
-      <RowWrapper2>
+      <RowWrapper2 id="bottom-wrapper">
         <MiddleHeaders className="utility">
           <img src={peepoChat} alt="utility" className="bot-pfp utility" />
           <div className="bot-name">Utility Commands</div>
@@ -499,203 +487,9 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
           ></button>
         ))}
       </BottomImageSliderButtons>
-      <FooterThatFitsMobile>
-        <div className="outer-footer">
-          <div className="copyright">
-            <span className="Bot-Name-1">
-              DontAdd<span className="Bot-Name-2">ThisBot</span>
-            </span>
-            <p>© 2022 Kattah</p>
-            <p>Not affiliated with Twitch or any of its partners. All rights</p>
-          </div>
-          <div className="information-footer">
-            <p className="information-footer-text">Information</p>
-            <div className="information-redirects">
-              {infoText.map((text, key) => {
-                return (
-                  <a href={text.href} key={key}>
-                    {text.name}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-          <div className="social-media">
-            <p className="social-media-text">Contact</p>
-            <div className="social-media-redirects">
-              {socialMedias.map((socialMedia, key) => {
-                return (
-                  <a
-                    href={socialMedia.link}
-                    key={key}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={socialMedia.img}
-                      alt={socialMedia.name}
-                      className={`social-media-pfp ${socialMedia.name}`}
-                    />
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </FooterThatFitsMobile>
     </Wrapper>
   );
 }
-
-const FooterThatFitsMobile = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 5%;
-  background-color: #1f1f1f;
-  width: 100%;
-
-  .outer-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    margin-bottom: 2%;
-    margin-top: 2%;
-    margin-right: 3%;
-    gap: 25%;
-
-    .copyright,
-    .information-footer,
-    .social-media {
-      flex-direction: column;
-
-      a {
-        color: #a9a9a9;
-      }
-
-      p {
-        font-size: 0.9rem;
-        color: #a9a9a9;
-        margin-top: 1%;
-      }
-
-      p.information-footer-text,
-      p.social-media-text {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #f8f8f8;
-      }
-
-      .information-redirects,
-      .social-media-redirects {
-        display: flex;
-        flex-direction: column;
-        margin-top: 1%;
-
-        a {
-          font-size: 1rem;
-          font-weight: 500;
-          color: #a9a9a9;
-
-          &:hover {
-            transition: 0.3s;
-            color: #f8f8f8;
-            span {
-              visibility: visible;
-            }
-          }
-        }
-      }
-
-      .social-media-redirects {
-        display: flex;
-        flex-direction: row;
-        gap: 20%;
-        img {
-          width: 1.5rem;
-          height: 1.5rem;
-
-          &:hover {
-            transition: 0.5s;
-            filter: brightness(0.5);
-          }
-        }
-
-        .Github {
-          width: 1.8rem;
-          height: 1.8rem;
-          margin-top: -0.2rem;
-          margin-left: -0.2rem;
-        }
-
-        .Twitter {
-          width: 1.6rem;
-          height: 1.4rem;
-        }
-      }
-
-      span {
-        font-size: 1.3rem;
-        font-weight: 600;
-        &.Bot-Name-1 {
-          color: #f8f8f8;
-          margin-top: 200px;
-        }
-        &.Bot-Name-2 {
-          color: #998fd2;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    margin-top: 13%;
-    .outer-footer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      margin-right: 0%;
-      margin-top: -10%;
-      margin-bottom: 10%;
-
-      .copyright,
-      .information-footer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .copyright {
-        margin-bottom: 5%;
-        margin-top: -30%;
-      }
-
-      .information-footer {
-        margin-bottom: 15%;
-
-        a {
-          margin-top: 1%;
-        }
-      }
-
-      p.social-media-text {
-        display: flex;
-        justify-content: center;
-      }
-
-      .social-media-redirects {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-      }
-    }
-  }
-`;
 
 const BottomImageSliderButtons = styled.ul`
   display: flex;
@@ -760,6 +554,7 @@ const StreamerBox = styled.section`
   border: 2px solid grey;
   background-color: transparent;
   animation: slide 1s ease-in-out;
+
   button {
     background-color: transparent;
     border: none;
@@ -1184,6 +979,24 @@ const MiddleHeaders = styled.section`
   margin-bottom: 48px;
   background-color: #1f1f1f;
   border-radius: 15px;
+
+  animation-name: slideFromLeft;
+  animation-duration: 1s;
+
+  @keyframes slideFromLeft {
+    0% {
+      transform: translateY(-2%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
   div.bot-name {
     color: #fff;
