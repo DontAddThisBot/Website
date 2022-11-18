@@ -55,18 +55,18 @@ function App() {
       setIsLoggedIn(loginFlow);
       const { success, id } = loginFlow;
       if (success) {
-        isChannelBot(id.user.data[0].login).then((channelInfo) => {
+        isChannelBot(id?.data[0].login).then((channelInfo) => {
           setIsBotIn(channelInfo);
           setIsLoading(true);
         });
-        getUserLevel(id.user.data[0].login).then((userLevel) => {
+        getUserLevel(id?.data[0].login).then((userLevel) => {
           const { success } = userLevel;
           if (success) {
             setUserLevel(userLevel);
             setIsLoading(true);
           } else {
             createUser().then(() => {
-              getUserLevel(id.user.data[0].login).then((userLevel) => {
+              getUserLevel(id?.data[0].login).then((userLevel) => {
                 setUserLevel(userLevel);
                 setIsLoading(true);
               });

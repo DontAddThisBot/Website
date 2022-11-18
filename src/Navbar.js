@@ -53,7 +53,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
         <div>
           <ul>
             <img
-              src={id?.user.data[0]?.profile_image_url}
+              src={id?.data[0].profile_image_url}
               alt="navbar-pfp"
               onClick={dropdownBox}
               style={style}
@@ -64,7 +64,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
               <p className="user-level">Level: {level}</p>
             </li>
             <li className="dropdown-text dashboard">
-              <a href={`/dashboard/${id?.user.data[0]?.login}`}>Dashboard</a>
+              <a href={`/dashboard/${id?.data[0].login}`}>Dashboard</a>
             </li>
             <li id="logout" className="dropdown-text">
               <a

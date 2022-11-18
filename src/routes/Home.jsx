@@ -186,7 +186,7 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
   useEffect(() => {
     totalChannels().then((res) => setTotalChannelCount(res));
     fetchStreamers().then((streamers) => setTotalStreamers(streamers));
-    const userID = id?.user.data[0].login;
+    const userID = id?.data[0].login;
     if (userID) {
       isChannelBot(userID).then((res) => {
         setBotState(res);
@@ -201,7 +201,7 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
         onClick={() => {
           disableJoin();
           joinChannel().then(() => {
-            isChannelBot(id?.user.data[0].login).then((res) => {
+            isChannelBot(id?.data[0].login).then((res) => {
               disableLoading();
               setBotState(res);
             });
@@ -220,7 +220,7 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
         onClick={() => {
           disablePart();
           partChannel().then(() => {
-            isChannelBot(id?.user.data[0].login).then((res) => {
+            isChannelBot(id?.data[0].login).then((res) => {
               disableLoading();
               setBotState(res);
             });
