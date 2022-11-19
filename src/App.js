@@ -1,48 +1,18 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-
 import Home from "./routes/Home";
 import Unknown from "./routes/Unknown";
 import Navbar from "./Navbar";
 import Leaderboard from "./routes/Leaderboard";
 import Dashboard from "./routes/Dashboard";
 import Footer from "./Footer";
-
 import styled from "styled-components";
 import img from "./img/shapes.png";
-
-import site from "./config.json";
-
 import { create as createUser } from "./js/bot";
-
-async function isLogged() {
-  const isLogged = await fetch(`${site.frontend.origin}/api/twitch`, {
-    method: "GET",
-    credentials: "include",
-  }).then((res) => res.json());
-  return isLogged;
-}
-
-async function isChannelBot(channelName) {
-  const isChannelBot = await fetch(
-    `${site.frontend.oldApi}/api/bot/channel/${channelName}`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-  return isChannelBot;
-}
-
-async function getUserLevel(username) {
-  const userLevel = await fetch(
-    `${site.frontend.oldApi}/api/bot/users/${username}`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-  return userLevel;
-}
+import { isLogged } from "./js/isLogged";
+import { isChannelBot } from "./js/isChannelBot";
+import { getUserLevel } from "./js/getUserLevel";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState([]);
