@@ -66,15 +66,18 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
             <li className="dropdown-text dashboard">
               <a href={`/dashboard/${id?.data[0].login}`}>Dashboard</a>
             </li>
-            <li id="logout" className="dropdown-text">
-              <a
-                href={`${site.frontend.origin}/api/twitch/logout`}
-                onClick={() => {
-                  setAuthState([]);
-                }}
-              >
-                Logout
-              </a>
+            <li
+              id="logout"
+              className="dropdown-text"
+              onClick={() => {
+                setAuthState([]);
+                fetch(`${site.frontend.origin}/api/twitch/logout`, {
+                  method: "POST",
+                  credentials: "include",
+                });
+              }}
+            >
+              Logout
             </li>
           </div>
         </div>

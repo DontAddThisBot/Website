@@ -187,10 +187,12 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
     totalChannels().then((res) => setTotalChannelCount(res));
     fetchStreamers().then((streamers) => setTotalStreamers(streamers));
     const userID = id?.data[0].login;
-    if (userID) {
-      isChannelBot(userID).then((res) => {
-        setBotState(res);
-      });
+    if (success) {
+      if (userID) {
+        isChannelBot(userID).then((res) => {
+          setBotState(res);
+        });
+      }
     }
   }, []);
 
