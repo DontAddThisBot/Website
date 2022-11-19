@@ -61,6 +61,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
           </ul>
           <div className="dropdown-content">
             <li className="dropdown-text dashboard">
+              <p className="user-level">{id?.data[0].login}</p>
               <p className="user-level">Level: {level}</p>
             </li>
             <li className="dropdown-text dashboard">
