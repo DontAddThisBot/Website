@@ -1,20 +1,8 @@
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { CustomLink } from "./js/CustomLink";
+import { Logout } from "./js/Logout";
 import styled from "styled-components";
 import React from "react";
 import site from "./config.json";
-
-function CustomLink({ to, children, ...props }) {
-  const resolvedPath = useResolvedPath(to);
-  const match = useMatch({ path: resolvedPath.pathname, end: true });
-
-  return (
-    <li className={match ? "active" : ""}>
-      <Link to={to} {...props}>
-        {children}
-      </Link>
-    </li>
-  );
-}
 
 function toggleMobileMenu() {
   const getDocuemnt = document.getElementById("hamburger-icon");
@@ -35,10 +23,6 @@ function dropdownBox() {
       getDocuemnt[0].style.display = "none";
     }
   });
-
-  return () => {
-    window.removeEventListener("click", () => {});
-  };
 }
 
 const Navbar = ({ userAuth, setAuthState, userLevel }) => {
@@ -72,10 +56,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
               className="dropdown-text"
               onClick={() => {
                 setAuthState([]);
-                fetch(`${site.frontend.origin}/api/twitch/logout`, {
-                  method: "POST",
-                  credentials: "include",
-                });
+                Logout();
               }}
             >
               Logout
@@ -106,8 +87,14 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
               <p className="user-level">Level: {level}</p>
             </li>
           </ul>
-          <li id="logout">
-            <a href={`${site.frontend.origin}/api/twitch/logout`}>Logout</a>
+          <li
+            id="logout"
+            onClick={() => {
+              setAuthState([]);
+              Logout();
+            }}
+          >
+            Logout
           </li>
         </>
       );
@@ -149,6 +136,10 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
             <CustomLink to="/commands">Commands</CustomLink>
             <li>
               <a href="https://stats.kattah.me">Stats</a>
+            </li>
+            <li>
+              <p className="user-name">Logged in as</p>
+              <p>{id?.data[0].login}</p>
             </li>
             {mobileNavBar()}
           </ul>
@@ -396,11 +387,24 @@ const Nav = styled.nav`
       display: block;
     }
 
+    li {
+      margin: 0 10px;
+      text-align: center;
+    }
+
     ul.mobile-text-dropdown {
       margin-right: 2.5rem;
+      display: flex;
+
+      li {
+        margin: 0;
+        margin-top: -35px;
+      }
+
       a,
       p.user-level {
         color: grey;
+        font-weight: 500;
       }
     }
   }

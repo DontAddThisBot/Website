@@ -1,31 +1,9 @@
+import { fetchPfp } from "../js/fetchPfp";
+import { fetchLeaderboard } from "../js/fetchLeaderboard";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import fetch from "node-fetch";
-import site from "../config.json";
 
 import Loading from "../img/Loading.gif";
-
-async function fetchPfp(streamers) {
-  const data = await fetch(
-    `https://api.ivr.fi/v2/twitch/user?login=${streamers.join("%2C")}`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-  return data;
-}
-
-async function fetchLeaderboard(boolean) {
-  const { topUsers } = await fetch(
-    `${site.frontend.oldApi}/api/bot/leaderboard${
-      boolean ? `?type=lowest` : ""
-    }`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-  return topUsers;
-}
 
 const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
@@ -56,7 +34,9 @@ const Leaderboard = () => {
   }, []);
 
   leaderboard.forEach((user, index) => {
-    user.pfp = profilePic[index];
+    if (user.username) {
+      user.pfp = profilePic[index];
+    }
   });
 
   async function sortLowest(Boolean) {
@@ -89,15 +69,6 @@ const Leaderboard = () => {
       <p className="leaderboard-prize">
         Within Top 10 Gets lower cooldowns & colored bot reply!
       </p>
-      {/* <button
-        className="leaderboard-prize"
-        onClick={() => {
-          sortLowest();
-        }}
-      >
-        {" "}
-        Test{" "}
-      </button> */}
       <label className="dropdown">
         <div className="dd-button">Sort by</div>
         <input type="checkbox" className="dd-input" id="test" />

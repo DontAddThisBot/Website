@@ -1,7 +1,17 @@
+import { fetchStreamers } from "../js/fetchStreamers";
+import { join as joinChannel, part as partChannel } from "../js/bot";
+import { redirect } from "../js/redirect";
+import { isChannelBot } from "../js/isChannelBot";
+import { totalChannels } from "../js/totalChannels";
+import { disableJoin, disablePart } from "../js/join.part.js";
+import { loadAllImages } from "../js/loadAllImages";
+import { handleScroll } from "../js/handleScroll";
+import { disableLoading } from "../js/disableLoading";
+import { transition } from "../js/transition";
+
 import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { join as joinChannel, part as partChannel } from "../js/bot";
 import site from "../config.json";
 
 import happE from "../img/happE.avif";
@@ -14,153 +24,13 @@ import StatsAnimated from "../img/Stats-Animated.gif";
 import peepoChat from "../img/peepoChat.avif";
 import peepooChatAnimated from "../img/peepoChat-Animated.gif";
 import Gradient from "../img/Gradient.png";
+import Tutorial from "../img/Tutorial.avif";
+import Tutorial2 from "../img/Tutorial2.avif";
 
 let pfp = document.getElementsByClassName("streamer-pfp");
 let username = document.getElementsByClassName("streamer-username");
 let statusa = document.getElementsByClassName("streamer-status");
 let followers = document.getElementsByClassName("streamer-followers");
-
-async function fetchStreamers() {
-  const streamers = [
-    "forsen",
-    "fapparamoar",
-    "michelleputtini",
-    "lagoda1337",
-    "jujalag",
-    "tibb12",
-  ];
-  const data = await fetch(
-    `https://api.ivr.fi/v2/twitch/user?login=${streamers.join("%2C")}`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-  const mapped = await data.map((streamer) => {
-    const { displayName, logo, followers } = streamer;
-    return {
-      name: displayName,
-      pfp: logo,
-      status: "Partner",
-      followers: followers.toLocaleString(),
-    };
-  });
-  return mapped;
-}
-
-function transition(isNegative) {
-  for (const classes of [username, followers, statusa, pfp]) {
-    classes[0].style.transform = `translate3d(${
-      isNegative ? "-" : ""
-    }25%, 0, 0)`;
-    classes[0].style.transition = "transform 0.5s ease-in-out";
-
-    setTimeout(() => {
-      classes[0].style.transform = "translate3d(0, 0, 0)";
-    }, 500);
-
-    setTimeout(() => {
-      classes[0].style.transition = "none";
-    }, 1000);
-
-    setTimeout(() => {
-      classes[0].style.transition = "transform 0.5s ease-in-out";
-    }, 1001);
-  }
-}
-
-function redirect() {
-  const a = "/";
-  const b = "c";
-  const c = "o";
-  const d = "d";
-  const e = "e";
-  window.location.href = `${a}${b}${c}${d}${e}`;
-}
-
-const loadAllImages = () => {
-  const images = [
-    StvMAnimated,
-    PoroAnimated,
-    StatsAnimated,
-    peepooChatAnimated,
-  ];
-  return (
-    <div
-      style={{
-        display: "none",
-      }}
-    >
-      {images.map(
-        (image, key) => <img src={image} alt={key} key={key} /> ?? null
-      )}
-    </div>
-  );
-};
-
-function disableJoin() {
-  const button = document.getElementsByClassName("join-button");
-  button[0].style.display = "none";
-
-  const loading = document.createElement("div");
-  loading.className = "loading";
-  loading.innerHTML = "Joining Channel...";
-  button[0].parentNode.appendChild(loading);
-}
-
-function disablePart() {
-  const button = document.getElementsByClassName("part-button");
-  button[0].style.display = "none";
-
-  const loading = document.createElement("div");
-  loading.className = "loading";
-  loading.innerHTML = "Parting Channel...";
-  button[0].parentNode.appendChild(loading);
-}
-
-async function isChannelBot(channelName) {
-  const isChannelBot = await fetch(
-    `${site.frontend.oldApi}/api/bot/channel/${channelName}`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-  return isChannelBot;
-}
-
-async function totalChannels() {
-  const channelCount = await fetch(`${site.frontend.oldApi}/api/bot/channels`, {
-    method: "GET",
-  }).then((res) => res.json());
-  return channelCount;
-}
-
-function disableLoading() {
-  const loading = document.getElementsByClassName("loading");
-  loading[0].parentNode.removeChild(loading[0]);
-}
-
-const handleScroll = () => {
-  const topWrapper = document.getElementById("top-wrapper");
-  const bottomWrapper = document.getElementById("bottom-wrapper");
-  for (const wrappers of [topWrapper, bottomWrapper]) {
-    if (window.scrollY > 200) {
-      window.removeEventListener("scroll", handleScroll);
-      topWrapper.style.transform = `translateX(-20%)`;
-      bottomWrapper.style.transform = `translateX(20%)`;
-      wrappers.style.transition = "transform 0.4s ease-in-out";
-
-      setTimeout(() => {
-        wrappers.style.transform = "translate3d(0, 0, 0)";
-        wrappers.style.opacity = "0.2";
-      }, 500);
-
-      setTimeout(() => {
-        wrappers.style.opacity = "0.6";
-        wrappers.style.opacity = "1";
-      }, 700);
-    }
-  }
-};
 
 export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
   useEffect(() => {
@@ -309,7 +179,7 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
 
   function ButtonClickLoad(streamer) {
     changeStreamer(streamer);
-    transition(true);
+    transition("-", pfp, username, statusa, followers);
   }
 
   const LeftLoad = () => {
@@ -321,7 +191,7 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
     } else {
       changeStreamer(totalSteamers[index - 1].name);
     }
-    transition("");
+    transition("", pfp, username, statusa, followers);
   };
 
   function RightLoad() {
@@ -333,13 +203,26 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
     } else {
       changeStreamer(totalSteamers[index + 1].name);
     }
-    transition("-");
+    transition("-", pfp, username, statusa, followers);
   }
 
   return (
     <Wrapper>
       <TopHeaders>
-        {loadAllImages()}
+        {loadAllImages(
+          Poro,
+          PoroAnimated,
+          StvM,
+          StvMAnimated,
+          happE,
+          Stats,
+          StatsAnimated,
+          peepoChat,
+          peepooChatAnimated,
+          Gradient,
+          Tutorial,
+          Tutorial2
+        )}
         <div>
           Variety
           <br />
@@ -425,11 +308,7 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
         </BottomTextHeaders>
         <BottomImageHeaders>
           <div className="images">
-            <img
-              src="https://i.imgur.com/gMDtQXj.gif"
-              alt="information"
-              className="bot-pfp stv"
-            />
+            <img src={Tutorial} alt="information" className="bot-pfp stv" />
           </div>
         </BottomImageHeaders>
       </BottomWrapper>
@@ -756,7 +635,7 @@ const BottomImageHeaders = styled.section`
       width: 100%;
       height: 100%;
       border-radius: 10px;
-      content: url("https://i.imgur.com/L3AWFhn.gif");
+      content: url(${Tutorial2});
       box-shadow: 0 0 10px 0 white;
     }
   }
