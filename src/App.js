@@ -13,6 +13,7 @@ import { create as createUser } from "./js/bot";
 import { isLogged } from "./js/isLogged";
 import { isChannelBot } from "./js/isChannelBot";
 import { getUserLevel } from "./js/getUserLevel";
+import { Logout } from "./js/Logout";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState([]);
@@ -30,7 +31,13 @@ function App() {
           setIsLoading(true);
         });
         getUserLevel(id?.data[0].login).then((userLevel) => {
-          const { success } = userLevel;
+          const { success, level } = userLevel;
+
+          if (level === 0) {
+            setIsLoggedIn([]);
+            Logout();
+          }
+
           if (success) {
             setUserLevel(userLevel);
             setIsLoading(true);
