@@ -26,21 +26,13 @@ export function LoginButton({ children }) {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.success) {
               window.location.href = AuthLink;
+            } else {
+              window.location.reload();
             }
           });
       }}
-      // onClick={async () => {
-      //   // await fetch(`${site.frontend.origin}/redirect?path=${pathname}`, {
-      //   //   method: "GET",
-      //   //   credentials: "include",
-      //   //   headers: {
-      //   //     "Content-Type": "application/json",
-      //   //   },
-      //   // });
-      // }}
     >
       {children}
     </a>
