@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import site from "../config.json";
 import { useLocation } from "react-router-dom";
+import fetch from "node-fetch";
 
 export function LoginButton({ children }) {
   const { pathname } = useLocation();
@@ -15,8 +16,8 @@ export function LoginButton({ children }) {
   return (
     <a
       href={AuthLink}
-      onClick={() => {
-        fetch(`${site.frontend.origin}/redirect`, {
+      onClick={async () => {
+        await fetch(`${site.frontend.origin}/redirect`, {
           method: "POST",
           credentials: "include",
           headers: {
