@@ -16,7 +16,7 @@ export function LoginButton({ children }) {
     <a
       href="#"
       onClick={() => {
-        fetch(`${site.frontend.origin}/redirect?path=${pathname}`, {
+        fetch(`${site.frontend.origin}/redirect`, {
           method: "POST",
           credentials: "include",
           headers: {
