@@ -19,6 +19,9 @@ export function LoginButton({ children }) {
         fetch(`https://test.poros.lol/redirect?path=${pathname}`, {
           method: "POST",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
         })
           .then((res) => res.json())
           .then((data) => {
