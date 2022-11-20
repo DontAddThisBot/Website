@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import site from "../config.json";
 import { useLocation } from "react-router-dom";
-import fetch from "node-fetch";
 
 export function LoginButton({ children }) {
   const { pathname } = useLocation();
@@ -15,16 +14,29 @@ export function LoginButton({ children }) {
   const AuthLink = `https://id.twitch.tv/oauth2/authorize?${newParams.toString()}`;
   return (
     <a
-      href={AuthLink}
-      onClick={async () => {
-        await fetch(`${site.frontend.origin}/redirect?path=${pathname}`, {
-          method: "GET",
+      href="#"
+      onClick={() => {
+        fetch(`http://localhost:3001/redirect?path=${pathname}`, {
+          method: "POST",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.success) {
+              window.location.href = AuthLink;
+            }
+          });
       }}
+      // onClick={async () => {
+      //   // await fetch(`${site.frontend.origin}/redirect?path=${pathname}`, {
+      //   //   method: "GET",
+      //   //   credentials: "include",
+      //   //   headers: {
+      //   //     "Content-Type": "application/json",
+      //   //   },
+      //   // });
+      // }}
     >
       {children}
     </a>
