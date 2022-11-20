@@ -3,6 +3,7 @@ import { Logout } from "./js/Logout";
 import styled from "styled-components";
 import React from "react";
 import site from "./config.json";
+import { LoginButton } from "./js/LoginButton";
 
 function toggleMobileMenu() {
   const getDocuemnt = document.getElementById("hamburger-icon");
@@ -68,7 +69,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
       return (
         <ul>
           <li id="login">
-            <a href={`${site.frontend.origin}/auth/twitch`}>Login</a>
+            <LoginButton />
           </li>
         </ul>
       );
@@ -87,6 +88,10 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
               <p className="user-level">Level: {level}</p>
             </li>
           </ul>
+          <li>
+            <p className="user-name">Logged in as</p>
+            <p>{id?.data[0].login}</p>
+          </li>
           <li
             id="logout"
             onClick={() => {
@@ -101,7 +106,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
     } else {
       return (
         <li id="login">
-          <a href={`${site.frontend.origin}/auth/twitch`}>Login</a>
+          <LoginButton id="login" />
         </li>
       );
     }
@@ -136,10 +141,6 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
             <CustomLink to="/commands">Commands</CustomLink>
             <li>
               <a href="https://stats.kattah.me">Stats</a>
-            </li>
-            <li>
-              <p className="user-name">Logged in as</p>
-              <p>{id?.data[0].login}</p>
             </li>
             {mobileNavBar()}
           </ul>
@@ -395,6 +396,7 @@ const Nav = styled.nav`
     ul.mobile-text-dropdown {
       margin-right: 2.5rem;
       display: flex;
+      margin-top: 2.5rem;
 
       li {
         margin: 0;

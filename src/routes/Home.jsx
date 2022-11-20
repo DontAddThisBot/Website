@@ -1,6 +1,6 @@
 import { fetchStreamers } from "../js/fetchStreamers";
 import { join as joinChannel, part as partChannel } from "../js/bot";
-import { redirect } from "../js/redirect";
+import { Redirect } from "../js/redirect";
 import { isChannelBot } from "../js/isChannelBot";
 import { totalChannels } from "../js/totalChannels";
 import { disableJoin, disablePart } from "../js/join.part.js";
@@ -248,7 +248,9 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
         </div>
       </TopHeaders>
       <MiddleHeaders>
-        <img src={happE} alt="happE" className="bot-pfp" onClick={redirect} />
+        <Redirect to="/code">
+          <img src={happE} alt="happE" className="bot-pfp" />
+        </Redirect>
         <div className="bot-name">What can this bot do?</div>
         <p>
           DontAddThisBot is a multi-channel variety and utility moderation/fun

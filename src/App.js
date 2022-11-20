@@ -6,6 +6,7 @@ import Unknown from "./routes/Unknown";
 import Navbar from "./Navbar";
 import Leaderboard from "./routes/Leaderboard";
 import Dashboard from "./routes/Dashboard";
+import Code from "./routes/Code";
 import Footer from "./Footer";
 import styled from "styled-components";
 import img from "./img/shapes.png";
@@ -92,6 +93,10 @@ function App() {
         <Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
           <Route path="/dashboard/:id" element={<Dashboard />} />
         </Route>
+        <Route
+          path="/code"
+          element={<Code isUserLoggedIn={isLoggedIn} isLoaded={isLoading} />}
+        />
         <Route path="*" element={<Unknown />} />
       </Routes>
       <Footer />

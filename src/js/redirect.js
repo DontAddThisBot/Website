@@ -1,8 +1,10 @@
-export function redirect() {
-  const a = "/";
-  const b = "c";
-  const c = "o";
-  const d = "d";
-  const e = "e";
-  window.location.href = `${a}${b}${c}${d}${e}`;
+import { Link, useResolvedPath } from "react-router-dom";
+
+export function Redirect({ to, children, ...props }) {
+  const resolvedPath = useResolvedPath(to);
+  return (
+    <Link to={resolvedPath.pathname} {...props}>
+      {children}
+    </Link>
+  );
 }
