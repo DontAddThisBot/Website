@@ -21,7 +21,7 @@ export function LoginButton({ children }) {
           method: "POST",
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "text/plain",
           },
           body: JSON.stringify({
             path: pathname,
