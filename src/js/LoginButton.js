@@ -22,6 +22,7 @@ export function LoginButton({ children }) {
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ path: pathname }),
         })
           .then((res) => res.json())
           .then((data) => {
