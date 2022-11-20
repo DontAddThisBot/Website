@@ -8,11 +8,11 @@ import { loadAllImages } from "../js/loadAllImages";
 import { handleScroll } from "../js/handleScroll";
 import { disableLoading } from "../js/disableLoading";
 import { transition } from "../js/transition";
+import { LoginButton } from "../js/LoginButton";
 
 import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import site from "../config.json";
 
 import happE from "../img/happE.avif";
 import StvM from "../img/7tvM.avif";
@@ -115,11 +115,11 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
   const IsInChannel = () => {
     if (!success) {
       return (
-        <a href={`${site.frontend.origin}/auth/twitch`}>
+        <LoginButton>
           <button className="login-button">
             <Span>Login with Twitch</Span>
           </button>
-        </a>
+        </LoginButton>
       );
     }
 

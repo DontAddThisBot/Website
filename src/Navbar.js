@@ -1,8 +1,7 @@
+import React from "react";
 import { CustomLink } from "./js/CustomLink";
 import { Logout } from "./js/Logout";
 import styled from "styled-components";
-import React from "react";
-import site from "./config.json";
 import { LoginButton } from "./js/LoginButton";
 
 function toggleMobileMenu() {
@@ -69,7 +68,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
       return (
         <ul>
           <li id="login">
-            <LoginButton />
+            <LoginButton>Login</LoginButton>
           </li>
         </ul>
       );
@@ -106,7 +105,7 @@ const Navbar = ({ userAuth, setAuthState, userLevel }) => {
     } else {
       return (
         <li id="login">
-          <LoginButton id="login" />
+          <LoginButton>Login</LoginButton>
         </li>
       );
     }
