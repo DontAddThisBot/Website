@@ -29,7 +29,6 @@ function App() {
       if (success) {
         isChannelBot(id?.data[0].login).then((channelInfo) => {
           setIsBotIn(channelInfo);
-          setIsLoading(true);
         });
         getUserLevel(id?.data[0].login).then((userLevel) => {
           const { success, level } = userLevel;
