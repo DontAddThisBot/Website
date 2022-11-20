@@ -17,15 +17,12 @@ export function LoginButton({ children }) {
     <a
       href={AuthLink}
       onClick={async () => {
-        await fetch(`${site.frontend.origin}/redirect`, {
+        await fetch(`${site.frontend.origin}/redirect?path=${pathname}`, {
           method: "POST",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            path: pathname,
-          }),
         });
       }}
     >
