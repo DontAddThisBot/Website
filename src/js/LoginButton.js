@@ -18,7 +18,7 @@ export function LoginButton({ children }) {
       href={AuthLink}
       onClick={async () => {
         await fetch(`${site.frontend.origin}/redirect`, {
-          method: "POST",
+          method: "GET",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
