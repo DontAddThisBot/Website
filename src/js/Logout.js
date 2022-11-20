@@ -1,8 +1,10 @@
 import site from "../config.json";
 
-export function Logout() {
-  fetch(`${site.frontend.origin}/api/twitch/logout`, {
+export async function Logout() {
+  const data = await fetch(`${site.frontend.origin}/api/twitch/logout`, {
     method: "POST",
     credentials: "include",
-  });
+  }).then((res) => res.json());
+
+  return data;
 }

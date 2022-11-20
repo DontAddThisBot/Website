@@ -59,18 +59,7 @@ function App() {
 
   return (
     <AppContainer>
-      <Context.Provider
-        value={{
-          isLoggedIn,
-          isBotIn,
-          isLoading,
-          setIsBotIn,
-          setIsLoggedIn,
-          userLevel,
-        }}
-      >
-        <Navbar />
-        {/* <div class="snowflakes" aria-hidden="true">
+      {/* <div class="snowflakes" aria-hidden="true">
           <div class="snowflake">❅</div>
           <div class="snowflake">❅</div>
           <div class="snowflake">❆</div>
@@ -82,16 +71,25 @@ function App() {
           <div class="snowflake">❆</div>
           <div class="snowflake">❄</div>
         </div> */}
+      <Context.Provider
+        value={{
+          isLoggedIn,
+          isBotIn,
+          isLoading,
+          setIsBotIn,
+          setIsLoggedIn,
+          setUserLevel,
+          userLevel,
+        }}
+      >
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
             <Route path="/dashboard/:id" element={<Dashboard />} />
           </Route>
-          <Route
-            path="/code"
-            element={<Code isUserLoggedIn={isLoggedIn} isLoaded={isLoading} />}
-          />
+          <Route path="/code" element={<Code />} />
           <Route path="*" element={<Unknown />} />
         </Routes>
         <Footer />
@@ -103,7 +101,7 @@ function App() {
 const AppContainer = styled.div`
   color: white;
   min-height: 100vh;
-  background-color: #2b2647;
+  background-color: rgba(43, 38, 71, 1.2);
   background-image: url(${img});
 
   .snowflake {

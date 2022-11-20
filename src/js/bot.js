@@ -1,22 +1,28 @@
 import site from "../config.json";
 
 export async function join() {
-  await fetch(`${site.frontend.origin}/api/bot/join`, {
+  const data = await fetch(`${site.frontend.origin}/api/bot/join`, {
     method: "POST",
     credentials: "include",
-  });
+  }).then((res) => res.json());
+
+  return data;
 }
 
 export async function part() {
-  await fetch(`${site.frontend.origin}/api/bot/part`, {
+  const data = await fetch(`${site.frontend.origin}/api/bot/part`, {
     method: "POST",
     credentials: "include",
-  });
+  }).then((res) => res.json());
+
+  return data;
 }
 
 export async function create() {
-  await fetch(`${site.frontend.origin}/api/bot/create`, {
+  const data = await fetch(`${site.frontend.origin}/api/bot/create`, {
     method: "POST",
     credentials: "include",
-  });
+  }).then((res) => res.json());
+
+  return data;
 }

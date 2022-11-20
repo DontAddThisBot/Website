@@ -4,6 +4,7 @@ import { CustomLink } from "./js/CustomLink";
 import { Logout } from "./js/Logout";
 import styled from "styled-components";
 import { LoginButton } from "./js/LoginButton";
+import { isLogged } from "./js/isLogged";
 
 function toggleMobileMenu() {
   const getDocuemnt = document.getElementById("hamburger-icon");
@@ -31,7 +32,21 @@ const Navbar = () => {
     isLoggedIn: userAuth,
     setIsLoggedIn: setAuthState,
     userLevel,
+    setIsBotIn,
+    setUserLevel,
   } = useContext(Context);
+
+  function LogoutUser() {
+    Logout().then((data) => {
+      if (data.success) {
+        isLogged().then((login) => {
+          setAuthState(login);
+          setIsBotIn([]);
+          setUserLevel([]);
+        });
+      }
+    });
+  }
 
   const { level } = userLevel;
   const { success, id } = userAuth;
@@ -62,8 +77,7 @@ const Navbar = () => {
               id="logout"
               className="dropdown-text"
               onClick={() => {
-                setAuthState([]);
-                Logout();
+                LogoutUser();
               }}
             >
               Logout
@@ -101,8 +115,7 @@ const Navbar = () => {
           <li
             id="logout"
             onClick={() => {
-              setAuthState([]);
-              Logout();
+              LogoutUser();
             }}
           >
             Logout
