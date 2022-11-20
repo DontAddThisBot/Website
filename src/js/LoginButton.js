@@ -16,7 +16,7 @@ export function LoginButton({ children }) {
     <a
       href="#"
       onClick={() => {
-        fetch(`https://test.poros.lol/redirect?path=${pathname}`, {
+        fetch(`${site.frontend.origin}/redirect?path=${pathname}`, {
           method: "POST",
           credentials: "include",
           headers: {
