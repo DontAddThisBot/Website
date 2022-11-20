@@ -12,7 +12,8 @@ import { LoginButton } from "../js/LoginButton";
 
 import React from "react";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../Context";
 
 import happE from "../img/happE.avif";
 import StvM from "../img/7tvM.avif";
@@ -32,7 +33,14 @@ let username = document.getElementsByClassName("streamer-username");
 let statusa = document.getElementsByClassName("streamer-status");
 let followers = document.getElementsByClassName("streamer-followers");
 
-export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
+export default function Home() {
+  const {
+    isLoggedIn: loginFlow,
+    isBotIn,
+    isLoading,
+    setIsBotIn: setBotState,
+  } = useContext(Context);
+
   useEffect(() => {
     const topWrapper = document.getElementById("top-wrapper");
     const bottomWrapper = document.getElementById("bottom-wrapper");
@@ -141,20 +149,6 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
       return <JoinButton />;
     }
   };
-
-  // useEffect(() => {
-  //   let Timer = setInterval(() => {
-  //     setCount((count) => count + 1);
-  //     if (count === 5) {
-  //       reset();
-  //       function reset() {
-  //         setCount(0);
-  //         LeftLoad();
-  //       }
-  //     }
-  //   }, 1000);
-  //   return () => clearInterval(Timer);
-  // }, [count]);
 
   const changeStreamer = (name) => {
     totalSteamers.forEach((streamer) => {

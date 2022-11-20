@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../Context";
 import styled from "styled-components";
 
-const Code = ({ isUserLoggedIn, isLoaded }) => {
-  console.log(isUserLoggedIn, isLoaded);
+const Code = () => {
+  const { isLoggedIn: isUserLoggedIn, isLoading } = useContext(Context);
   const { success, message, id } = isUserLoggedIn;
-  if (!isLoaded) {
+
+  if (!isLoading) {
     return (
       <CodeWrapper>
         <div>Loading...</div>

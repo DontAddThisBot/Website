@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "./Context";
 import { CustomLink } from "./js/CustomLink";
 import { Logout } from "./js/Logout";
 import styled from "styled-components";
@@ -25,7 +26,13 @@ function dropdownBox() {
   });
 }
 
-const Navbar = ({ userAuth, setAuthState, userLevel }) => {
+const Navbar = () => {
+  const {
+    isLoggedIn: userAuth,
+    setIsLoggedIn: setAuthState,
+    userLevel,
+  } = useContext(Context);
+
   const { level } = userLevel;
   const { success, id } = userAuth;
   const isLoggedIn = () => {

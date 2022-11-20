@@ -15,6 +15,7 @@ import { isLogged } from "./js/isLogged";
 import { isChannelBot } from "./js/isChannelBot";
 import { getUserLevel } from "./js/getUserLevel";
 import { Logout } from "./js/Logout";
+import { Context } from "./Context";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState([]);
@@ -58,13 +59,18 @@ function App() {
 
   return (
     <AppContainer>
-      <Navbar
-        userAuth={isLoggedIn}
-        isLoading={isLoading}
-        setAuthState={setIsLoggedIn}
-        userLevel={userLevel}
-      />
-      {/* <div class="snowflakes" aria-hidden="true">
+      <Context.Provider
+        value={{
+          isLoggedIn,
+          isBotIn,
+          isLoading,
+          setIsBotIn,
+          setIsLoggedIn,
+          userLevel,
+        }}
+      >
+        <Navbar />
+        {/* <div class="snowflakes" aria-hidden="true">
           <div class="snowflake">❅</div>
           <div class="snowflake">❅</div>
           <div class="snowflake">❆</div>
@@ -76,29 +82,20 @@ function App() {
           <div class="snowflake">❆</div>
           <div class="snowflake">❄</div>
         </div> */}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              loginFlow={isLoggedIn}
-              isBotIn={isBotIn}
-              isLoading={isLoading}
-              setBotState={setIsBotIn}
-            />
-          }
-        />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
-          <Route path="/dashboard/:id" element={<Dashboard />} />
-        </Route>
-        <Route
-          path="/code"
-          element={<Code isUserLoggedIn={isLoggedIn} isLoaded={isLoading} />}
-        />
-        <Route path="*" element={<Unknown />} />
-      </Routes>
-      <Footer />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
+            <Route path="/dashboard/:id" element={<Dashboard />} />
+          </Route>
+          <Route
+            path="/code"
+            element={<Code isUserLoggedIn={isLoggedIn} isLoaded={isLoading} />}
+          />
+          <Route path="*" element={<Unknown />} />
+        </Routes>
+        <Footer />
+      </Context.Provider>
     </AppContainer>
   );
 }
