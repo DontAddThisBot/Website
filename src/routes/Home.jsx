@@ -54,10 +54,18 @@ export default function Home({ loginFlow, isBotIn, isLoading, setBotState }) {
   const [totalChannelCount, setTotalChannelCount] = useState([]);
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      setCount(count + 1);
+      RightLoad();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [count]);
+
+  useEffect(() => {
     totalChannels().then((res) => setTotalChannelCount(res));
     fetchStreamers().then((streamers) => setTotalStreamers(streamers));
-    const userID = id?.data[0].login;
     if (success) {
+      const userID = id.data[0].login;
       if (userID) {
         isChannelBot(userID).then((res) => {
           setBotState(res);
