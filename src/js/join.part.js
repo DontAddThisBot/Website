@@ -6,6 +6,8 @@ export function disableJoin() {
   loading.className = "loading";
   loading.innerHTML = "Joining Channel...";
   button[0].parentNode.appendChild(loading);
+
+  return true;
 }
 
 export function disablePart() {
@@ -16,4 +18,6 @@ export function disablePart() {
   loading.className = "loading";
   loading.innerHTML = "Parting Channel...";
   button[0].parentNode.appendChild(loading);
+
+  return true;
 }

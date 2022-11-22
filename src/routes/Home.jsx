@@ -1,8 +1,12 @@
 import { fetchStreamers } from "../js/fetchStreamers";
+import { join as joinChannel, part as partChannel } from "../js/bot";
 import { Redirect } from "../js/redirect";
+import { isChannelBot } from "../js/isChannelBot";
 import { totalChannels } from "../js/totalChannels";
+import { disableJoin, disablePart } from "../js/join.part.js";
 import { loadAllImages } from "../js/loadAllImages";
 import { handleScroll } from "../js/handleScroll";
+import { disableLoading } from "../js/disableLoading";
 import { transition } from "../js/transition";
 import { LoginButton } from "../js/LoginButton";
 
@@ -72,10 +76,8 @@ export default function Home() {
     if (success) {
       const userID = id.data[0].login;
       if (userID) {
-        import("../js/isChannelBot").then(({ isChannelBot }) => {
-          isChannelBot(userID).then((res) => {
-            setBotState(res);
-          });
+        isChannelBot(userID).then((res) => {
+          setBotState(res);
         });
       }
     }
@@ -86,19 +88,11 @@ export default function Home() {
       <button
         className="join-button"
         onClick={() => {
-          import("../js/join.part").then(({ disableJoin }) => {
-            disableJoin();
-          });
-          import("../js/bot").then(({ join: joinChannel }) => {
-            joinChannel().then(() => {
-              import("../js/isChannelBot").then(({ isChannelBot }) => {
-                isChannelBot(id?.data[0].login).then((res) => {
-                  import("../js/disableLoading").then(({ disableLoading }) => {
-                    disableLoading();
-                  });
-                  setBotState(res);
-                });
-              });
+          disableJoin();
+          joinChannel().then(() => {
+            isChannelBot(id?.data[0].login).then((res) => {
+              disableLoading();
+              setBotState(res);
             });
           });
         }}
@@ -113,19 +107,11 @@ export default function Home() {
       <button
         className="part-button"
         onClick={() => {
-          import("../js/join.part").then(({ disablePart }) => {
-            disablePart();
-          });
-          import("../js/bot").then(({ part: partChannel }) => {
-            partChannel().then(() => {
-              import("../js/isChannelBot").then(({ isChannelBot }) => {
-                isChannelBot(id?.data[0].login).then((res) => {
-                  import("../js/disableLoading").then(({ disableLoading }) => {
-                    disableLoading();
-                  });
-                  setBotState(res);
-                });
-              });
+          disablePart();
+          partChannel().then(() => {
+            isChannelBot(id?.data[0].login).then((res) => {
+              disableLoading();
+              setBotState(res);
             });
           });
         }}
