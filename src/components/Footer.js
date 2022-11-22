@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import React from "react";
 
-import Discord from "./img/Discord.png";
-import Twitter from "./img/Twitter.png";
-import Twitch from "./img/Twitch.png";
-import Github from "./img/Github.png";
+import Discord from "../img/Discord.png";
+import Twitter from "../img/Twitter.png";
+import Twitch from "../img/Twitch.png";
+import Github from "../img/Github.png";
 
 const socialMedias = [
   {
@@ -32,19 +32,19 @@ const socialMedias = [
 const infoText = [
   {
     name: "Commands",
-    href: "/commands",
+    href: "https://docs.poros.lol/global-command",
   },
   {
     name: "Rules",
-    href: "/rules",
+    href: "https://docs.poros.lol/rules",
   },
   {
-    name: "Leaderboard",
-    href: "/leaderboard",
+    name: "ToS",
+    href: "https://docs.poros.lol/tos",
   },
   {
     name: "Stats",
-    href: "/stats",
+    href: "https://stats.kattah.me/stats",
   },
 ];
 
