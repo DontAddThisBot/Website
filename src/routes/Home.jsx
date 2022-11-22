@@ -3,10 +3,8 @@ import { join as joinChannel, part as partChannel } from "../js/bot";
 import { Redirect } from "../js/redirect";
 import { isChannelBot } from "../js/isChannelBot";
 import { totalChannels } from "../js/totalChannels";
-import { disableJoin, disablePart } from "../js/join.part.js";
 import { loadAllImages } from "../js/loadAllImages";
 import { handleScroll } from "../js/handleScroll";
-import { disableLoading } from "../js/disableLoading";
 import { transition } from "../js/transition";
 import { LoginButton } from "../js/LoginButton";
 
@@ -88,10 +86,11 @@ export default function Home() {
       <button
         className="join-button"
         onClick={() => {
-          disableJoin();
-          joinChannel().then(() => {
+          const joinButton = document.getElementsByClassName("join-button");
+          joinButton[0].innerHTML = "Joining...";
+          joinButton[0].disabled = true;
+          joinChannel().then((e) => {
             isChannelBot(id?.data[0].login).then((res) => {
-              disableLoading();
               setBotState(res);
             });
           });
@@ -107,10 +106,11 @@ export default function Home() {
       <button
         className="part-button"
         onClick={() => {
-          disablePart();
+          const partButton = document.getElementsByClassName("part-button");
+          partButton[0].innerHTML = "Parting...";
+          partButton[0].disabled = true;
           partChannel().then(() => {
             isChannelBot(id?.data[0].login).then((res) => {
-              disableLoading();
               setBotState(res);
             });
           });

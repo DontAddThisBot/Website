@@ -1,16 +1,17 @@
-export function disableJoin() {
+export async function disableJoin() {
   const button = document.getElementsByClassName("join-button");
   button[0].style.display = "none";
 
-  const loading = document.createElement("div");
-  loading.className = "loading";
-  loading.innerHTML = "Joining Channel...";
-  button[0].parentNode.appendChild(loading);
-
-  return true;
+  console.log(button[0]);
+  if (button[0].style.display === "none") {
+    const loading = document.createElement("div");
+    loading.className = "loading";
+    loading.innerHTML = "Joining Channel...";
+    button[0].parentNode.appendChild(loading);
+  }
 }
 
-export function disablePart() {
+export async function disablePart() {
   const button = document.getElementsByClassName("part-button");
   button[0].style.display = "none";
 
@@ -18,6 +19,4 @@ export function disablePart() {
   loading.className = "loading";
   loading.innerHTML = "Parting Channel...";
   button[0].parentNode.appendChild(loading);
-
-  return true;
 }
