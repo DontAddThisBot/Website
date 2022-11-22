@@ -89,9 +89,11 @@ export default function Home() {
           const joinButton = document.getElementsByClassName("join-button");
           joinButton[0].innerHTML = "Joining...";
           joinButton[0].disabled = true;
-          joinChannel().then((e) => {
+          joinChannel().then(() => {
             isChannelBot(id?.data[0].login).then((res) => {
-              setBotState(res);
+              if (res) {
+                setBotState(res);
+              }
             });
           });
         }}
@@ -111,7 +113,9 @@ export default function Home() {
           partButton[0].disabled = true;
           partChannel().then(() => {
             isChannelBot(id?.data[0].login).then((res) => {
-              setBotState(res);
+              if (res) {
+                setBotState(res);
+              }
             });
           });
         }}
