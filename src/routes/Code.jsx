@@ -1,14 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../Context";
-import { poroInfo } from "../js/getPoroInfo";
-import { totalChannels } from "../js/totalChannels";
 import { humanizeDuration } from "../js/humanizeDuration";
-import { join as joinChannel } from "../js/bot";
-import { disableJoin } from "../js/join.part";
-import { isChannelBot } from "../js/isChannelBot";
-import poroDespair from "../img/poroDespair.avif";
 import styled from "styled-components";
 import Loading from "../img/Loading.gif";
+import poroDespair from "../img/poroDespair.avif";
 
 const Code = () => {
   const {
@@ -17,10 +12,12 @@ const Code = () => {
     isBotIn,
     setIsBotIn,
   } = useContext(Context);
+
   const { success, id } = isUserLoggedIn;
   const [poroData, setPoro] = useState([]);
   const [todayCode, setTodayCode] = useState("");
   const [remainingTime, setRemainingTime] = useState(0);
+  const [didPoroLoad, setDidPoroLoad] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,6 +26,34 @@ const Code = () => {
 
     return () => clearInterval(interval);
   }, [remainingTime]);
+
+  useEffect(() => {
+    if (success) {
+      import("../js/getPoroInfo").then(({ poroInfo }) => {
+        const { login } = id.data[0];
+        poroInfo(login).then((res) => {
+          setDidPoroLoad(true);
+          if (res.success) {
+            setPoro(res);
+            if (res.cooldowns?.poroRedeem.isAvailable === false) {
+              const timeLeft =
+                new Date(res.cooldowns?.poroRedeem.lastUsage).getTime() -
+                new Date().getTime() +
+                1000 * 60 * 60 * 24;
+              setRemainingTime(timeLeft);
+            }
+          } else {
+            setPoro(res);
+          }
+        });
+        import("../js/totalChannels").then(({ totalChannels }) => {
+          totalChannels().then((res) => {
+            setTodayCode(res.code);
+          });
+        });
+      });
+    }
+  }, [success]);
 
   const Available = () => {
     return (
@@ -67,30 +92,7 @@ const Code = () => {
     }
   }
 
-  useEffect(() => {
-    if (success) {
-      const { login } = id.data[0];
-      poroInfo(login).then((res) => {
-        if (res.success) {
-          setPoro(res);
-          if (res.cooldowns?.poroRedeem.isAvailable === false) {
-            const timeLeft =
-              new Date(res.cooldowns?.poroRedeem.lastUsage).getTime() -
-              new Date().getTime() +
-              1000 * 60 * 60 * 24;
-            setRemainingTime(timeLeft);
-          }
-        } else {
-          setPoro(res);
-        }
-      });
-      totalChannels().then((res) => {
-        setTodayCode(res.todaysCode);
-      });
-    }
-  }, [success]);
-
-  if (!isLoading) {
+  if (!isLoading && !didPoroLoad) {
     return (
       <OuterWrapper>
         <MakeABox>
@@ -126,10 +128,16 @@ const Code = () => {
             <button
               className="join-button"
               onClick={() => {
-                disableJoin();
-                joinChannel().then(() => {
-                  isChannelBot(id?.data[0].login).then((res) => {
-                    setIsBotIn(res);
+                import("../js/join.part").then(({ disableJoin }) => {
+                  disableJoin();
+                });
+                import("../js/bot").then(({ join: joinChannel }) => {
+                  joinChannel().then(() => {
+                    import("../js/isChannelBot").then(({ isChannelBot }) => {
+                      isChannelBot(id?.data[0].login).then((res) => {
+                        setIsBotIn(res);
+                      });
+                    });
                   });
                 });
               }}

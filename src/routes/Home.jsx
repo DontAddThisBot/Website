@@ -1,12 +1,8 @@
 import { fetchStreamers } from "../js/fetchStreamers";
-import { join as joinChannel, part as partChannel } from "../js/bot";
 import { Redirect } from "../js/redirect";
-import { isChannelBot } from "../js/isChannelBot";
 import { totalChannels } from "../js/totalChannels";
-import { disableJoin, disablePart } from "../js/join.part.js";
 import { loadAllImages } from "../js/loadAllImages";
 import { handleScroll } from "../js/handleScroll";
-import { disableLoading } from "../js/disableLoading";
 import { transition } from "../js/transition";
 import { LoginButton } from "../js/LoginButton";
 
@@ -14,6 +10,7 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
 import { Context } from "../Context";
+import Footer from "../components/Footer";
 
 import happE from "../img/happE.avif";
 import StvM from "../img/7tvM.avif";
@@ -75,8 +72,10 @@ export default function Home() {
     if (success) {
       const userID = id.data[0].login;
       if (userID) {
-        isChannelBot(userID).then((res) => {
-          setBotState(res);
+        import("../js/isChannelBot").then(({ isChannelBot }) => {
+          isChannelBot(userID).then((res) => {
+            setBotState(res);
+          });
         });
       }
     }
@@ -87,11 +86,19 @@ export default function Home() {
       <button
         className="join-button"
         onClick={() => {
-          disableJoin();
-          joinChannel().then(() => {
-            isChannelBot(id?.data[0].login).then((res) => {
-              disableLoading();
-              setBotState(res);
+          import("../js/join.part").then(({ disableJoin }) => {
+            disableJoin();
+          });
+          import("../js/bot").then(({ join: joinChannel }) => {
+            joinChannel().then(() => {
+              import("../js/isChannelBot").then(({ isChannelBot }) => {
+                isChannelBot(id?.data[0].login).then((res) => {
+                  import("../js/disableLoading").then(({ disableLoading }) => {
+                    disableLoading();
+                  });
+                  setBotState(res);
+                });
+              });
             });
           });
         }}
@@ -106,11 +113,19 @@ export default function Home() {
       <button
         className="part-button"
         onClick={() => {
-          disablePart();
-          partChannel().then(() => {
-            isChannelBot(id?.data[0].login).then((res) => {
-              disableLoading();
-              setBotState(res);
+          import("../js/join.part").then(({ disablePart }) => {
+            disablePart();
+          });
+          import("../js/bot").then(({ part: partChannel }) => {
+            partChannel().then(() => {
+              import("../js/isChannelBot").then(({ isChannelBot }) => {
+                isChannelBot(id?.data[0].login).then((res) => {
+                  import("../js/disableLoading").then(({ disableLoading }) => {
+                    disableLoading();
+                  });
+                  setBotState(res);
+                });
+              });
             });
           });
         }}
@@ -124,29 +139,25 @@ export default function Home() {
     if (!isLoading) {
       return <div className="loading">Loading...</div>;
     } else {
-      return IsInChannel();
-    }
-  };
-
-  const IsInChannel = () => {
-    if (!success) {
-      return (
-        <LoginButton>
-          <button className="login-button">
-            <Span>Login with Twitch</Span>
-          </button>
-        </LoginButton>
-      );
-    }
-
-    if (success && isChannelSuccess) {
-      if (!isChannel) {
-        return <JoinButton />;
-      } else {
-        return <PartButton />;
+      if (!success) {
+        return (
+          <LoginButton>
+            <button className="login-button">
+              <Span>Login with Twitch</Span>
+            </button>
+          </LoginButton>
+        );
       }
-    } else if (success && !isChannelSuccess) {
-      return <JoinButton />;
+
+      if (success && isChannelSuccess) {
+        if (!isChannel) {
+          return <JoinButton />;
+        } else {
+          return <PartButton />;
+        }
+      } else if (success && !isChannelSuccess) {
+        return <JoinButton />;
+      }
     }
   };
 
@@ -185,27 +196,31 @@ export default function Home() {
   }
 
   const LeftLoad = () => {
-    const index = totalSteamers.findIndex(
-      (streamer) => streamer.name === username[0].innerHTML
-    );
-    if (index === 0) {
-      changeStreamer(totalSteamers[totalSteamers.length - 1].name);
-    } else {
-      changeStreamer(totalSteamers[index - 1].name);
+    if (totalSteamers) {
+      const index = totalSteamers.findIndex(
+        (streamer) => streamer.name === username[0].innerHTML
+      );
+      if (index === 0) {
+        changeStreamer(totalSteamers[totalSteamers.length - 1].name);
+      } else {
+        changeStreamer(totalSteamers[index - 1].name);
+      }
+      transition("", pfp, username, statusa, followers);
     }
-    transition("", pfp, username, statusa, followers);
   };
 
   function RightLoad() {
-    const index = totalSteamers.findIndex(
-      (streamer) => streamer.name === username[0].innerHTML
-    );
-    if (index === totalSteamers.length - 1) {
-      changeStreamer(totalSteamers[0].name);
-    } else {
-      changeStreamer(totalSteamers[index + 1].name);
+    if (totalSteamers) {
+      const index = totalSteamers.findIndex(
+        (streamer) => streamer.name === username[0].innerHTML
+      );
+      if (index === totalSteamers.length - 1) {
+        changeStreamer(totalSteamers[0]?.name);
+      } else {
+        changeStreamer(totalSteamers[index + 1].name);
+      }
+      transition("-", pfp, username, statusa, followers);
     }
-    transition("-", pfp, username, statusa, followers);
   }
 
   return (
@@ -339,14 +354,14 @@ export default function Home() {
           .map((streamer, key) => (
             <div className="streamer-information" key={key}>
               <img
-                src={streamer.pfp}
+                src={streamer?.pfp}
                 alt="information"
                 className="streamer-pfp"
               />
               <div className="streamer-information-text">
-                <p className="streamer-username">{streamer.name}</p>
-                <p className="streamer-status">{streamer.status}</p>
-                <p className="streamer-followers">{streamer.followers}</p>
+                <p className="streamer-username">{streamer?.name}</p>
+                <p className="streamer-status">{streamer?.status}</p>
+                <p className="streamer-followers">{streamer?.followers}</p>
               </div>
             </div>
           ))}
@@ -372,6 +387,7 @@ export default function Home() {
           ></button>
         ))}
       </BottomImageSliderButtons>
+      <Footer />
     </Wrapper>
   );
 }
@@ -438,7 +454,23 @@ const StreamerBox = styled.section`
   cursor: pointer;
   border: 2px solid grey;
   background-color: transparent;
-  animation: slide 1s ease-in-out;
+  animation-name: slideFromLeft;
+  animation-duration: 0.5s;
+
+  @keyframes slideFromLeft {
+    0% {
+      transform: translateX(-2%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
   button {
     background-color: transparent;
@@ -866,11 +898,11 @@ const MiddleHeaders = styled.section`
   border-radius: 15px;
 
   animation-name: slideFromLeft;
-  animation-duration: 1s;
+  animation-duration: 0.5s;
 
   @keyframes slideFromLeft {
     0% {
-      transform: translateY(-2%);
+      transform: translateX(-2%);
     }
     100% {
       transform: translateX(0%);

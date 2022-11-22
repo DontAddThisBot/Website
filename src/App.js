@@ -3,17 +3,13 @@ import { Route, Routes } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import Home from "./routes/Home";
 import Unknown from "./routes/Unknown";
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar";
 import Leaderboard from "./routes/Leaderboard";
 import Dashboard from "./routes/Dashboard";
 import Code from "./routes/Code";
-import Footer from "./Footer";
 import styled from "styled-components";
 import img from "./img/shapes.png";
-import { create as createUser } from "./js/bot";
 import { isLogged } from "./js/isLogged";
-import { isChannelBot } from "./js/isChannelBot";
-import { getUserLevel } from "./js/getUserLevel";
 import { Logout } from "./js/Logout";
 import { Context } from "./Context";
 
@@ -28,28 +24,34 @@ function App() {
       setIsLoggedIn(loginFlow);
       const { success, id } = loginFlow;
       if (success) {
-        isChannelBot(id?.data[0].login).then((channelInfo) => {
-          setIsBotIn(channelInfo);
+        import("./js/isChannelBot").then(({ isChannelBot }) => {
+          isChannelBot(id?.data[0].login).then((channelInfo) => {
+            setIsBotIn(channelInfo);
+          });
         });
-        getUserLevel(id?.data[0].login).then((userLevel) => {
-          const { success, level } = userLevel;
+        import("./js/getUserLevel").then(({ getUserLevel }) => {
+          getUserLevel(id?.data[0].login).then((userLevel) => {
+            const { success, level } = userLevel;
 
-          if (level === 0) {
-            setIsLoggedIn([]);
-            Logout();
-          }
+            if (level === 0) {
+              setIsLoggedIn([]);
+              Logout();
+            }
 
-          if (success) {
-            setUserLevel(userLevel);
-            setIsLoading(true);
-          } else {
-            createUser().then(() => {
-              getUserLevel(id?.data[0].login).then((userLevel) => {
-                setUserLevel(userLevel);
-                setIsLoading(true);
+            if (success) {
+              setUserLevel(userLevel);
+              setIsLoading(true);
+            } else {
+              import("./js/bot").then(({ create: createUser }) => {
+                createUser().then(() => {
+                  getUserLevel(id?.data[0].login).then((userLevel) => {
+                    setUserLevel(userLevel);
+                    setIsLoading(true);
+                  });
+                });
               });
-            });
-          }
+            }
+          });
         });
       } else {
         setIsLoading(true);
@@ -92,7 +94,6 @@ function App() {
           <Route path="/code" element={<Code />} />
           <Route path="*" element={<Unknown />} />
         </Routes>
-        <Footer />
       </Context.Provider>
     </AppContainer>
   );
