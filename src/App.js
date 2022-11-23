@@ -9,7 +9,10 @@ import Dashboard from "./routes/Dashboard";
 import Code from "./routes/Code";
 import styled from "styled-components";
 import img from "./img/shapes.png";
+import { create as createUser } from "./js/bot";
 import { isLogged } from "./js/isLogged";
+import { isChannelBot } from "./js/isChannelBot";
+import { getUserLevel } from "./js/getUserLevel";
 import { Logout } from "./js/Logout";
 import { Context } from "./Context";
 
@@ -24,34 +27,28 @@ function App() {
       setIsLoggedIn(loginFlow);
       const { success, id } = loginFlow;
       if (success) {
-        import("./js/isChannelBot").then(({ isChannelBot }) => {
-          isChannelBot(id?.data[0].login).then((channelInfo) => {
-            setIsBotIn(channelInfo);
-          });
+        isChannelBot(id?.data[0].login).then((channelInfo) => {
+          setIsBotIn(channelInfo);
         });
-        import("./js/getUserLevel").then(({ getUserLevel }) => {
-          getUserLevel(id?.data[0].login).then((userLevel) => {
-            const { success, level } = userLevel;
+        getUserLevel(id?.data[0].login).then((userLevel) => {
+          const { success, level } = userLevel;
 
-            if (level === 0) {
-              setIsLoggedIn([]);
-              Logout();
-            }
+          if (level === 0) {
+            setIsLoggedIn([]);
+            Logout();
+          }
 
-            if (success) {
-              setUserLevel(userLevel);
-              setIsLoading(true);
-            } else {
-              import("./js/bot").then(({ create: createUser }) => {
-                createUser().then(() => {
-                  getUserLevel(id?.data[0].login).then((userLevel) => {
-                    setUserLevel(userLevel);
-                    setIsLoading(true);
-                  });
-                });
+          if (success) {
+            setUserLevel(userLevel);
+            setIsLoading(true);
+          } else {
+            createUser().then(() => {
+              getUserLevel(id?.data[0].login).then((userLevel) => {
+                setUserLevel(userLevel);
+                setIsLoading(true);
               });
-            }
-          });
+            });
+          }
         });
       } else {
         setIsLoading(true);
