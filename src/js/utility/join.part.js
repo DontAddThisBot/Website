@@ -2,7 +2,6 @@ export async function disableJoin() {
   const button = document.getElementsByClassName("join-button");
   button[0].style.display = "none";
 
-  console.log(button[0]);
   if (button[0].style.display === "none") {
     const loading = document.createElement("div");
     loading.className = "loading";

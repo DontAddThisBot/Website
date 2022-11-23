@@ -4,6 +4,9 @@ import { humanizeDuration } from "../js/humanizeDuration";
 import styled from "styled-components";
 import Loading from "../img/Loading.gif";
 import poroDespair from "../img/poroDespair.avif";
+import { disableJoin } from "../js/join.part";
+import { isChannelBot } from "../js/api/isChannelBot";
+import { join as joinChannel } from "../js/api/bot";
 
 const Code = () => {
   const {
@@ -29,10 +32,9 @@ const Code = () => {
 
   useEffect(() => {
     if (success) {
-      import("../js/getPoroInfo").then(({ poroInfo }) => {
+      import("../js/api/getPoroInfo").then(({ poroInfo }) => {
         const { login } = id.data[0];
         poroInfo(login).then((res) => {
-          setDidPoroLoad(true);
           if (res.success) {
             setPoro(res);
             if (res.cooldowns?.poroRedeem.isAvailable === false) {
@@ -45,11 +47,10 @@ const Code = () => {
           } else {
             setPoro(res);
           }
+          setDidPoroLoad(true);
         });
-        import("../js/totalChannels").then(({ totalChannels }) => {
-          totalChannels().then((res) => {
-            setTodayCode(res.code);
-          });
+        import("../js/api/totalChannels").then(({ totalChannels }) => {
+          totalChannels().then(({ todaysCode }) => setTodayCode(todaysCode));
         });
       });
     }
@@ -92,30 +93,6 @@ const Code = () => {
     }
   }
 
-  if (!isLoading && !didPoroLoad) {
-    return (
-      <OuterWrapper>
-        <MakeABox>
-          <div className="loading">
-            <img src={Loading} alt="loading" />
-          </div>
-        </MakeABox>
-      </OuterWrapper>
-    );
-  } else {
-    if (!success) {
-      return (
-        <OuterWrapper>
-          <div className="un-authorized">
-            <h1>Unauthorized</h1>
-            <img src={poroDespair} alt="poroDespair" className="poro" />
-            <h2>Please Login</h2>
-          </div>
-        </OuterWrapper>
-      );
-    }
-  }
-
   function DidBotJoin() {
     if (!isBotIn?.isChannel) {
       return (
@@ -128,16 +105,10 @@ const Code = () => {
             <button
               className="join-button"
               onClick={() => {
-                import("../js/join.part").then(({ disableJoin }) => {
-                  disableJoin();
-                });
-                import("../js/bot").then(({ join: joinChannel }) => {
-                  joinChannel().then(() => {
-                    import("../js/isChannelBot").then(({ isChannelBot }) => {
-                      isChannelBot(id?.data[0].login).then((res) => {
-                        setIsBotIn(res);
-                      });
-                    });
+                disableJoin();
+                joinChannel().then(() => {
+                  isChannelBot(id?.data[0].login).then((res) => {
+                    setIsBotIn(res);
                   });
                 });
               }}
@@ -159,17 +130,43 @@ const Code = () => {
     }
   }
 
+  const CodePage = () => {
+    if (!isLoading && !didPoroLoad) {
+      return (
+        <div className="loading">
+          <img src={Loading} alt="loading" />
+        </div>
+      );
+    } else {
+      if (!success) {
+        return (
+          <div className="un-authorized">
+            <h1>Unauthorized</h1>
+            <img src={poroDespair} alt="poroDespair" className="poro" />
+            <h2>Please Login</h2>
+          </div>
+        );
+      } else {
+        return (
+          <>
+            <div className="top-info-code">
+              <h1>Todays Hint</h1>
+              <h2>{todayCode}</h2>
+            </div>
+            <div className="top-info-code-2">
+              <IsCooldown />
+            </div>
+            <DidBotJoin />
+          </>
+        );
+      }
+    }
+  };
+
   return (
     <OuterWrapper>
       <MakeABox>
-        <div className="top-info-code">
-          <h1>Todays Hint</h1>
-          <h2>{todayCode}</h2>
-        </div>
-        <div className="top-info-code-2">
-          <IsCooldown />
-        </div>
-        <DidBotJoin />
+        <CodePage />
       </MakeABox>
     </OuterWrapper>
   );
@@ -338,9 +335,9 @@ const MakeABox = styled.div`
 
 const OuterWrapper = styled.div`
   display: flex;
-  height: 100vh;
   justify-content: center;
   align-items: center;
+  margin-top: 10%;
 
   div.un-authorized {
     display: flex;
