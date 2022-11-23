@@ -19,7 +19,7 @@ const socialMedias = [
   },
   {
     name: "Twitch",
-    link: "https://twitch.tv/katt3h",
+    link: "https://twitch.tv/kattah",
     img: Twitch,
   },
   {
