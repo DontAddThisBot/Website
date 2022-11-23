@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../Context";
-import { CustomLink } from "../js/CustomLink";
+import { CustomLink } from "../js/utility/CustomLink";
 import { Logout } from "../js/api/Logout";
 import styled from "styled-components";
 import { LoginButton } from "../js/api/LoginButton";

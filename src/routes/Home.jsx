@@ -3,9 +3,9 @@ import { join as joinChannel, part as partChannel } from "../js/api/bot";
 import { Redirect } from "../js/api/redirect";
 import { isChannelBot } from "../js/api/isChannelBot";
 import { totalChannels } from "../js/api/totalChannels";
-import { loadAllImages } from "../js/loadAllImages";
-import { handleScroll } from "../js/handleScroll";
-import { transition } from "../js/transition";
+import { loadAllImages } from "../js/utility/loadAllImages";
+import { handleScroll } from "../js/utility/handleScroll";
+import { transition } from "../js/utility/transition";
 import { LoginButton } from "../js/api/LoginButton";
 
 import React from "react";
