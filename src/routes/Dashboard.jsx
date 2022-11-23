@@ -6,7 +6,7 @@ const Dashboard = ({ test }) => {
   console.log(test);
   return (
     <div className="dashboard">
-      <h1>Dashboard {id}</h1>
+      <h1>TODO Dashboard {id}</h1>
     </div>
   );
 };
