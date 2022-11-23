@@ -22,13 +22,13 @@ const Code = () => {
   const [remainingTime, setRemainingTime] = useState(0);
   const [didPoroLoad, setDidPoroLoad] = useState(false);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setRemainingTime((remainingTime) => remainingTime - 1000);
-  //   }, 1000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRemainingTime((remainingTime) => remainingTime - 1000);
+    }, 1000);
 
-  //   return () => clearInterval(interval);
-  // }, [remainingTime]);
+    return () => clearInterval(interval);
+  }, [remainingTime]);
 
   useEffect(() => {
     if (success) {
