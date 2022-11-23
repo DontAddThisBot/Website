@@ -91,9 +91,7 @@ export default function Home() {
           joinButton[0].disabled = true;
           joinChannel().then(() => {
             isChannelBot(id?.data[0].login).then((res) => {
-              if (res) {
-                setBotState(res);
-              }
+              setBotState(res);
             });
           });
         }}
@@ -113,9 +111,7 @@ export default function Home() {
           partButton[0].disabled = true;
           partChannel().then(() => {
             isChannelBot(id?.data[0].login).then((res) => {
-              if (res) {
-                setBotState(res);
-              }
+              setBotState(res);
             });
           });
         }}
