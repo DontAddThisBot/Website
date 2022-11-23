@@ -1,16 +1,11 @@
 import React, { useContext } from "react";
 import { Context } from "../Context";
 import { CustomLink } from "../js/CustomLink";
-import { Logout } from "../js/Logout";
+import { Logout } from "../js/api/Logout";
 import styled from "styled-components";
-import { LoginButton } from "../js/LoginButton";
+import { LoginButton } from "../js/api/LoginButton";
 
 let getDocument = document.getElementsByClassName("dropdown-content");
-let hamburgerIcon = document.getElementById("hamburger-icon");
-
-function toggleMobileMenu() {
-  hamburgerIcon.classList.toggle("open");
-}
 
 function removeListener() {
   window.removeEventListener("click", ClickEvent);
@@ -32,6 +27,10 @@ function ClickEvent(event) {
   }
 }
 
+function onClickHide() {
+  document.getElementById("hamburger-icon").classList.toggle("open");
+}
+
 const Navbar = () => {
   const {
     isLoggedIn: userAuth,
@@ -44,7 +43,7 @@ const Navbar = () => {
   function LogoutUser() {
     Logout().then((data) => {
       if (data.success) {
-        import("../js/isLogged").then(({ isLogged }) => {
+        import("../js/api/isLogged").then(({ isLogged }) => {
           isLogged().then((login) => {
             setAuthState(login);
             setIsBotIn([]);
@@ -57,11 +56,13 @@ const Navbar = () => {
 
   const { level } = userLevel;
   const { success, id } = userAuth;
+
   const IsLoggedIn = () => {
     if (success) {
       const style = {
         marginRight: "50px",
       };
+
       return (
         <div>
           <ul>
@@ -77,9 +78,12 @@ const Navbar = () => {
               <p className="user-level">{id?.data[0].login}</p>
               <p className="user-level">Level: {level}</p>
             </li>
-            <li className="dropdown-text dashboard">
-              <a href={`/dashboard/${id?.data[0].login}`}>Dashboard</a>
-            </li>
+            <CustomLink
+              to={`/dashboard/${id?.data[0].login}`}
+              className="dropdown-text dashboard"
+            >
+              Dashboard
+            </CustomLink>
             <li
               id="logout"
               className="dropdown-text"
@@ -104,14 +108,19 @@ const Navbar = () => {
     }
   };
 
-  const mobileNavBar = () => {
+  const MobileNavBar = () => {
     if (success) {
       return (
         <>
           <ul className="mobile-text-dropdown">
-            <li id="dropdown-text dashboard">
-              <a href="/login">Dashboard</a>
-            </li>
+            <CustomLink
+              to={`/dashboard/${id?.data[0].login}`}
+              id="dropdown-text dashboard"
+              onClick={onClickHide}
+            >
+              {" "}
+              Dashboard{" "}
+            </CustomLink>
             <li id="dropdown-text dashboard">
               <p className="user-level">Level: {level}</p>
             </li>
@@ -146,7 +155,6 @@ const Navbar = () => {
           <span className="Bot-Name-1">DontAdd</span>
           <span className="Bot-Name-2">ThisBot</span>
         </div>
-
         <nav className="middle-navbar">
           <ul>
             <CustomLink to="/">Home</CustomLink>
@@ -162,20 +170,33 @@ const Navbar = () => {
         <nav className="right-navbar">
           <IsLoggedIn />
         </nav>
-        <div id="hamburger-icon" onClick={() => toggleMobileMenu()}>
+        <div
+          id="hamburger-icon"
+          onClick={(event) => {
+            if (event.target.id === "hamburger-icon") {
+              event.target.classList.toggle("open");
+            } else {
+              event.target.parentElement.classList.toggle("open");
+            }
+          }}
+        >
           <div className="bar1"></div>
           <div className="bar2"></div>
           <div className="bar3"></div>
           <ul className="mobile-menu">
-            <CustomLink to="/">Home</CustomLink>
-            <CustomLink to="/leaderboard">Leaderboard</CustomLink>
+            <CustomLink to="/" onClick={onClickHide}>
+              Home
+            </CustomLink>
+            <CustomLink to="/leaderboard" onClick={onClickHide}>
+              Leaderboard
+            </CustomLink>
             <li>
               <a href="https://docs.poros.lol/global-commands/">Commands</a>
             </li>
             <li>
               <a href="https://stats.kattah.me">Stats</a>
             </li>
-            {mobileNavBar()}
+            <MobileNavBar />
           </ul>
         </div>
       </nav>
