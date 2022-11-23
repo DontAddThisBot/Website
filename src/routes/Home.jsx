@@ -7,6 +7,7 @@ import { loadAllImages } from "../js/utility/loadAllImages";
 import { handleScroll } from "../js/utility/handleScroll";
 import { transition } from "../js/utility/transition";
 import { LoginButton } from "../js/api/LoginButton";
+import { modLookup } from "../js/api/modLookUp";
 
 import React from "react";
 import styled from "styled-components";
@@ -44,6 +45,7 @@ export default function Home() {
   const { success: isChannelSuccess, isChannel } = isBotIn;
 
   const [totalSteamers, setTotalStreamers] = useState([]);
+  const [totalMods, setTotalMods] = useState([]);
   const [count, setCount] = useState(0);
   const [button, setButton] = useState([]);
   const [totalChannelCount, setTotalChannelCount] = useState([]);
@@ -73,6 +75,7 @@ export default function Home() {
   useEffect(() => {
     totalChannels().then((res) => setTotalChannelCount(res));
     fetchStreamers().then((streamers) => setTotalStreamers(streamers));
+    modLookup().then((mods) => setTotalMods(mods));
     if (success) {
       const userID = id.data[0].login;
       if (userID) {
@@ -315,9 +318,12 @@ export default function Home() {
       </BottomWrapper>
       <StreamerText>
         <div className="streamer-bot-info">Who is using DontAddThisBot?</div>
-        <p>
-          These are the top streamers using the bot! DontAddThisBot is trusted
-          by these streamers!
+        <p>{totalMods.total.toLocaleString()} Total Modded Channels</p>
+        <p className="modded-follows">
+          {totalMods.follows.toLocaleString()} Total Modded Follows
+        </p>
+        <p className="modded-views">
+          {totalMods.views.toLocaleString()} Total Modded Views
         </p>
       </StreamerText>
       <StreamerBox>
@@ -414,6 +420,14 @@ const StreamerText = styled.section`
   p {
     margin: 0 auto;
     color: grey;
+  }
+
+  p.modded-follows {
+    font-size: 1.2rem;
+  }
+
+  p.modded-views {
+    font-size: 1rem;
   }
 
   .streamer-bot-info {
