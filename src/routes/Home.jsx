@@ -1,12 +1,12 @@
-import { fetchStreamers } from "../js/fetchStreamers";
-import { join as joinChannel, part as partChannel } from "../js/bot";
-import { Redirect } from "../js/redirect";
-import { isChannelBot } from "../js/isChannelBot";
-import { totalChannels } from "../js/totalChannels";
+import { fetchStreamers } from "../js/api/fetchStreamers";
+import { join as joinChannel, part as partChannel } from "../js/api/bot";
+import { Redirect } from "../js/api/redirect";
+import { isChannelBot } from "../js/api/isChannelBot";
+import { totalChannels } from "../js/api/totalChannels";
 import { loadAllImages } from "../js/loadAllImages";
 import { handleScroll } from "../js/handleScroll";
 import { transition } from "../js/transition";
-import { LoginButton } from "../js/LoginButton";
+import { LoginButton } from "../js/api/LoginButton";
 
 import React from "react";
 import styled from "styled-components";
@@ -40,25 +40,27 @@ export default function Home() {
     setIsBotIn: setBotState,
   } = useContext(Context);
 
-  useEffect(() => {
-    const topWrapper = document.getElementById("top-wrapper");
-    const bottomWrapper = document.getElementById("bottom-wrapper");
-    window.addEventListener("scroll", handleScroll);
-    topWrapper.style.opacity = "0";
-    bottomWrapper.style.opacity = "0";
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   const { success, id } = loginFlow;
   const { success: isChannelSuccess, isChannel } = isBotIn;
 
   const [totalSteamers, setTotalStreamers] = useState([]);
   const [count, setCount] = useState(0);
   const [button, setButton] = useState([]);
-
   const [totalChannelCount, setTotalChannelCount] = useState([]);
+
+  useEffect(() => {
+    const topWrapper = document.getElementById("top-wrapper");
+    const bottomWrapper = document.getElementById("bottom-wrapper");
+
+    window.addEventListener("scroll", handleScroll);
+
+    topWrapper.style.opacity = "0";
+    bottomWrapper.style.opacity = "0";
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -74,9 +76,7 @@ export default function Home() {
     if (success) {
       const userID = id.data[0].login;
       if (userID) {
-        isChannelBot(userID).then((res) => {
-          setBotState(res);
-        });
+        isChannelBot(userID).then((res) => setBotState(res));
       }
     }
   }, []);
@@ -90,9 +90,7 @@ export default function Home() {
           joinButton[0].innerHTML = "Joining...";
           joinButton[0].disabled = true;
           joinChannel().then(() => {
-            isChannelBot(id?.data[0].login).then((res) => {
-              setBotState(res);
-            });
+            isChannelBot(id?.data[0].login).then((res) => setBotState(res));
           });
         }}
       >
@@ -109,11 +107,9 @@ export default function Home() {
           const partButton = document.getElementsByClassName("part-button");
           partButton[0].innerHTML = "Parting...";
           partButton[0].disabled = true;
-          partChannel().then(() => {
-            isChannelBot(id?.data[0].login).then((res) => {
-              setBotState(res);
-            });
-          });
+          partChannel().then(() =>
+            isChannelBot(id?.data[0].login).then((res) => setBotState(res))
+          );
         }}
       >
         <Span>Part Bot</Span>

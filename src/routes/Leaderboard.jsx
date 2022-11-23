@@ -1,8 +1,7 @@
-import { fetchPfp } from "../js/fetchPfp";
-import { fetchLeaderboard } from "../js/fetchLeaderboard";
+import { fetchPfp } from "../js/api/fetchPfp";
+import { fetchLeaderboard } from "../js/api/fetchLeaderboard";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import Loading from "../img/Loading.gif";
 
 const Leaderboard = () => {
@@ -17,17 +16,13 @@ const Leaderboard = () => {
       let names = [];
       topUsers.map((user) => {
         names.push(user.username);
-
         return null;
       });
 
       fetchPfp(names).then((data) => {
         let pfps = [];
-        data.forEach((user) => {
-          pfps.push(user.logo);
-        });
+        data.forEach((user) => pfps.push(user.logo));
         setProfilePic(pfps);
-
         setData(true);
       });
     });
@@ -53,11 +48,8 @@ const Leaderboard = () => {
 
       fetchPfp(names).then((data) => {
         let pfps = [];
-        data.forEach((user) => {
-          pfps.push(user.logo);
-        });
+        data.forEach((user) => pfps.push(user.logo));
         setProfilePic(pfps);
-
         setData(true);
       });
     });
