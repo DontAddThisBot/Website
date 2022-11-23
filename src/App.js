@@ -1,5 +1,4 @@
-import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import Home from "./routes/Home";
 import Unknown from "./routes/Unknown";
@@ -9,30 +8,47 @@ import Dashboard from "./routes/Dashboard";
 import Code from "./routes/Code";
 import styled from "styled-components";
 import img from "./img/shapes.png";
-import { create as createUser } from "./js/bot";
-import { isLogged } from "./js/isLogged";
-import { isChannelBot } from "./js/isChannelBot";
-import { getUserLevel } from "./js/getUserLevel";
-import { Logout } from "./js/Logout";
+import { create as createUser } from "./js/api/bot";
+import { isLogged } from "./js/api/isLogged";
+import { isChannelBot } from "./js/api/isChannelBot";
+import { getUserLevel } from "./js/api/getUserLevel";
+import { Logout } from "./js/api/Logout";
 import { Context } from "./Context";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState([]);
   const [isBotIn, setIsBotIn] = useState([]);
   const [userLevel, setUserLevel] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { pathname } = useLocation();
+
+  function HelmetPath() {
+    if (pathname === "/") {
+      return "Home";
+    } else if (pathname === "/leaderboard") {
+      return "Leaderboard";
+    } else if (/^\/dashboard\/.*/i.test(pathname)) {
+      const path = pathname.split("/");
+      return path[2];
+    } else if (pathname === "/code") {
+      return "Code";
+    } else {
+      return "Unknown";
+    }
+  }
 
   useEffect(() => {
     isLogged().then((loginFlow) => {
       setIsLoggedIn(loginFlow);
+
       const { success, id } = loginFlow;
       if (success) {
-        isChannelBot(id?.data[0].login).then((channelInfo) => {
-          setIsBotIn(channelInfo);
-        });
+        isChannelBot(id?.data[0].login).then((channelInfo) =>
+          setIsBotIn(channelInfo)
+        );
         getUserLevel(id?.data[0].login).then((userLevel) => {
           const { success, level } = userLevel;
-
           if (level === 0) {
             setIsLoggedIn([]);
             Logout();
@@ -42,12 +58,12 @@ function App() {
             setUserLevel(userLevel);
             setIsLoading(true);
           } else {
-            createUser().then(() => {
+            createUser().then(() =>
               getUserLevel(id?.data[0].login).then((userLevel) => {
                 setUserLevel(userLevel);
                 setIsLoading(true);
-              });
-            });
+              })
+            );
           }
         });
       } else {
@@ -57,8 +73,12 @@ function App() {
   }, []);
 
   return (
-    <AppContainer>
-      {/* <div class="snowflakes" aria-hidden="true">
+    <HelmetProvider>
+      <Helmet>
+        <title>{HelmetPath()} - DontAddThisBot</title>
+      </Helmet>
+      <AppContainer>
+        {/* <div class="snowflakes" aria-hidden="true">
           <div class="snowflake">❅</div>
           <div class="snowflake">❅</div>
           <div class="snowflake">❆</div>
@@ -70,29 +90,31 @@ function App() {
           <div class="snowflake">❆</div>
           <div class="snowflake">❄</div>
         </div> */}
-      <Context.Provider
-        value={{
-          isLoggedIn,
-          isBotIn,
-          isLoading,
-          setIsBotIn,
-          setIsLoggedIn,
-          setUserLevel,
-          userLevel,
-        }}
-      >
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
-            <Route path="/dashboard/:id" element={<Dashboard />} />
-          </Route>
-          <Route path="/code" element={<Code />} />
-          <Route path="*" element={<Unknown />} />
-        </Routes>
-      </Context.Provider>
-    </AppContainer>
+        <Context.Provider
+          value={{
+            isLoggedIn,
+            isBotIn,
+            isLoading,
+            setIsBotIn,
+            setIsLoggedIn,
+            setUserLevel,
+            userLevel,
+            Navbar,
+          }}
+        >
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
+              <Route path="/dashboard/:id" element={<Dashboard />} />
+            </Route>
+            <Route path="/code" element={<Code />} />
+            <Route path="*" element={<Unknown />} />
+          </Routes>
+        </Context.Provider>
+      </AppContainer>
+    </HelmetProvider>
   );
 }
 
