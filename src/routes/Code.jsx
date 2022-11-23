@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../Context";
-import { humanizeDuration } from "../js/humanizeDuration";
+import { humanizeDuration } from "../js/utility/humanizeDuration";
 import styled from "styled-components";
 import Loading from "../img/Loading.gif";
 import poroDespair from "../img/poroDespair.avif";
-import { disableJoin } from "../js/join.part";
+import { disableJoin } from "../js/utility/join.part";
 import { isChannelBot } from "../js/api/isChannelBot";
 import { join as joinChannel } from "../js/api/bot";
 
@@ -22,13 +22,13 @@ const Code = () => {
   const [remainingTime, setRemainingTime] = useState(0);
   const [didPoroLoad, setDidPoroLoad] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRemainingTime((remainingTime) => remainingTime - 1000);
-    }, 1000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setRemainingTime((remainingTime) => remainingTime - 1000);
+  //   }, 1000);
 
-    return () => clearInterval(interval);
-  }, [remainingTime]);
+  //   return () => clearInterval(interval);
+  // }, [remainingTime]);
 
   useEffect(() => {
     if (success) {
@@ -149,12 +149,14 @@ const Code = () => {
       } else {
         return (
           <>
-            <div className="top-info-code">
-              <h1>Todays Hint</h1>
-              <h2>{todayCode}</h2>
-            </div>
-            <div className="top-info-code-2">
-              <IsCooldown />
+            <div className="top-info">
+              <div className="top-info-code">
+                <h1>Todays Hint</h1>
+                <h2>{todayCode}</h2>
+              </div>
+              <div className="top-info-code-2">
+                <IsCooldown />
+              </div>
             </div>
             <DidBotJoin />
           </>
@@ -202,33 +204,42 @@ const MakeABox = styled.div`
     }
   }
 
-  .top-info-code {
-    overflow-wrap: break-word;
-    align-self: stretch;
-    overflow-wrap: anywhere;
+  .top-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    margin-bottom: 10px;
     padding: 20px;
-    line-height: 0.5;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .top-info-code {
+    align-self: self-start;
+    overflow-wrap: anywhere;
+    float: right;
 
     h1 {
-      font-size: 20px;
+      font-size: 30px;
       text-align: -webkit-left;
+      text-transform: uppercase;
     }
 
     h2 {
-      overflow-wrap: break-word;
       text-align: -webkit-left;
-      font-size: 45px;
+      text-transform: uppercase;
     }
   }
 
   .top-info-code-2 {
-    overflow-wrap: break-word;
-    align-self: self-end;
+    align-self: self-start;
     overflow-wrap: anywhere;
     float: right;
     color: grey;
-    padding: 10px;
-    line-height: 0.5;
 
     h1.daily-redeem {
       font-size: 30px;
@@ -238,13 +249,12 @@ const MakeABox = styled.div`
     }
 
     h1 {
-      font-size: 35px;
+      font-size: 30px;
       text-align: -webkit-right;
       text-transform: uppercase;
     }
 
     h2 {
-      overflow-wrap: break-word;
       text-align: -webkit-right;
       text-transform: uppercase;
     }
@@ -252,7 +262,6 @@ const MakeABox = styled.div`
 
   .top-info-code-3 {
     text-align: center;
-    margin-top: 20%;
   }
 
   div.add-bot-button {
@@ -337,7 +346,7 @@ const OuterWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10%;
+  margin-top: 3%;
 
   div.un-authorized {
     display: flex;
