@@ -1,11 +1,10 @@
 export async function fetchStreamers() {
   const streamers = [
     "forsen",
+    "velcuz",
     "fapparamoar",
     "michelleputtini",
-    "lagoda1337",
     "jujalag",
-    "tibb12",
   ];
   const data = await fetch(
     `https://api.ivr.fi/v2/twitch/user?login=${streamers.join("%2C")}`,
