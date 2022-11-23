@@ -57,7 +57,7 @@ const Navbar = () => {
 
   const { level } = userLevel;
   const { success, id } = userAuth;
-  const isLoggedIn = () => {
+  const IsLoggedIn = () => {
     if (success) {
       const style = {
         marginRight: "50px",
@@ -159,8 +159,10 @@ const Navbar = () => {
             </li>
           </ul>
         </nav>
-        <nav className="right-navbar">{isLoggedIn()}</nav>
-        <div id="hamburger-icon" onClick={toggleMobileMenu}>
+        <nav className="right-navbar">
+          <IsLoggedIn />
+        </nav>
+        <div id="hamburger-icon" onClick={() => toggleMobileMenu()}>
           <div className="bar1"></div>
           <div className="bar2"></div>
           <div className="bar3"></div>
