@@ -1,4 +1,4 @@
-import site from "../config.json";
+import site from "../../config.json";
 
 export async function getUserLevel(username) {
   const userLevel = await fetch(

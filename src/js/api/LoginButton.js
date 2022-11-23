@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import site from "../config.json";
+import site from "../../config.json";
 import { useLocation } from "react-router-dom";
 
 export function LoginButton({ children }) {

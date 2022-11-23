@@ -1,4 +1,4 @@
-import site from "../config.json";
+import site from "../../config.json";
 
 export async function fetchLeaderboard(boolean) {
   const { topUsers } = await fetch(

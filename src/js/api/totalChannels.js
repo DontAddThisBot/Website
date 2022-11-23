@@ -1,4 +1,4 @@
-import site from "../config.json";
+import site from "../../config.json";
 
 export async function totalChannels() {
   const channelCount = await fetch(`${site.frontend.oldApi}/api/bot/channels`, {

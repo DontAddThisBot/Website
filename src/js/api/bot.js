@@ -1,4 +1,4 @@
-import site from "../config.json";
+import site from "../../config.json";
 
 export async function join() {
   const data = await fetch(`${site.frontend.origin}/api/bot/join`, {

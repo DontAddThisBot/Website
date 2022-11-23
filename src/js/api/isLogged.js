@@ -1,4 +1,4 @@
-import site from "../config.json";
+import site from "../../config.json";
 
 export async function isLogged() {
   const isLogged = await fetch(`${site.frontend.origin}/api/twitch`, {
