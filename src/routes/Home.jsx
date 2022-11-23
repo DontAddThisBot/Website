@@ -318,11 +318,13 @@ export default function Home() {
       </BottomWrapper>
       <StreamerText>
         <div className="streamer-bot-info">Who is using DontAddThisBot?</div>
-        <p>{totalMods?.total} Total Modded Channels</p>
+        <p>{totalMods?.total?.toLocaleString() ?? ""} Total Modded Channels</p>
         <p className="modded-follows">
-          {totalMods?.follows} Total Modded Follows
+          {totalMods?.follows?.toLocaleString() ?? ""} Total Modded Follows
         </p>
-        <p className="modded-views">{totalMods?.views} Total Modded Views</p>
+        <p className="modded-views">
+          {totalMods?.views?.toLocaleString() ?? ""} Total Modded Views
+        </p>
       </StreamerText>
       <StreamerBox>
         <button
