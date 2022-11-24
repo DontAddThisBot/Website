@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Home from "./routes/Home";
 import Unknown from "./routes/Unknown";
 import Navbar from "./components/Navbar";
+import Commands from "./routes/Commands";
 import Leaderboard from "./routes/Leaderboard";
 import Dashboard from "./routes/Dashboard";
 import Code from "./routes/Code";
@@ -109,6 +110,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
               <Route path="/dashboard/:id" element={<Dashboard />} />
             </Route>
+            <Route path="/commands" element={<Commands />} />
             <Route path="/code" element={<Code />} />
             <Route path="*" element={<Unknown />} />
           </Routes>
