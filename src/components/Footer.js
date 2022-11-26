@@ -191,7 +191,7 @@ const FooterThatFitsMobile = styled.div`
         font-weight: 600;
         &.Bot-Name-1 {
           color: #f8f8f8;
-          margin-top: 200px;
+          margin-top: 100px;
         }
         &.Bot-Name-2 {
           color: #998fd2;
@@ -222,7 +222,6 @@ const FooterThatFitsMobile = styled.div`
 
       .copyright {
         margin-bottom: 5%;
-        margin-top: -30%;
       }
 
       .information-footer {
