@@ -8,7 +8,7 @@ import Leaderboard from "./routes/Leaderboard";
 import Dashboard from "./routes/Dashboard";
 import Code from "./routes/Code";
 import styled from "styled-components";
-import img from "./img/shapes.png";
+import img from "./img/backgroundshapes.png";
 import { create as createUser } from "./js/api/bot";
 import { isLogged } from "./js/api/isLogged";
 import { isChannelBot } from "./js/api/isChannelBot";
@@ -123,8 +123,14 @@ function App() {
 const AppContainer = styled.div`
   color: white;
   min-height: 100vh;
-  background-color: rgba(43, 38, 71, 1.2);
+  background-color: rgb(29 25 56);
   background-image: url(${img});
+
+  body {
+    color: white;
+    min-height: 100vh;
+    background-color: #1d1f1d;
+  }
 
   .snowflake {
     color: #fff;
@@ -243,12 +249,6 @@ const AppContainer = styled.div`
     left: 90%;
     -webkit-animation-delay: 3s, 1.5s;
     animation-delay: 3s, 1.5s;
-  }
-
-  body {
-    color: white;
-    min-height: 100vh;
-    background-color: #1d1f1d;
   }
 `;
 
