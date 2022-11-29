@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import site from "../../config.json";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 export function LoginButton({ children }) {
   const { pathname } = useLocation();
@@ -13,28 +13,19 @@ export function LoginButton({ children }) {
 
   const AuthLink = `https://id.twitch.tv/oauth2/authorize?${newParams.toString()}`;
   return (
-    <a
-      href="#"
+    <Link
       onClick={() => {
-        fetch(`${site.frontend.origin}/redirect`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ path: pathname }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.success) {
-              window.location.href = AuthLink;
-            } else {
-              window.location.reload();
-            }
-          });
+        window.localStorage.setItem(
+          "CURRENT_STATE",
+          JSON.stringify({
+            returnTo: pathname.startsWith("/auth/twitch") ? "/" : pathname,
+          })
+        );
+
+        window.location.href = AuthLink;
       }}
     >
       {children}
-    </a>
+    </Link>
   );
 }

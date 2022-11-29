@@ -32,7 +32,7 @@ const socialMedias = [
 const infoText = [
   {
     name: "Commands",
-    href: "https://docs.poros.lol/global-command",
+    href: "https://docs.poros.lol/global-commands",
   },
   {
     name: "Rules",
@@ -57,7 +57,7 @@ const Footer = () => {
             DontAdd<span className="Bot-Name-2">ThisBot</span>
           </span>
           <p>© 2022 Kattah</p>
-          <p>Not affiliated with Twitch or any of its partners. All rights</p>
+          <p>Not affiliated with Twitch, All Rights Reserved.</p>
         </div>
         <div className="information-footer">
           <p className="information-footer-text">Information</p>

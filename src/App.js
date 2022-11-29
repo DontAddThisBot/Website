@@ -7,6 +7,7 @@ import Commands from "./routes/Commands";
 import Leaderboard from "./routes/Leaderboard";
 import Dashboard from "./routes/Dashboard";
 import Code from "./routes/Code";
+import Authorize from "./routes/Authenticate";
 import styled from "styled-components";
 import img from "./img/backgroundshapes.png";
 import { create as createUser } from "./js/api/bot";
@@ -18,6 +19,7 @@ import { Context } from "./Context";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function App() {
+  const localeStorageToken = localStorage.getItem("SITE_TOKEN");
   const [isLoggedIn, setIsLoggedIn] = useState([]);
   const [isBotIn, setIsBotIn] = useState([]);
   const [userLevel, setUserLevel] = useState([]);
@@ -40,38 +42,41 @@ function App() {
   }
 
   useEffect(() => {
-    isLogged().then((loginFlow) => {
-      setIsLoggedIn(loginFlow);
+    if (localeStorageToken) {
+      isLogged().then((loginFlow) => {
+        setIsLoggedIn(loginFlow);
+        const { success, id } = loginFlow;
+        if (success) {
+          isChannelBot(id?.data[0].login).then((channelInfo) =>
+            setIsBotIn(channelInfo)
+          );
+          getUserLevel(id?.data[0].login).then((userLevel) => {
+            const { success, level } = userLevel;
+            if (level === 0) {
+              setIsLoggedIn([]);
+              Logout();
+            }
 
-      const { success, id } = loginFlow;
-      if (success) {
-        isChannelBot(id?.data[0].login).then((channelInfo) =>
-          setIsBotIn(channelInfo)
-        );
-        getUserLevel(id?.data[0].login).then((userLevel) => {
-          const { success, level } = userLevel;
-          if (level === 0) {
-            setIsLoggedIn([]);
-            Logout();
-          }
-
-          if (success) {
-            setUserLevel(userLevel);
-            setIsLoading(true);
-          } else {
-            createUser().then(() =>
-              getUserLevel(id?.data[0].login).then((userLevel) => {
-                setUserLevel(userLevel);
-                setIsLoading(true);
-              })
-            );
-          }
-        });
-      } else {
-        setIsLoading(true);
-      }
-    });
-  }, []);
+            if (success) {
+              setUserLevel(userLevel);
+              setIsLoading(true);
+            } else {
+              createUser().then(() =>
+                getUserLevel(id?.data[0].login).then((userLevel) => {
+                  setUserLevel(userLevel);
+                  setIsLoading(true);
+                })
+              );
+            }
+          });
+        } else {
+          setIsLoading(true);
+        }
+      });
+    } else {
+      setIsLoading(true);
+    }
+  }, [localeStorageToken]);
 
   return (
     <HelmetProvider>
@@ -112,6 +117,7 @@ function App() {
             </Route>
             <Route path="/commands" element={<Commands />} />
             <Route path="/code" element={<Code />} />
+            <Route path="/auth/twitch/*" element={<Authorize />} />
             <Route path="*" element={<Unknown />} />
           </Routes>
         </Context.Provider>

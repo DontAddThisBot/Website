@@ -41,16 +41,13 @@ const Navbar = () => {
   } = useContext(Context);
 
   function LogoutUser() {
-    Logout().then((data) => {
-      if (data.success) {
-        import("../js/api/isLogged").then(({ isLogged }) => {
-          isLogged().then((login) => {
-            setAuthState(login);
-            setIsBotIn([]);
-            setUserLevel([]);
-          });
-        });
-      }
+    Logout();
+    import("../js/api/isLogged").then(({ isLogged }) => {
+      isLogged().then((login) => {
+        setAuthState(login);
+        setIsBotIn([]);
+        setUserLevel([]);
+      });
     });
   }
 
