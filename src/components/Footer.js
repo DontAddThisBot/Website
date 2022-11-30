@@ -35,16 +35,16 @@ const infoText = [
     href: "https://docs.poros.lol/global-commands",
   },
   {
-    name: "Rules",
-    href: "https://docs.poros.lol/rules",
+    name: "Privacy Policy",
+    href: "https://docs.poros.lol/legal/privacy-policy",
   },
   {
-    name: "ToS",
-    href: "https://docs.poros.lol/tos",
+    name: "Terms of Condition",
+    href: "https://docs.poros.lol/legal/terms-of-conditions",
   },
   {
     name: "Stats",
-    href: "https://stats.kattah.me/stats",
+    href: "https://stats.kattah.me",
   },
 ];
 
@@ -113,7 +113,8 @@ const FooterThatFitsMobile = styled.div`
     flex-direction: row;
     margin-bottom: 2%;
     margin-top: 2%;
-    margin-right: 3%;
+    margin-right: 10%;
+    width: 70%;
     gap: 25%;
 
     .copyright,
