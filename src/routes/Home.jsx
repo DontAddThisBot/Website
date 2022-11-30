@@ -8,6 +8,7 @@ import { handleScroll } from "../js/utility/handleScroll";
 import { transition } from "../js/utility/transition";
 import { LoginButton } from "../js/api/LoginButton";
 import { modLookup } from "../js/api/modLookUp";
+import { botRoles } from "../js/api/botRoles";
 
 import React from "react";
 import styled from "styled-components";
@@ -49,6 +50,7 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [button, setButton] = useState([]);
   const [totalChannelCount, setTotalChannelCount] = useState([]);
+  const [totalRoles, setTotalRoles] = useState([]);
 
   useEffect(() => {
     const topWrapper = document.getElementById("top-wrapper");
@@ -76,6 +78,7 @@ export default function Home() {
     totalChannels().then((res) => setTotalChannelCount(res));
     fetchStreamers().then((streamers) => setTotalStreamers(streamers));
     modLookup().then((mods) => setTotalMods(mods));
+    botRoles().then(({ data }) => setTotalRoles(data));
     if (success) {
       const userID = id.data[0].login;
       if (userID) {
@@ -318,7 +321,10 @@ export default function Home() {
       </BottomWrapper>
       <StreamerText>
         <div className="streamer-bot-info">Who is using DontAddThisBot?</div>
-        <p>{totalMods?.total?.toLocaleString() ?? ""} Total Modded Channels</p>
+        <p>{totalRoles?.mods?.toLocaleString() ?? ""} Total Modded Channels</p>
+        <p className="vip-channel">
+          {totalRoles?.vips?.toLocaleString() ?? ""} Total Modded Channels
+        </p>
         <p className="modded-follows">
           {totalMods?.follows?.toLocaleString() ?? ""} Total Modded Follows
         </p>
@@ -422,12 +428,16 @@ const StreamerText = styled.section`
     color: grey;
   }
 
+  p.vip-channel {
+    font-size: 1.3rem;
+  }
+
   p.modded-follows {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   p.modded-views {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .streamer-bot-info {
