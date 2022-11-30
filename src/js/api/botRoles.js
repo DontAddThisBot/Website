@@ -5,6 +5,5 @@ export async function botRoles() {
     method: "GET",
   }).then((res) => res.json());
 
-  console.log(roles);
   return roles;
 }
