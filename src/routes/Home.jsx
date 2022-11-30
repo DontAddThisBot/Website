@@ -323,7 +323,7 @@ export default function Home() {
         <div className="streamer-bot-info">Who is using DontAddThisBot?</div>
         <p>{totalRoles?.mods?.toLocaleString() ?? ""} Total Modded Channels</p>
         <p className="vip-channel">
-          {totalRoles?.vips?.toLocaleString() ?? ""} Total Modded Channels
+          {totalRoles?.vips?.toLocaleString() ?? ""} Total VIP Channels
         </p>
         <p className="modded-follows">
           {totalMods?.follows?.toLocaleString() ?? ""} Total Modded Follows
