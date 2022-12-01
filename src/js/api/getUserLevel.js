@@ -5,6 +5,7 @@ export async function getUserLevel(username) {
     `${site.frontend.oldApi}/api/bot/users/${username}`,
     {
       method: "GET",
+      credentials: "include",
     }
   ).then((res) => res.json());
   return userLevel;

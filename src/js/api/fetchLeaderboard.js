@@ -7,6 +7,7 @@ export async function fetchLeaderboard(boolean) {
     }`,
     {
       method: "GET",
+      credentials: "include",
     }
   ).then((res) => res.json());
   return topUsers;
