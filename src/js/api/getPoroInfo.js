@@ -5,7 +5,6 @@ export async function poroInfo(username) {
     `${site.frontend.oldApi}/api/bot/porocount/${username}`,
     {
       method: "GET",
-      credentials: "include",
     }
   ).then((res) => res.json());
 
