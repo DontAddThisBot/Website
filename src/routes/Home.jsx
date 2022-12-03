@@ -98,8 +98,7 @@ export default function Home() {
           joinChannel().then(() => {
             isChannelBot(id?.data[0].login).then((res) => setBotState(res));
           });
-        }}
-      >
+        }}>
         <Span>Add Bot</Span>
       </button>
     );
@@ -116,8 +115,7 @@ export default function Home() {
           partChannel().then(() =>
             isChannelBot(id?.data[0].login).then((res) => setBotState(res))
           );
-        }}
-      >
+        }}>
         <Span>Part Bot</Span>
       </button>
     );
@@ -244,7 +242,7 @@ export default function Home() {
             Total {totalChannelCount.totalPoros} Poros farmed
           </p>
           <p className="bot-info">
-            Total {totalChannelCount.executedCommands} commands execued
+            Total {totalChannelCount.executedCommands} commands executed
           </p>
           <p className="bot-info">
             Total {totalChannelCount.seenUsers} users seen
@@ -263,7 +261,7 @@ export default function Home() {
         </p>
         <p>
           Simply login with Twitch and add the bot to your channel to get
-          stared! The bot has alot of utility, and variety of commands.
+          started! The bot has a lot of utility, and variety of commands.
         </p>
         <p>
           The bot is currently in development, and is being updated frequently.
@@ -281,7 +279,7 @@ export default function Home() {
           <div className="bot-name">Poro Commands?</div>
           <p>Virtual currency in Twitch Chat</p>
           <p>
-            Simply type |poro to get started, You can also checkout the Poro
+            Simply type |poro to get started, You can also check out the Poro
             leaderboard!
           </p>
         </MiddleHeaders>
@@ -290,7 +288,7 @@ export default function Home() {
         <MiddleHeaders className="utility">
           <img src={peepoChat} alt="utility" className="bot-pfp utility" />
           <div className="bot-name">Utility Commands</div>
-          <p>Alot of utility commandsㅤㅤㅤㅤ</p>
+          <p>A lot of utility commandsㅤㅤㅤㅤ</p>
           <p>
             Check utility commands of user's information in
             chats!ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ
@@ -338,8 +336,7 @@ export default function Home() {
           onClick={() => {
             LeftLoad();
             setCount(0);
-          }}
-        >
+          }}>
           <span>&#60;</span>
         </button>
         {totalSteamers
@@ -364,8 +361,7 @@ export default function Home() {
           onClick={() => {
             RightLoad();
             setCount(0);
-          }}
-        >
+          }}>
           <span>&#62;</span>
         </button>
       </StreamerBox>
@@ -377,8 +373,7 @@ export default function Home() {
             onClick={() => {
               ButtonClickLoad(streamer.name);
               setCount(0);
-            }}
-          ></button>
+            }}></button>
         ))}
       </BottomImageSliderButtons>
       <Footer />

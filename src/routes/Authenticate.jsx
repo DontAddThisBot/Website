@@ -7,7 +7,6 @@ import ppCircle from "../img/ppCircle.gif";
 async function generateToken(code, state) {
   const createToken = await fetch(`${site.frontend.oldApi}/authenticate`, {
     method: "POST",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
