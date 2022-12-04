@@ -200,7 +200,7 @@ const Code = () => {
           <h1>Moderator in a channel?</h1>
           <h2>
             You can now add this bot to any channel you Moderate! doing so will
-            also reward you 100 poros!
+            also reward you 30 poros!
           </h2>
           <form className="moderator-bot" onSubmit={handleSubmit}>
             <input
