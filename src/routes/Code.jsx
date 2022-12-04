@@ -7,6 +7,7 @@ import poroDespair from "../img/poroDespair.avif";
 import { disableJoin } from "../js/utility/join.part";
 import { isChannelBot } from "../js/api/isChannelBot";
 import { join as joinChannel } from "../js/api/bot";
+import { moderatorJoin } from "../js/api/modAddBot";
 
 const Code = () => {
   const {
@@ -111,19 +112,9 @@ const Code = () => {
                     setIsBotIn(res);
                   });
                 });
-              }}
-            >
+              }}>
               Add bot
             </button>
-          </div>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <div className="top-info-code-3">
-            <h1>Thanks for adding the bot on Twitch!</h1>
-            <h2>you got 100 poros!</h2>
           </div>
         </>
       );
@@ -165,14 +156,102 @@ const Code = () => {
     }
   };
 
+  const handleSubmit = (e) => {
+    function controlSubmit(Boolean) {
+      e.target[0].disabled = Boolean;
+      Boolean
+        ? (e.target[0].placeholder = "Loading...")
+        : (e.target[0].placeholder = "Channel Name");
+      e.target[1].disabled = Boolean;
+    }
+
+    function appeandH2(text, ms) {
+      const h2 = document.createElement("h2");
+      h2.innerText = `${text}`;
+      e.target.appendChild(h2);
+      setTimeout(() => {
+        h2.remove();
+      }, ms);
+    }
+
+    e.preventDefault();
+    controlSubmit(true);
+    const channel = e.target[0].value;
+    if (!channel) {
+      return;
+    }
+
+    moderatorJoin(channel).then((res) => {
+      console.log(res);
+      controlSubmit(false);
+      if (res.success) {
+        appeandH2("Success!", 5000);
+      } else {
+        appeandH2(res.message, 5000);
+      }
+    });
+  };
+
   return (
     <OuterWrapper>
       <MakeABox>
         <CodePage />
+        <IsModerator>
+          <h1>Moderator in a channel?</h1>
+          <h2>
+            You can now add this bot to any channel you Moderate! doing so will
+            also reward you 100 poros!
+          </h2>
+          <form className="moderator-bot" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Channel Name"
+              className="moderator-bot-input"
+            />
+            <button type="submit" className="moderator-bot-button">
+              Add bot
+            </button>
+          </form>
+        </IsModerator>
       </MakeABox>
     </OuterWrapper>
   );
 };
+
+const IsModerator = styled.div`
+  color: grey;
+  text-align: center;
+  line-height: 0.8;
+
+  .moderator-bot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+
+    .moderator-bot-input {
+      width: 50%;
+      padding: 0.5rem;
+      border: 1px solid grey;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .moderator-bot-button {
+      padding: 0.5rem;
+      border: 1px solid grey;
+      border-radius: 0.5rem;
+      background-color: #1e1e1e;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+`;
 
 const MakeABox = styled.div`
   background-color: rgba(29, 31, 29, 0.5);
