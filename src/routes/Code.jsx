@@ -181,8 +181,7 @@ const Code = () => {
       return;
     }
 
-    moderatorJoin(channel).then((res) => {
-      console.log(res);
+    moderatorJoin(channel.toLowerCase()).then((res) => {
       controlSubmit(false);
       if (res.success) {
         appeandH2("Success!", 5000);
