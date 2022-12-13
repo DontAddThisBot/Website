@@ -44,7 +44,7 @@ jobs:
           json: '{
             "origin": "http://localhost:3000",
             "oldApi": "http://localhost:3003",
-            "client_id": ${{ secrets.CLIENT_ID }},
+            "client_id": "${{ secrets.CLIENT_ID }}",
             "redirect_uri": "http://localhost:3000/auth/twitch/callback"
           }'
           dir: "src/"
