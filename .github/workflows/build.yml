@@ -1,4 +1,4 @@
-name: Format check
+name: Build
 
 on:
   push:
@@ -36,5 +36,17 @@ jobs:
           echo "::set-output name=tag::${MESSAGE}"
           IS_RELEASE=`echo "${MESSAGE}" | grep -qP "^v\d+\.\d+\.\d+\S*$" && echo true || echo false`
           echo "::set-output name=is_release::${IS_RELEASE}"
+      - name: Build JSON
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "config.json"
+          json: '{
+            "origin": "http://localhost:3000",
+            "oldApi": "http://localhost:3003",
+            "client_id": ${{ secrets.CLIENT_ID }},
+            "redirect_uri": "http://localhost:3000/auth/twitch/callback"
+          }'
+          dir: "src/"
       - name: Build
         run: npm run build
