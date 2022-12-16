@@ -1,3 +1,3 @@
 export async function Logout() {
-  localStorage.removeItem("SITE_TOKEN");
+	localStorage.removeItem('SITE_TOKEN');
 }
