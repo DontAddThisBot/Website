@@ -1,10 +1,12 @@
 import { isChannelBot } from '../../../js/api/isChannelBot';
 import { Span } from '../components/Span';
 import { join as joinChannel } from '../../../js/api/bot';
+import LearnMoreButton from './LearnMoreButton';
 
 const JoinButton = ({ loginFlow, callback }) => {
 	const { success, id } = loginFlow;
 	return (
+		<>
 		<button
 			className="join-button"
 			onClick={() => {
@@ -16,6 +18,8 @@ const JoinButton = ({ loginFlow, callback }) => {
 		>
 			<Span>Add Bot</Span>
 		</button>
+		<LearnMoreButton />
+		</>
 	);
 };
 

@@ -3,6 +3,7 @@ import { LoginButton } from '../../../js/api/LoginButton';
 import { Span } from '../components/Span';
 import JoinButton from './JoinButton';
 import PartButton from './PartButton';
+import LearnMoreButton from './LearnMoreButton';
 
 const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 	const { success: isChannelSuccess, isChannel: isBotInChannel } = channelBot;
@@ -13,11 +14,14 @@ const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 	} else {
 		if (!success) {
 			return (
+				<>
 				<LoginButton>
 					<button className="login-button">
 						<Span>Login with Twitch</Span>
 					</button>
 				</LoginButton>
+				<LearnMoreButton />
+				</>
 			);
 		}
 

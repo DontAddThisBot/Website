@@ -20,6 +20,7 @@ export const TopHeaders = styled.section`
 		cursor: pointer;
 		transition: all 0.2s ease-in-out;
 	}
+	
 	div.channel-count {
 		font-size: 2rem;
 		p.bot-info {
@@ -35,23 +36,35 @@ export const TopHeaders = styled.section`
 
 	button.join-button {
 		color: white;
-		background-color: transparent;
+		background-color: #30c759;
 		border: 1px solid #30c759;
 
 		:hover {
-			background-color: #30c759;
+			background-color: transparent;
 			border: 1px solid #30c759;
 		}
 	}
 
 	button.part-button {
 		color: white;
-		background-color: transparent;
+		background-color: #d1243e;
 		border: 1px solid #d1243e;
 
 		:hover {
-			background-color: #d1243e;
+			background-color: transparent;
 			border: 1px solid #d1243e;
+		}
+	}
+
+	button.learn-more-button {
+		color: #339af0;
+		background-color: transparent;
+		border: 1px solid #339af0;
+		
+		:hover {
+			color: white;
+			background-color: #339af0;
+			border: 1px solid #339af0;
 		}
 	}
 
@@ -66,6 +79,8 @@ export const TopHeaders = styled.section`
 		border-radius: 5px;
 		background-color: #9146ff;
 		transition: 0.3s;
+		font-size: 1rem;
+		margin: 20px;
 
 		&:hover {
 			background-color: transparent;
