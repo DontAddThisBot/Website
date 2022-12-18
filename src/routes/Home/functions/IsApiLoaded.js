@@ -25,8 +25,8 @@ const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 			);
 		}
 
-		if (success && isChannelSuccess) {
-			if (!isBotInChannel) {
+		if (success) {
+			if (!isBotInChannel || !isChannelSuccess) {
 				return <JoinButton loginFlow={loginFlow} callback={setBotState} />;
 			} else {
 				return <PartButton loginFlow={loginFlow} callback={setBotState} />;
