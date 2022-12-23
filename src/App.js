@@ -82,6 +82,15 @@ function App() {
 				<title>{HelmetPath()} - DontAddThisBot</title>
 			</Helmet>
 			<AppContainer>
+				<div class="snowflake">❆</div>
+				<div class="snowflake">❆</div>
+				<div class="snowflake">❆</div>
+				<div class="snowflake">❆</div>
+				<div class="snowflake">❆</div>
+				<div class="snowflake">❆</div>
+				<div class="snowflake">❆</div>
+				<div class="snowflake">❆</div>
+				<div class="snowflake">❆</div>
 				<Context.Provider
 					value={{
 						isLoggedIn,
