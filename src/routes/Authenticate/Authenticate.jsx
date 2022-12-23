@@ -17,12 +17,11 @@ async function generateToken(code, state) {
 
 const Auth = () => {
 	const navgiate = useNavigate();
+	const localToken = localStorage.getItem('SITE_TOKEN');
+	if (localToken) {
+		navgiate('/');
+	}
 	useEffect(() => {
-		const localToken = localStorage.getItem('SITE_TOKEN');
-		if (localToken) {
-			navgiate('/');
-		}
-
 		if ((!localToken || localToken == null) && window.location.href.startsWith(`${site.frontend.origin}/auth/twitch`)) {
 			let code;
 			let state;
@@ -49,7 +48,7 @@ const Auth = () => {
 				}
 			});
 		}
-	}, []);
+	}, [localToken, navgiate]);
 
 	return (
 		<LoggingIn>

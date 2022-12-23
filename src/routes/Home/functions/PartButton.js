@@ -3,7 +3,7 @@ import { Span } from '../components/Span';
 import { part as partChannel } from '../../../js/api/bot';
 
 const PartButton = ({ loginFlow, callback }) => {
-	const { success, id } = loginFlow;
+	const { id } = loginFlow;
 	return (
 		<button
 			className="part-button"

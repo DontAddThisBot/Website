@@ -7,7 +7,7 @@ import LearnMoreButton from './LearnMoreButton';
 
 const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 	const { success: isChannelSuccess, isChannel: isBotInChannel } = channelBot;
-	const { success, id } = loginFlow;
+	const { success } = loginFlow;
 
 	if (!isLoading || !channelBot || !loginFlow) {
 		return <div className="loading">Loading...</div>;
@@ -15,12 +15,12 @@ const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 		if (!success) {
 			return (
 				<>
-				<LoginButton>
-					<button className="login-button">
-						<Span>Login with Twitch</Span>
-					</button>
-				</LoginButton>
-				<LearnMoreButton />
+					<LoginButton>
+						<button className="login-button">
+							<Span>Login with Twitch</Span>
+						</button>
+					</LoginButton>
+					<LearnMoreButton />
 				</>
 			);
 		}

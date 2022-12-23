@@ -23,7 +23,7 @@ const useFrontPage = (loginFlow, callback) => {
 				isChannelBot(userID).then((res) => callback(res));
 			}
 		}
-	}, []);
+	}, [success, id, callback]);
 
 	return {
 		totalStreamers,

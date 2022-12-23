@@ -9,28 +9,24 @@ let followers = document.getElementsByClassName('streamer-followers');
 const useTimer = ({ ms, totalStreamers, setButton }) => {
 	const [count, setCount] = useState(0);
 
-	function RightLoad() {
-		if (totalStreamers) {
-			const index = totalStreamers.findIndex((streamer) => streamer.name === username[0].innerHTML);
-			transition('-', pfp, username, statusa, followers);
-			if (index === totalStreamers.length - 1) {
-				setButton(totalStreamers[0]?.name);
-			} else {
-				setButton(totalStreamers[index + 1].name);
-			}
-		}
-	}
-
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCount(count + 1);
 			if (count === 5) {
-				RightLoad();
+				if (totalStreamers) {
+					const index = totalStreamers.findIndex((streamer) => streamer.name === username[0].innerHTML);
+					transition('-', pfp, username, statusa, followers);
+					if (index === totalStreamers.length - 1) {
+						setButton(totalStreamers[0]?.name);
+					} else {
+						setButton(totalStreamers[index + 1].name);
+					}
+				}
 				setCount(0);
 			}
 		}, ms);
 		return () => clearInterval(interval);
-	}, [count]);
+	}, [count, ms, setButton, totalStreamers]);
 
 	return [count, setCount];
 };

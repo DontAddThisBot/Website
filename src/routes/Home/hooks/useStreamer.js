@@ -35,7 +35,7 @@ const useStreamer = ({ totalStreamers }) => {
 				}
 			}
 		});
-	}, [button, totalStreamers]);
+	}, [button, totalStreamers, oldStreamer]);
 
 	return [button, setButton];
 };

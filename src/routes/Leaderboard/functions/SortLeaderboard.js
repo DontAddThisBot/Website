@@ -3,7 +3,6 @@ import { fetchPfp } from '../../../js/api/fetchPfp';
 
 const SortLeaderboard = ({ isLowest, setData, setLeaderboard, setProfilePic }) => {
 	function sortLowest(Boolean) {
-		console.log(Boolean);
 		setData(null);
 		fetchLeaderboard(Boolean).then((topUsers) => {
 			setLeaderboard(topUsers);

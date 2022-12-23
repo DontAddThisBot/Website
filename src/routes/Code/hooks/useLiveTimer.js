@@ -37,7 +37,7 @@ const useLiveTimer = ({ isUserLoggedIn }) => {
 				});
 			});
 		}
-	}, [success]);
+	}, [success, id]);
 
 	return { remainingTime, poroData, didPoroLoad, todayCode };
 };
