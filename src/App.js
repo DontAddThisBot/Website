@@ -1,5 +1,6 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
+
 import Home from './routes/Home/Home';
 import Unknown from './routes/404/Unknown';
 import Navbar from './components/Navbar/Navbar.jsx';
@@ -8,6 +9,8 @@ import Leaderboard from './routes/Leaderboard/Leaderboard.jsx';
 import Dashboard from './routes/Dashboard/Dashboard.jsx';
 import Code from './routes/Code/Code';
 import Authorize from './routes/Authenticate/Authenticate.jsx';
+import Dalle from './routes/Dalle/Dalle.jsx';
+
 import styled from 'styled-components';
 import img from './img/backgroundshapes.png';
 import { create as createUser } from './js/api/bot';
@@ -36,6 +39,8 @@ function App() {
 			return path[2];
 		} else if (pathname === '/code') {
 			return 'Code';
+		} else if (pathname === '/dalle') {
+			return 'Dalle';
 		} else {
 			return 'Unknown';
 		}
@@ -111,6 +116,7 @@ function App() {
 							<Route path="/dashboard/:id" element={<Dashboard />} />
 						</Route>
 						<Route path="/commands" element={<Commands />} />
+						<Route path="/dall-e/:id" element={<Dalle />} />
 						<Route path="/code" element={<Code />} />
 						<Route path="/auth/twitch/*" element={<Authorize />} />
 						<Route path="*" element={<Unknown />} />
