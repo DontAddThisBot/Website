@@ -5,21 +5,32 @@ import useImage from './hooks/useImage';
 
 const Dalle = () => {
 	const { id } = useParams();
-	const { success, data } = useImage(id);
-	if (!success && !data)
+	const [image, loading] = useImage(id);
+	const { success, data } = image;
+
+	if (loading) {
+		return (
+			<OuterBase>
+				<h1>Loading...</h1>
+			</OuterBase>
+		);
+	}
+
+	if (!success && !data) {
 		return (
 			<OuterBase>
 				<h1>Unkown Image</h1>
 			</OuterBase>
 		);
+	}
 
 	return (
 		<OuterBase>
 			<h1>"{data.prompt}"</h1>
 			<h2>By {data.username}</h2>
 			<ImageBase>
-				{data.imageBase64.map((image) => {
-					return <img src={image} alt="dalle" />;
+				{data.imageBase64.map((image, key) => {
+					return <img src={image} alt={`dalle ` + key} />;
 				})}
 			</ImageBase>
 		</OuterBase>
