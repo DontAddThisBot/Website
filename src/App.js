@@ -39,7 +39,7 @@ function App() {
 			return path[2];
 		} else if (pathname === '/code') {
 			return 'Code';
-		} else if (pathname === '/dalle') {
+		} else if (/^\/dall-e\/.*/i.test(pathname)) {
 			return 'Dalle';
 		} else {
 			return 'Unknown';
