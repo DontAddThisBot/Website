@@ -20,7 +20,7 @@ export const TopHeaders = styled.section`
 		cursor: pointer;
 		transition: all 0.2s ease-in-out;
 	}
-	
+
 	div.channel-count {
 		font-size: 2rem;
 		p.bot-info {
@@ -60,11 +60,23 @@ export const TopHeaders = styled.section`
 		color: #339af0;
 		background-color: transparent;
 		border: 1px solid #339af0;
-		
+
 		:hover {
 			color: white;
 			background-color: #339af0;
 			border: 1px solid #339af0;
+		}
+	}
+
+	button.discord-button {
+		color: white;
+		background-color: #7289da;
+		border: 1px solid #7289da;
+
+		:hover {
+			color: white;
+			background-color: #7289da;
+			border: 1px solid #7289da;
 		}
 	}
 
@@ -80,7 +92,7 @@ export const TopHeaders = styled.section`
 		background-color: #9146ff;
 		transition: 0.3s;
 		font-size: 1rem;
-		margin: 20px;
+		margin: 10px;
 
 		&:hover {
 			background-color: transparent;

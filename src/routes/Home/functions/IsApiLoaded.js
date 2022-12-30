@@ -4,6 +4,7 @@ import { Span } from '../components/Span';
 import JoinButton from './JoinButton';
 import PartButton from './PartButton';
 import LearnMoreButton from './LearnMoreButton';
+import DiscordButton from './DiscordAdd';
 
 const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 	const { success: isChannelSuccess, isChannel: isBotInChannel } = channelBot;
@@ -27,7 +28,13 @@ const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 
 		if (success) {
 			if (!isBotInChannel || !isChannelSuccess) {
-				return <JoinButton loginFlow={loginFlow} callback={setBotState} />;
+				return (
+					<>
+						<JoinButton loginFlow={loginFlow} callback={setBotState} />
+						<LearnMoreButton />
+						<DiscordButton />
+					</>
+				);
 			} else {
 				return <PartButton loginFlow={loginFlow} callback={setBotState} />;
 			}
