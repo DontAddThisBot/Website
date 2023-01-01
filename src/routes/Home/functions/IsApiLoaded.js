@@ -36,7 +36,12 @@ const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 					</>
 				);
 			} else {
-				return <PartButton loginFlow={loginFlow} callback={setBotState} />;
+				return (
+					<>
+						<PartButton loginFlow={loginFlow} callback={setBotState} />
+						<DiscordButton />
+					</>
+				);
 			}
 		}
 	}
