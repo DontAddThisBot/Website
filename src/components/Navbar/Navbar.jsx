@@ -20,9 +20,7 @@ const Navbar = () => {
 					<ul>
 						<CustomLink to="/">Home</CustomLink>
 						<CustomLink to="/leaderboard">Leaderboard</CustomLink>
-						<li>
-							<a href="https://docs.poros.lol/global-commands/">Commands</a>
-						</li>
+						<CustomLink to="/commands">Commands</CustomLink>
 						<li>
 							<a href="https://stats.kattah.me">Stats</a>
 						</li>

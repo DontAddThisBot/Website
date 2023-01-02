@@ -1,11 +1,11 @@
 const Commands = () => {
-  window.location.replace("https://docs.poros.lol/global-commands/");
+	window.location.replace('https://docs.poros.lol/');
 
-  return (
-    <div>
-      <h1>Redirecting to Commands...</h1>
-    </div>
-  );
+	return (
+		<div>
+			<h1>Redirecting to Commands...</h1>
+		</div>
+	);
 };
 
 export default Commands;
