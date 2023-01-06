@@ -6,10 +6,18 @@ import Unknown from './routes/404/Unknown';
 import Navbar from './components/Navbar/Navbar.jsx';
 import Commands from './routes/Commands/Commands';
 import Leaderboard from './routes/Leaderboard/Leaderboard.jsx';
-import Dashboard from './routes/Dashboard/Dashboard.jsx';
 import Code from './routes/Code/Code';
 import Authorize from './routes/Authenticate/Authenticate.jsx';
 import Dalle from './routes/Dalle/Dalle.jsx';
+
+import Dashboard from './routes/Dashboard/Dashboard.jsx';
+import ProfileUser from './routes/Dashboard/Profile/Profile.jsx';
+import ChannelBotSettings from './routes/Dashboard/Channel/ChannelBotSettings.jsx';
+import CustomCommands from './routes/Dashboard/Channel/CustomCommands.jsx';
+import DefaultCommands from './routes/Dashboard/Channel/DefaultCommands.jsx';
+import Editors from './routes/Dashboard/Channel/Editors.jsx';
+import SevenTV from './routes/Dashboard/Modules/SevenTV';
+import Justlog from './routes/Dashboard/Modules/Justlog';
 
 import styled from 'styled-components';
 import img from './img/backgroundshapes.png';
@@ -17,7 +25,6 @@ import { create as createUser } from './js/api/bot';
 import { isLogged } from './js/api/isLogged';
 import { isChannelBot } from './js/api/isChannelBot';
 import { getUserLevel } from './js/api/getUserLevel';
-import { Logout } from './js/api/Logout';
 import { Context } from './Context';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -49,30 +56,8 @@ function App() {
 	useEffect(() => {
 		if (localeStorageToken) {
 			isLogged().then((loginFlow) => {
-				setIsLoggedIn(loginFlow);
-				const { success, id } = loginFlow;
-				if (success) {
-					isChannelBot(id?.data[0].login).then((channelInfo) => setIsBotIn(channelInfo));
-					getUserLevel(id?.data[0].login).then((userLevel) => {
-						const { success, level } = userLevel;
-						if (level === 0) {
-							setIsLoggedIn([]);
-							Logout();
-						}
-
-						if (success) {
-							setUserLevel(userLevel);
-							setIsLoading(true);
-						} else {
-							createUser().then(() =>
-								getUserLevel(id?.data[0].login).then((userLevel) => {
-									setUserLevel(userLevel);
-									setIsLoading(true);
-								}),
-							);
-						}
-					});
-				} else {
+				if (loginFlow) {
+					setIsLoggedIn(loginFlow);
 					setIsLoading(true);
 				}
 			});
@@ -80,6 +65,50 @@ function App() {
 			setIsLoading(true);
 		}
 	}, [localeStorageToken]);
+
+	useEffect(() => {
+		const { success, id } = isLoggedIn;
+		if (success) {
+			const userLogin = id?.data[0].login;
+			getUserLevel(userLogin).then((userLevel) => {
+				if (userLevel.success) {
+					setUserLevel(userLevel);
+					localStorage.setItem('language', userLevel.language);
+				} else {
+					createUser().then(() =>
+						getUserLevel(userLogin).then((userLevel) => {
+							setUserLevel(userLevel);
+							localStorage.setItem('language', userLevel.language);
+						}),
+					);
+				}
+			});
+		}
+	}, [isLoggedIn]);
+
+	const regex = /\/dashboard\/([^/]*)/;
+	let targetChannel;
+	if (regex.test(pathname)) {
+		targetChannel = regex.exec(pathname)[1];
+	}
+
+	useEffect(() => {
+		if (userLevel) {
+			if (targetChannel) {
+				if (targetChannel !== userLevel.login) {
+					isChannelBot(targetChannel).then((channelBot) => {
+						setIsBotIn(channelBot);
+						setIsLoading(true);
+					});
+				} else {
+					isChannelBot(userLevel.username).then((channelBot) => {
+						setIsBotIn(channelBot);
+						setIsLoading(true);
+					});
+				}
+			}
+		}
+	}, [targetChannel, userLevel]);
 
 	return (
 		<HelmetProvider>
@@ -112,8 +141,14 @@ function App() {
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="/leaderboard" element={<Leaderboard />} />
-						<Route path="/dashboard" element={<Dashboard test={isLoggedIn} />}>
-							<Route path="/dashboard/:id" element={<Dashboard />} />
+						<Route path="dashboard" element={<Dashboard />}>
+							<Route path=":id/profile/user" element={<ProfileUser />} />
+							<Route path=":id/channel/settings" element={<ChannelBotSettings />} />
+							<Route path=":id/channel/default" element={<DefaultCommands />} />
+							<Route path=":id/channel/custom" element={<CustomCommands />} />
+							<Route path=":id/channel/editors" element={<Editors />} />
+							<Route path=":id/channel/seven-tv" element={<SevenTV />} />
+							<Route path=":id/channel/justlog" element={<Justlog />} />
 						</Route>
 						<Route path="/commands" element={<Commands />} />
 						<Route path="/dall-e/:id" element={<Dalle />} />

@@ -42,7 +42,6 @@ const SlideStreamer = ({ position, totalStreamers, setButton, setCount }) => {
 			onClick={() => {
 				position === 'left' ? LeftLoad() : RightLoad();
 				setCount(0);
-				console.log(totalStreamers);
 			}}
 		>
 			<span>{position === 'left' ? convertUnicode('&#60;') : convertUnicode('&#62;')}</span>

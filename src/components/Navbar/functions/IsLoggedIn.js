@@ -23,7 +23,7 @@ const IsLoggedIn = ({ userAuth, userLevel, setAuthState, setIsBotIn, setUserLeve
 						<p className="user-level">{id?.data[0].login}</p>
 						<p className="user-level">Level: {level}</p>
 					</li>
-					<CustomLink to={`/dashboard/${id?.data[0].login}`} className="dropdown-text dashboard">
+					<CustomLink to={`/dashboard/${id?.data[0].login}/profile/user`} className="dropdown-text dashboard" onClick={dropdownBox}>
 						Dashboard
 					</CustomLink>
 					<LogoutUser setAuthState={setAuthState} setIsBotIn={setIsBotIn} setUserLevel={setUserLevel} />
