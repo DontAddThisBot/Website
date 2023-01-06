@@ -26,6 +26,11 @@ const Dashboard = () => {
 	const regex = /\/dashboard\/([^/]*)/;
 	const result = regex.exec(location.pathname);
 	let { display_name, profile_image_url, login, id } = asd.isLoggedIn.id.data[0];
+	if (!result || result === null || result[1] === '') {
+		const isLogged = login ? `/dashboard/${login}/profile/user` : '/';
+		return navigate(isLogged);
+	}
+
 	if (result[1] !== login) {
 		const { success, username, message, pfp, editors } = asd.isBotIn;
 		if (!success && message) {
