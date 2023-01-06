@@ -37,9 +37,16 @@ const Dashboard = () => {
 			return navigate('/');
 		}
 
-		login = username;
-		display_name = username;
-		profile_image_url = pfp;
+		if (editors) {
+			const editorsMapped = new Set(editors.map((editor) => editor.id));
+			if (!editorsMapped.has(id) && asd.userLevel.level < 2) {
+				return navigate('/');
+			} else {
+				login = username;
+				display_name = username;
+				profile_image_url = pfp;
+			}
+		}
 	}
 
 	return (
