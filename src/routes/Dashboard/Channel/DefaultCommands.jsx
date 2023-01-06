@@ -9,9 +9,9 @@ import Unkonwn from '../functions/Unknown';
 const DefaultCommands = () => {
 	const asd = useContext(Context);
 	const { isChannel, id, username } = asd.isBotIn;
-
-	const [disabledCommands, setDisabledCommands] = useState(asd.isBotIn.disabledCommands);
-	const [searchCommands, setSearchCommands] = useState(asd.isBotIn.disabledCommands);
+	console.log(asd.isBotIn);
+	const [disabledCommands, setDisabledCommands] = useState(asd?.isBotIn?.disabledCommands);
+	const [searchCommands, setSearchCommands] = useState(asd?.isBotIn?.disabledCommands);
 
 	function handleSubmit(e) {
 		const value = e.target?.value.toLowerCase();
