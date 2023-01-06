@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Context } from '../../../Context';
 import TopHeader from './functions/OuterProfile';
 import styled from 'styled-components';
@@ -9,9 +9,15 @@ import Unkonwn from '../functions/Unknown';
 const DefaultCommands = () => {
 	const asd = useContext(Context);
 	const { isChannel, id, username } = asd.isBotIn;
-	console.log(asd.isBotIn);
-	const [disabledCommands, setDisabledCommands] = useState(asd?.isBotIn?.disabledCommands);
-	const [searchCommands, setSearchCommands] = useState(asd?.isBotIn?.disabledCommands);
+	const [disabledCommands, setDisabledCommands] = useState([]);
+	const [searchCommands, setSearchCommands] = useState([]);
+
+	useEffect(() => {
+		if (asd.isBotIn) {
+			setDisabledCommands(asd.isBotIn.disabledCommands);
+			setSearchCommands(asd.isBotIn.disabledCommands);
+		}
+	}, [asd.isBotIn]);
 
 	function handleSubmit(e) {
 		const value = e.target?.value.toLowerCase();
@@ -75,7 +81,7 @@ const DefaultCommands = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{searchCommands.map((cmd) => (
+						{searchCommands?.map((cmd) => (
 							<tr key={cmd.command}>
 								<td className="command-name">{cmd.command}</td>
 								<td className="command-desc">{cmd.desc}</td>
