@@ -33,7 +33,7 @@ const Dashboard = () => {
 		}
 
 		if (editors) {
-			const editorsMapped = new Set(editors.map((editor) => editor.id));
+			const editorsMapped = new Set(editors?.map((editor) => editor.id));
 			if (!editorsMapped.has(id) && asd.userLevel.level < 2) {
 				return navigate('/');
 			} else {
