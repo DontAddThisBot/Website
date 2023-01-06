@@ -49,7 +49,7 @@ export default function Home() {
 
 	useHandleScroller();
 	const [button, setButton] = useStreamer({ totalStreamers });
-	const [count, setCount] = useTimer({ ms: 3000, totalStreamers, setButton });
+	const [count, setCount] = useTimer({ ms: 1000, totalStreamers, setButton });
 
 	return (
 		<Wrapper>

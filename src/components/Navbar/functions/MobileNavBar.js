@@ -16,7 +16,9 @@ function ReturnMobileRoutes() {
 			<CustomLink to="/leaderboard" onClick={onClickHide}>
 				Leaderboard
 			</CustomLink>
-			<CustomLink to="/commands">Commands</CustomLink>
+			<CustomLink to="/commands" onClick={onClickHide}>
+				Commands
+			</CustomLink>
 			<li>
 				<a href="https://stats.kattah.me">Stats</a>
 			</li>
@@ -32,7 +34,7 @@ const MobileNavBar = ({ userAuth, userLevel, setAuthState, setIsBotIn, setUserLe
 			<>
 				<ReturnMobileRoutes />
 				<ul className="mobile-text-dropdown">
-					<CustomLink to={`/dashboard/${id?.data[0].login}`} id="dropdown-text dashboard" onClick={onClickHide}>
+					<CustomLink to={`/dashboard/${id?.data[0].login}/profile/user`} id="dropdown-text dashboard" onClick={onClickHide}>
 						{' '}
 						Dashboard{' '}
 					</CustomLink>
