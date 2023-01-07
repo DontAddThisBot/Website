@@ -13,10 +13,6 @@ const useFrontPage = (loginFlow, callback) => {
 	const [totalRoles, setTotalRoles] = useState([]);
 
 	useEffect(() => {
-		totalChannels().then((res) => setTotalChannelCount(res));
-		fetchStreamers().then((streamers) => setTotalStreamers(streamers));
-		modLookup().then((mods) => setTotalMods(mods));
-		botRoles().then(({ data }) => setTotalRoles(data));
 		if (success) {
 			const userID = id.data[0].login;
 			if (userID) {
@@ -24,6 +20,13 @@ const useFrontPage = (loginFlow, callback) => {
 			}
 		}
 	}, [success, id, callback]);
+
+	useEffect(() => {
+		totalChannels().then((res) => setTotalChannelCount(res));
+		fetchStreamers().then((streamers) => setTotalStreamers(streamers));
+		modLookup().then((mods) => setTotalMods(mods));
+		botRoles().then(({ data }) => setTotalRoles(data));
+	}, []);
 
 	return {
 		totalStreamers,

@@ -87,28 +87,26 @@ function App() {
 	}, [isLoggedIn]);
 
 	const regex = /\/dashboard\/([^/]*)/;
-	let targetChannel;
+	let targetChannel = userLevel.login;
 	if (regex.test(pathname)) {
 		targetChannel = regex.exec(pathname)[1];
 	}
 
 	useEffect(() => {
-		if (userLevel) {
-			if (targetChannel) {
-				if (targetChannel !== userLevel.login) {
-					isChannelBot(targetChannel).then((channelBot) => {
-						setIsBotIn(channelBot);
-						setIsLoading(true);
-					});
-				} else {
-					isChannelBot(userLevel.username).then((channelBot) => {
-						setIsBotIn(channelBot);
-						setIsLoading(true);
-					});
-				}
+		if (targetChannel) {
+			if (targetChannel !== userLevel.login) {
+				isChannelBot(targetChannel).then((channelBot) => {
+					setIsBotIn(channelBot);
+					setIsLoading(true);
+				});
+			} else {
+				isChannelBot(userLevel.username).then((channelBot) => {
+					setIsBotIn(channelBot);
+					setIsLoading(true);
+				});
 			}
 		}
-	}, [targetChannel, userLevel]);
+	}, [targetChannel]);
 
 	return (
 		<HelmetProvider>
