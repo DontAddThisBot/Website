@@ -16,7 +16,7 @@ const Dropdown = ({ className, Links }) => {
 				}}
 			>
 				{className}
-				<i className="fa fa-caret-down"></i>
+				<i className="fa fa-caret-down" />
 			</button>
 			<div className={`dropdown-container ${className}`}>
 				{Links.map((link, index) => {
@@ -30,6 +30,7 @@ const Dropdown = ({ className, Links }) => {
 								}}
 								key={index}
 								to={link.href}
+								className={className}
 							>
 								{link.name}
 							</Link>

@@ -67,8 +67,8 @@ const DefaultCommands = () => {
 	return (
 		<>
 			<TopHeader h1="Default Commands" h2="Here you can disable & enable Default commands." />
-			<h3>Default Commands</h3>
 			<SearchBar>
+				<h3>Search Commands</h3>
 				<input type="text" placeholder="Search..., eg. Poro or 7TV" onInput={handleSubmit} />
 			</SearchBar>
 			<DefaultCommandsHeader>
@@ -104,6 +104,7 @@ const DefaultCommands = () => {
 };
 
 const SearchBar = styled.div`
+	margin-left: 20px;
 	input {
 		padding: 0.5rem;
 		border: 1px solid grey;

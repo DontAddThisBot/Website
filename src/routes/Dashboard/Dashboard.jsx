@@ -122,13 +122,18 @@ const BelowLeftDashboardProfileInfoText = styled.div`
 
 	.sidenav {
 		background-color: #111;
+		border-radius: 0.7rem;
+	}
+
+	button {
+		color: white;
 	}
 
 	.sidenav a,
 	.dropdown-btn {
 		padding: 10px;
 		font-size: 16px;
-		color: #818181;
+		color: rgba(255, 255, 255, 0.8);
 		display: block;
 		border: none;
 		background: none;
@@ -136,21 +141,41 @@ const BelowLeftDashboardProfileInfoText = styled.div`
 		text-align: left;
 		cursor: pointer;
 		outline: none;
-	}
+		text-decoration: none;
+		font-family: inherit;
+		font-weight: 600;
 
-	.sidenav a:hover,
-	.dropdown-btn:hover {
-		color: #f1f1f1;
-	}
-
-	.active {
-		background-color: green;
-		color: white;
+		&:focus,
+		&:hover,
+		&:visited,
+		&:link,
+		&:active {
+			text-decoration: none;
+		}
 	}
 
 	.dropdown-container {
 		display: none;
-		background-color: #262626;
+		background-color: rgb(24 26 34);
+
+		a {
+			color: grey;
+		}
+	}
+
+	.sidenav a:hover {
+		transform: scale(1.03);
+		transition: 0.5s;
+		text-shadow: none;
+		border-left: 5px solid rgb(76 138 241);
+
+		&.Channel {
+			border-left: 5px solid #7a749d;
+		}
+
+		&.Modules {
+			border-left: 5px solid #23ddf6;
+		}
 	}
 `;
 
