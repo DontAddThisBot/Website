@@ -135,6 +135,23 @@ const DefaultCommandsHeader = styled.div`
 	height: 75vh;
 	max-height: 100%;
 	line-height: 0.8rem;
+	animation-name: slideFromLeft;
+	animation-duration: 0.5s;
+
+	@keyframes slideFromLeft {
+		0% {
+			transform: translateX(-2%);
+		}
+		100% {
+			transform: translateX(0%);
+		}
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
 
 	::-webkit-scrollbar {
 		width: 20px;
