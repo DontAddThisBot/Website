@@ -8,7 +8,7 @@ import Commands from './routes/Commands/Commands';
 import Leaderboard from './routes/Leaderboard/Leaderboard.jsx';
 import Code from './routes/Code/Code';
 import Authorize from './routes/Authenticate/Authenticate.jsx';
-import Dalle from './routes/Dalle/Dalle.jsx';
+import Stable from './routes/Stable/Stable';
 
 import Dashboard from './routes/Dashboard/Dashboard.jsx';
 import ProfileUser from './routes/Dashboard/Profile/Profile.jsx';
@@ -46,8 +46,8 @@ function App() {
 			return path[2];
 		} else if (pathname === '/code') {
 			return 'Code';
-		} else if (/^\/dall-e\/.*/i.test(pathname)) {
-			return 'Dalle';
+		} else if (/^\/stable\/.*/i.test(pathname)) {
+			return 'Stable Diffusion';
 		} else {
 			return 'Unknown';
 		}
@@ -147,7 +147,7 @@ function App() {
 							<Route path=":id/channel/justlog" element={<Justlog />} />
 						</Route>
 						<Route path="/commands" element={<Commands />} />
-						<Route path="/dall-e/:id" element={<Dalle />} />
+						<Route path="/stable/:id" element={<Stable />} />
 						<Route path="/code" element={<Code />} />
 						<Route path="/auth/twitch/*" element={<Authorize />} />
 						<Route path="*" element={<Unknown />} />

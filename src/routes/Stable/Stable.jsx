@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import useImage from './hooks/useImage';
 
-const Dalle = () => {
+const Stable = () => {
 	const { id } = useParams();
 	const [image, loading] = useImage(id);
 	const { success, data } = image;
@@ -30,7 +30,7 @@ const Dalle = () => {
 			<h2>By {data.username}</h2>
 			<ImageBase>
 				{data.imageBase64.map((image, key) => {
-					return <img src={image} alt={`dalle ` + key} />;
+					return <img src={image} alt={`stable ` + key} />;
 				})}
 			</ImageBase>
 		</OuterBase>
@@ -46,8 +46,8 @@ const OuterBase = styled.div`
 const ImageBase = styled.div`
 	display: flex;
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: repeat(2, 1fr);
 
 	@media (max-width: 768px) {
 		grid-template-columns: repeat(1, 1fr);
@@ -62,4 +62,4 @@ const ImageBase = styled.div`
 	}
 `;
 
-export default Dalle;
+export default Stable;
