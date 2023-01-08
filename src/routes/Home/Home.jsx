@@ -45,7 +45,7 @@ import useStreamer from './hooks/useStreamer';
 
 export default function Home() {
 	const { isLoggedIn: loginFlow, isBotIn, isLoading, setIsBotIn: setBotState } = useContext(Context);
-	const { totalStreamers, totalMods, totalChannelCount, totalRoles } = useFrontPage(loginFlow, setBotState);
+	const { totalStreamers, totalMods, totalChannelCount, totalRoles } = useFrontPage();
 
 	useHandleScroller();
 	const [button, setButton] = useStreamer({ totalStreamers });

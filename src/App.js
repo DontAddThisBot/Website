@@ -53,16 +53,22 @@ function App() {
 		}
 	}
 
+	function getTargetChannel() {
+		const regex = /\/dashboard\/([^/]*)/;
+		let targetChannel = userLevel.login;
+		if (regex.test(pathname)) {
+			targetChannel = regex.exec(pathname)[1];
+		}
+		return targetChannel;
+	}
+
 	useEffect(() => {
 		if (localeStorageToken) {
 			isLogged().then((loginFlow) => {
 				if (loginFlow) {
 					setIsLoggedIn(loginFlow);
-					setIsLoading(true);
 				}
 			});
-		} else {
-			setIsLoading(true);
 		}
 	}, [localeStorageToken]);
 
@@ -86,27 +92,18 @@ function App() {
 		}
 	}, [isLoggedIn]);
 
-	const regex = /\/dashboard\/([^/]*)/;
-	let targetChannel = userLevel.login;
-	if (regex.test(pathname)) {
-		targetChannel = regex.exec(pathname)[1];
-	}
-
+	const targetChannel = getTargetChannel();
 	useEffect(() => {
-		if (targetChannel) {
-			if (targetChannel !== userLevel.login) {
-				isChannelBot(targetChannel).then((channelBot) => {
-					setIsBotIn(channelBot);
+		if (userLevel.length !== 0) {
+			const channels = targetChannel ?? userLevel.username;
+			isChannelBot(channels).then((isChannelBot) => {
+				if (isChannelBot) {
+					setIsBotIn(isChannelBot);
 					setIsLoading(true);
-				});
-			} else {
-				isChannelBot(userLevel.username).then((channelBot) => {
-					setIsBotIn(channelBot);
-					setIsLoading(true);
-				});
-			}
+				}
+			});
 		}
-	}, [targetChannel]);
+	}, [targetChannel, userLevel]);
 
 	return (
 		<HelmetProvider>
@@ -127,11 +124,12 @@ function App() {
 					value={{
 						isLoggedIn,
 						isBotIn,
-						isLoading,
-						setIsBotIn,
-						setIsLoggedIn,
-						setUserLevel,
 						userLevel,
+						isLoading,
+						setIsLoggedIn,
+						setIsBotIn,
+						setUserLevel,
+						setIsLoading,
 						Navbar,
 					}}
 				>

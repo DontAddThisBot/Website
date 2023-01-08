@@ -7,7 +7,7 @@ import IsLoggedIn from './functions/IsLoggedIn';
 import MobileNavBar from './functions/MobileNavBar';
 
 const Navbar = () => {
-	const { isLoggedIn: userAuth, setIsLoggedIn: setAuthState, userLevel, setIsBotIn, setUserLevel } = useContext(Context);
+	const { isLoggedIn, setIsLoggedIn, userLevel, setIsBotIn, setUserLevel } = useContext(Context);
 
 	return (
 		<Nav>
@@ -27,7 +27,7 @@ const Navbar = () => {
 					</ul>
 				</nav>
 				<nav className="right-navbar">
-					<IsLoggedIn userAuth={userAuth} userLevel={userLevel} setAuthState={setAuthState} setIsBotIn={setIsBotIn} setUserLevel={setUserLevel} />
+					<IsLoggedIn userAuth={isLoggedIn} userLevel={userLevel} setAuthState={setIsLoggedIn} setIsBotIn={setIsBotIn} setUserLevel={setUserLevel} />
 				</nav>
 				<div
 					id="hamburger-icon"
@@ -43,7 +43,7 @@ const Navbar = () => {
 					<div className="bar2"></div>
 					<div className="bar3"></div>
 					<ul className="mobile-menu">
-						<MobileNavBar userAuth={userAuth} userLevel={userLevel} setAuthState={setAuthState} setIsBotIn={setIsBotIn} setUserLevel={setUserLevel} />
+						<MobileNavBar userAuth={isLoggedIn} userLevel={userLevel} setAuthState={setIsLoggedIn} setIsBotIn={setIsBotIn} setUserLevel={setUserLevel} />
 					</ul>
 				</div>
 			</nav>

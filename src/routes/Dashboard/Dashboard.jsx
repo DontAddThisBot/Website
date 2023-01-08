@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Context } from '../../Context';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { HideDashboard } from './functions/HideDashboard';
 import Dropdown from './functions/Dropdown';
+import ppCircle from '../../img/ppCircle.gif';
 
 window.addEventListener('resize', (event) => {
 	if (event.target.innerWidth > 768) {
@@ -14,32 +15,41 @@ window.addEventListener('resize', (event) => {
 const Dashboard = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const asd = useContext(Context);
-	if (!asd.isLoading) {
-		return <div>Loading...</div>;
+	const { isBotIn, isLoggedIn, isLoading, userLevel } = useContext(Context);
+	const { success, username, pfp, editors } = isBotIn;
+
+	function getTargetChannel() {
+		const regex = /\/dashboard\/([^/]*)/;
+		const result = regex.exec(location.pathname);
+		return result ? result[1] : null;
 	}
 
-	if (!asd.isLoggedIn?.success) {
+	const editorsMapped = useMemo(() => {
+		return editors ? new Set(editors.map((editor) => editor.id)) : null;
+	}, [editors]);
+
+	if (!isLoggedIn.success) {
 		return navigate('/');
 	}
 
-	const regex = /\/dashboard\/([^/]*)/;
-	const result = regex.exec(location.pathname);
-	let { display_name, profile_image_url, login, id } = asd.isLoggedIn.id.data[0];
-	if (!result || result === null || result[1] === '') {
-		const isLogged = login ? `/dashboard/${login}/profile/user` : '/';
-		return navigate(isLogged);
+	if (!isLoading || success === undefined) {
+		return (
+			<Loading>
+				<h1>Loading...</h1>
+				<img src={ppCircle} alt="Loading..." />
+			</Loading>
+		);
 	}
 
-	if (result[1] !== login) {
-		const { success, username, message, pfp, editors } = asd.isBotIn;
-		if (!success && message) {
+	let { display_name, profile_image_url, login, id } = isLoggedIn.id.data[0];
+	const targetChannel = getTargetChannel();
+	if (targetChannel !== login) {
+		if (!success) {
 			return navigate('/');
 		}
 
-		if (editors) {
-			const editorsMapped = new Set(editors?.map((editor) => editor.id));
-			if (!editorsMapped.has(id) && asd.userLevel.level < 2) {
+		if (editorsMapped) {
+			if (!editorsMapped.has(id) && userLevel.level < 2) {
 				return navigate('/');
 			} else {
 				login = username;
@@ -95,6 +105,17 @@ const Dashboard = () => {
 		</OuterDashboard>
 	);
 };
+
+const Loading = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+	h1 {
+		font-family: fangsong;
+	}
+`;
 
 const BelowLeftDashboardProfileInfoText = styled.div`
 	display: flex;

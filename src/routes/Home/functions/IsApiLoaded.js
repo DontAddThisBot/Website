@@ -10,40 +10,38 @@ const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 	const { success: isChannelSuccess, isChannel: isBotInChannel } = channelBot;
 	const { success } = loginFlow;
 
-	if (!isLoading || !channelBot || !loginFlow) {
+	if (!isLoading) {
 		return <div className="loading">Loading...</div>;
-	} else {
-		if (!success) {
-			return (
-				<>
-					<LoginButton>
-						<button className="login-button">
-							<Span>Login with Twitch</Span>
-						</button>
-					</LoginButton>
-					<LearnMoreButton />
-				</>
-			);
-		}
+	}
 
-		if (success) {
-			if (!isBotInChannel || !isChannelSuccess) {
-				return (
-					<>
-						<JoinButton loginFlow={loginFlow} callback={setBotState} />
-						<LearnMoreButton />
-						<DiscordButton />
-					</>
-				);
-			} else {
-				return (
-					<>
-						<PartButton loginFlow={loginFlow} callback={setBotState} />
-						<DiscordButton />
-					</>
-				);
-			}
-		}
+	if (!success) {
+		return (
+			<>
+				<LoginButton>
+					<button className="login-button">
+						<Span>Login with Twitch</Span>
+					</button>
+				</LoginButton>
+				<LearnMoreButton />
+			</>
+		);
+	}
+
+	if (!isBotInChannel || !isChannelSuccess) {
+		return (
+			<>
+				<JoinButton loginFlow={loginFlow} callback={setBotState} />
+				<LearnMoreButton />
+				<DiscordButton />
+			</>
+		);
+	} else {
+		return (
+			<>
+				<PartButton loginFlow={loginFlow} callback={setBotState} />
+				<DiscordButton />
+			</>
+		);
 	}
 };
 

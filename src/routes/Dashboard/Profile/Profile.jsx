@@ -19,13 +19,11 @@ const Profile = () => {
 		}
 	};
 
-	return (
-		<>
-			<OuterProfile className="outer-profile">
-				<div className="profile-intro">
-					<h1>Profile</h1>
-					<h2>Here you can change your profile information, such as your lanuage, commands information etc.</h2>
-				</div>
+	const ReAuthButton = () => {
+		if (isLoggedIn.id.data[0]?.login !== pathUser) {
+			return <></>;
+		} else {
+			return (
 				<div className="re-auth">
 					<LoginButton>
 						<button className="reauthorize">
@@ -33,6 +31,17 @@ const Profile = () => {
 						</button>
 					</LoginButton>
 				</div>
+			);
+		}
+	};
+	return (
+		<>
+			<OuterProfile className="outer-profile">
+				<div className="profile-intro">
+					<h1>Profile</h1>
+					<h2>Here you can change your profile information, such as your lanuage, commands information etc.</h2>
+				</div>
+				<ReAuthButton />
 			</OuterProfile>
 			<Divider />
 			<ProfileInfoDashboardBoxes>
