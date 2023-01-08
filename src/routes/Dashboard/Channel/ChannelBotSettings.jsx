@@ -261,6 +261,23 @@ const ChannelPrefix = styled.div`
 
 const ScrollContainer = styled.div`
 	display: flex;
+	animation-name: slideFromLeft;
+	animation-duration: 0.5s;
+
+	@keyframes slideFromLeft {
+		0% {
+			transform: translateX(-2%);
+		}
+		100% {
+			transform: translateX(0%);
+		}
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
 
 	.scroller {
 		width: 95%;

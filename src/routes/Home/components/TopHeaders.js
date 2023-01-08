@@ -87,8 +87,6 @@ export const TopHeaders = styled.section`
 		color: white;
 		font-weight: bold;
 		cursor: pointer;
-		border: 1px solid #9146ff;
-		border-radius: 5px;
 		background-color: #9146ff;
 		transition: 0.3s;
 		font-size: 1rem;
