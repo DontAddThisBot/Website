@@ -69,6 +69,8 @@ function App() {
 					setIsLoggedIn(loginFlow);
 				}
 			});
+		} else {
+			setIsLoading(true);
 		}
 	}, [localeStorageToken]);
 

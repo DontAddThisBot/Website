@@ -10,7 +10,7 @@ const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 	const { success: isChannelSuccess, isChannel: isBotInChannel } = channelBot;
 	const { success } = loginFlow;
 
-	if (!isLoading) {
+	if (!isLoading || isChannelSuccess === undefined) {
 		return <div className="loading">Loading...</div>;
 	}
 

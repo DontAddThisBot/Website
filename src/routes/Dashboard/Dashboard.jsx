@@ -29,7 +29,12 @@ const Dashboard = () => {
 	}, [editors]);
 
 	if (!isLoggedIn.success) {
-		return navigate('/');
+		return window.location.replace('/');
+	}
+
+	const targetChannel = getTargetChannel();
+	if (!targetChannel || targetChannel === null) {
+		return navigate('/dashboard/' + isLoggedIn.id.data[0].login + '/profile/user');
 	}
 
 	if (!isLoading || success === undefined) {
@@ -42,7 +47,6 @@ const Dashboard = () => {
 	}
 
 	let { display_name, profile_image_url, login, id } = isLoggedIn.id.data[0];
-	const targetChannel = getTargetChannel();
 	if (targetChannel !== login) {
 		if (!success) {
 			return navigate('/');
