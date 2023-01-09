@@ -17,6 +17,7 @@ const Dashboard = () => {
 	const navigate = useNavigate();
 	const { isBotIn, isLoggedIn, isLoading, userLevel } = useContext(Context);
 	const { success, username, pfp, editors } = isBotIn;
+	const token = localStorage.getItem('SITE_TOKEN');
 
 	function getTargetChannel() {
 		const regex = /\/dashboard\/([^/]*)/;
@@ -28,13 +29,13 @@ const Dashboard = () => {
 		return editors ? new Set(editors.map((editor) => editor.id)) : null;
 	}, [editors]);
 
-	if (!isLoggedIn.success) {
-		return window.location.replace('/');
+	if (!token) {
+		return navigate('/');
 	}
 
 	const targetChannel = getTargetChannel();
-	if (!targetChannel || targetChannel === null) {
-		return navigate('/dashboard/' + isLoggedIn.id.data[0].login + '/profile/user');
+	if (!/^\/dashboard\/([^/]*)\/(.+)/.test(location.pathname)) {
+		return navigate('/dashboard/' + targetChannel + '/channel/settings');
 	}
 
 	if (!isLoading || success === undefined) {

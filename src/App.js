@@ -54,58 +54,74 @@ function App() {
 	}
 
 	function getTargetChannel() {
+		let targetChannel = userLevel.username;
 		const regex = /\/dashboard\/([^/]*)/;
-		let targetChannel = userLevel.login;
-		if (regex.test(pathname)) {
-			targetChannel = regex.exec(pathname)[1];
+		if (!regex.test(pathname)) return targetChannel;
+
+		const regexChannel = regex.exec(pathname)[1];
+		if (regex.test(pathname) && targetChannel !== regexChannel) {
+			targetChannel = regexChannel;
 		}
+
 		return targetChannel;
 	}
 
 	useEffect(() => {
-		if (localeStorageToken) {
-			isLogged().then((loginFlow) => {
+		const UserGrantFlow = async () => {
+			if (localeStorageToken) {
+				const loginFlow = await isLogged();
 				if (loginFlow) {
 					setIsLoggedIn(loginFlow);
 				}
-			});
-		} else {
-			setIsLoading(true);
-		}
+
+				if (!loginFlow.success) {
+					localStorage.removeItem('SITE_TOKEN');
+				}
+			} else {
+				setIsLoading(true);
+			}
+		};
+
+		UserGrantFlow();
 	}, [localeStorageToken]);
 
 	useEffect(() => {
-		const { success, id } = isLoggedIn;
-		if (success) {
-			const userLogin = id?.data[0].login;
-			getUserLevel(userLogin).then((userLevel) => {
+		const UserSiteLevel = async () => {
+			const { id, success } = isLoggedIn;
+			if (success) {
+				const userLogin = id.data[0].login;
+				const userLevel = await getUserLevel(userLogin);
+
 				if (userLevel.success) {
 					setUserLevel(userLevel);
 					localStorage.setItem('language', userLevel.language);
 				} else {
-					createUser().then(() =>
-						getUserLevel(userLogin).then((userLevel) => {
-							setUserLevel(userLevel);
-							localStorage.setItem('language', userLevel.language);
-						}),
-					);
+					await createUser();
+					const userLevel = await getUserLevel(userLogin);
+					setUserLevel(userLevel);
+					localStorage.setItem('language', userLevel.language);
 				}
-			});
-		}
+			}
+		};
+
+		UserSiteLevel();
 	}, [isLoggedIn]);
 
 	const targetChannel = getTargetChannel();
 	useEffect(() => {
-		if (userLevel.length !== 0) {
-			const channels = targetChannel ?? userLevel.username;
-			isChannelBot(channels).then((isChannelBot) => {
-				if (isChannelBot) {
-					setIsBotIn(isChannelBot);
+		const fetchData = async () => {
+			if (localeStorageToken) {
+				setIsLoading(false);
+				if (targetChannel) {
+					const isBotInChannel = await isChannelBot(targetChannel);
+					setIsBotIn(isBotInChannel);
 					setIsLoading(true);
 				}
-			});
-		}
-	}, [targetChannel, userLevel]);
+			}
+		};
+
+		fetchData();
+	}, [targetChannel, localeStorageToken]);
 
 	return (
 		<HelmetProvider>
@@ -139,14 +155,14 @@ function App() {
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="/leaderboard" element={<Leaderboard />} />
-						<Route path="dashboard" element={<Dashboard />}>
-							<Route path=":id/profile/user" element={<ProfileUser />} />
-							<Route path=":id/channel/settings" element={<ChannelBotSettings />} />
-							<Route path=":id/channel/default" element={<DefaultCommands />} />
-							<Route path=":id/channel/custom" element={<CustomCommands />} />
-							<Route path=":id/channel/editors" element={<Editors />} />
-							<Route path=":id/channel/seven-tv" element={<SevenTV />} />
-							<Route path=":id/channel/justlog" element={<Justlog />} />
+						<Route path="/dashboard/:id" element={<Dashboard />}>
+							<Route path="/dashboard/:id/profile/user" element={<ProfileUser />} />
+							<Route path="/dashboard/:id/channel/settings" element={<ChannelBotSettings />} />
+							<Route path="/dashboard/:id/channel/default" element={<DefaultCommands />} />
+							<Route path="/dashboard/:id/channel/custom" element={<CustomCommands />} />
+							<Route path="/dashboard/:id/channel/editors" element={<Editors />} />
+							<Route path="/dashboard/:id/channel/seven-tv" element={<SevenTV />} />
+							<Route path="/dashboard/:id/channel/justlog" element={<Justlog />} />
 						</Route>
 						<Route path="/commands" element={<Commands />} />
 						<Route path="/stable/:id" element={<Stable />} />

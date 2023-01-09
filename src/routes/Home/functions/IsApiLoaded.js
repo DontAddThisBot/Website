@@ -8,13 +8,13 @@ import DiscordButton from './DiscordAdd';
 
 const HandleFlow = ({ isLoading, loginFlow, channelBot, setBotState }) => {
 	const { success: isChannelSuccess, isChannel: isBotInChannel } = channelBot;
-	const { success } = loginFlow;
+	const token = localStorage.getItem('SITE_TOKEN');
 
 	if (!isLoading) {
 		return <div className="loading">Loading...</div>;
 	}
 
-	if (!success) {
+	if (!token || !loginFlow.success) {
 		return (
 			<>
 				<LoginButton>
