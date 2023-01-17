@@ -3,8 +3,8 @@ import { Logout } from '../../../js/api/Logout';
 import { removeListener } from './OnClickListener';
 
 const LogoutUser = ({ setAuthState, setIsBotIn, setUserLevel }) => {
-	function LogoutUser() {
-		Logout();
+	async function LogoutUser() {
+		await Logout();
 		import('../../../js/api/isLogged').then(({ isLogged }) => {
 			isLogged().then((login) => {
 				setAuthState(login);
