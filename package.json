@@ -24,7 +24,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --check './**/*.{js,ts, jsx}'",
-    "format:fix": "prettier --write './**/*.{js,ts, jsx}'"
+    "format:fix": "prettier --write './**/*.{js,ts, jsx}'",
+    "vite": "vite",
+    "preview": "vite build && vite preview --port 3000",
+    "serve": "vite build && serve -s dist -p 8000"
   },
   "eslintConfig": {
     "extends": [
@@ -45,6 +48,8 @@
     ]
   },
   "devDependencies": {
-    "json-loader": "^0.5.7"
+    "@vitejs/plugin-react": "^3.0.1",
+    "json-loader": "^0.5.7",
+    "vite": "^4.0.4"
   }
 }

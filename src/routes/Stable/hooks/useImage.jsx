@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import fetch from 'node-fetch';
 import site from '../../../config.json';
 
 export default function useImage(ID) {

@@ -1,5 +1,4 @@
 import site from '../../config.json';
-import fetch from 'node-fetch';
 
 export async function Logout() {
 	const LogOut = await fetch(`${site.frontend.oldApi}/logout`, {

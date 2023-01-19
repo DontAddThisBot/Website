@@ -21,6 +21,7 @@ const Auth = () => {
 	if (localToken) {
 		navgiate('/');
 	}
+
 	useEffect(() => {
 		if ((!localToken || localToken == null) && window.location.href.startsWith(`${site.frontend.origin}/auth/twitch`)) {
 			let code;
