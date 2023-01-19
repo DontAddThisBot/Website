@@ -212,6 +212,7 @@ const OuterDashboard = styled.div`
 	min-height: 0%;
 	-webkit-box-flex: 1;
 	flex-grow: 1;
+	overflow: hidden;
 
 	.mobile-left-dashboard {
 		display: none;
