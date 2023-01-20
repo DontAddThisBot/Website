@@ -20,7 +20,6 @@ import Gradient from '../../img/Gradient.png';
 import Tutorial from '../../img/Tutorial.avif';
 import Tutorial2 from '../../img/Tutorial2.avif';
 
-import { AmazonAds } from './components/AmazonAds';
 import { BottomImageHeaders } from './components/BottomImageHeaders';
 import { BottomImageSliderButtons } from './components/BottomImageSliderButtons';
 import { BottomTextHeaders } from './components/BottomTextHeaders';
@@ -67,15 +66,6 @@ export default function Home() {
 				</div>
 				<FrontPageInfo totalChannelCount={totalChannelCount} />
 			</TopHeaders>
-			<AmazonAds>
-				<iframe
-					src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=22&l=ur1&category=primediscounted&banner=07J0Y188XW9Z5B3A9782&f=ifr&linkID=510e04bf751b18e84dbb88f3af063d49&t=poros0f-20&tracking_id=poros0f-20"
-					width="250"
-					height="250"
-					title="Amazon Ads"
-					sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
-				></iframe>
-			</AmazonAds>
 			<MiddleHeaders>
 				<Redirect to="/code">
 					<img src={happE} alt="happE" className="bot-pfp" />
